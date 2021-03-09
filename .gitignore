@@ -2,10 +2,21 @@
 *.d
 
 # Object files
+*.txt
+*.lst
+*.cof
+*.dlt
+*.dct
+*.dbg
+*.bmk
+*.brk
+*.cfg
+*.cp
 *.o
 *.ko
 *.obj
 *.elf
+*.mcl
 
 # Linker output
 *.ilk
