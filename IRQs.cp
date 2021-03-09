@@ -198,6 +198,39 @@ extern struct Ticks TempTicks;
 
 
  void CalcTimerTicks();
+#line 1 "c:/users/git/reflowovencontrol/encoder.h"
+#line 1 "c:/users/git/reflowovencontrol/config.h"
+#line 9 "c:/users/git/reflowovencontrol/encoder.h"
+sbit Aphase at RB6_bit;
+sbit Bphase at RB7_bit;
+sbit EncSW at RA2_bit;
+
+
+
+
+
+
+typedef struct _enc{
+ uint8_t codePrevNext;
+ int8_t storeSW;
+ int16_t cntr;
+ int8_t val;
+ uint8_t ROR;
+ uint8_t layer_value[10];
+ uint8_t layer_cnt;
+}enc_Cnt;
+
+
+
+
+void Init_Encoder(uint8_t rotate_value);
+void Encode(void);
+uint8_t _SW(void);
+int8_t SW_Store(void);
+int8_t read_rotary();
+int16_t Get_EncoderValue(void);
+uint8_t Get_Layer_Count(void);
+uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
 #line 13 "c:/users/git/reflowovencontrol/adc_buttons.h"
@@ -205,6 +238,7 @@ enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolD
 
 
 extern unsigned char B;
+extern sbit Menu_Bit;
 extern sbit OK_Bit;
 extern sbit OK_A;
 extern sbit OK_B;
@@ -220,6 +254,7 @@ extern sbit OK_K;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
+
 struct Buttons{
 unsigned int ButMsVal;
 unsigned int ButMs;
@@ -249,15 +284,13 @@ extern Spts Sps;
 
 
 void SampleButtons();
-unsigned int IncValues(unsigned int Val);
-unsigned int IncDec(unsigned int Val);
 void ResetBits();
 void SavedVals();
 void doOFFBitoff();
 void EERead();
 void EEWrite();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 21 "c:/users/git/reflowovencontrol/config.h"
+#line 22 "c:/users/git/reflowovencontrol/config.h"
 extern enum swt{off,on};
 
 
@@ -283,6 +316,7 @@ void InitTimer2();
 void InitTimer3();
 void InitTimer5();
 void Uart1_En();
+void SetUp_IOCxInterrupts();
 void Set_Priority();
 void EI();
 void DI();
@@ -408,6 +442,12 @@ void High_Priority(){
 void Low_Priority(){
  if (TMR3IF_bit)
  TMR3();
+
+ if(RBIF_bit){
+ RBIF_bit = 0;
+ if((IOCB6_bit)||(IOCB7_bit))
+ Encode();
+ }
 
  if(RC1IF_bit)
  Serial();

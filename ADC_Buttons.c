@@ -2,16 +2,18 @@
 
 //////////////////////////////////////////////
 //variables
+static unsigned int enC,enC_temp;
 unsigned char txt4_[6];
 unsigned char B;
 unsigned char B_;
 static unsigned int valOf;
 /////////////////////////////////////////////
 //char B bits
-sbit OK_Bit  at B.B0;
-sbit ENT_Bit at B.B1;
-sbit OFF_Bit at B.B2;
-sbit EEWrt   at B.B3;
+sbit Menu_Bit at B.B0;
+sbit OK_Bit  at B.B1;
+sbit ENT_Bit at B.B2;
+sbit OFF_Bit at B.B3;
+sbit EEWrt   at B.B4;
 
 
 //char B_ bits
@@ -38,22 +40,27 @@ unsigned int (*Fptr)(unsigned int Arg1);
 //functions
 void SampleButtons(){
 static unsigned int i;
-     But.an2_ = ADC_Read(2);
-     if((!INC)&&(!DEC))But.ButMs = 500;
-     if(OK){
-       if((!OK_Bit)&&(Sps.State!=0))Sps.State = 0;
-       if((!OK_Bit)&&(Sps.State==0)) I2C_LCD_Out(LCD_01_ADDRESS,2,6,"  ");
+     if (Button(&PORTA, 2, 10, 0))
+               Menu_Bit = on;
+     else
+         return;
+               
+     if(Menu_Bit && !Ok_Bit){
+        Ok_Bit = on;
+        I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+     }
+     
+     if(Menu_Bit){
+       enC = Get_EncoderValue();//ReadMax31855J();
+       if(enC_temp != enC){
+         sprintf(txt1,"%4d",enC);
+         UART1_Write_Text(txt1);
+         I2C_LCD_Out(LCD_01_ADDRESS,2,11,"Enc:=");
+         I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt1);
+       }
+     }
 
-        if(i>=900){
-            SavedVals();
-            i = 0;
-        }else i++;
-
-
-      }else i = 0;
-
-    if(OK_Bit){
-        valOf = IncValues(valOf); //needs to be here to reset from previous state
+    if(Ok_Bit){
         if(EEWrt)EEWrt = off;
        switch(Sps.State){
            case Return:   I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ret     ");
@@ -204,30 +211,6 @@ static unsigned int i;
 
 }
 
-unsigned int IncValues(unsigned int Val){
-static unsigned int  k;
-     if((INC)||(DEC)){
-       if(tmr.millis > But.ButMs){
-         tmr.millis = 0;
-         Val = IncDec(Val);
-
-         if(k<10)But.ButMs = 500;
-         else if ((k>=10)&&(k<30)) But.ButMs = 200;
-         else if ((k>=30)&&(k<100)) But.ButMs = 10;
-         else But.ButMs = 1;
-         k++;
-       }
-     }else k=0;
-
-      return Val;
-}
-unsigned int IncDec(unsigned int Val ){
-
-           if(INC)Val++;
-           if(DEC) Val--;
-
-   return Val;
-}
 void ResetBits(){
   valOf = 0;
   Sps.State = 0;

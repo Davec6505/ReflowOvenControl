@@ -77,8 +77,14 @@ void High_Priority(){
 void Low_Priority(){
     if (TMR3IF_bit)
            TMR3();
-           
-  if(RC1IF_bit)
+     
+     if(RBIF_bit){
+        RBIF_bit  = 0;
+        if((IOCB6_bit)||(IOCB7_bit))
+            Encode();
+     }
+     
+     if(RC1IF_bit)
         Serial();
 }
 

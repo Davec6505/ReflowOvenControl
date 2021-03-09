@@ -5,12 +5,12 @@
 
 void ConfPic(){
 
- ANSELA = 0x07; //make RA0 to RA3 as analogs
+ ANSELA = 0x03; //make RA0 to RA3 as analogs
  ANSELB = 0X00; //turn off all analogs attached to Port B
  ANSELC = 0X00;
  
  TRISA = 0x3F;  //RA0 - RA5 as inputs
- TRISB = 0X00;
+ TRISB = 0XC0;
  TRISC = 0x08;  //RC port as outputs;
  LATC  = 0;     //FORCE portc off
 
@@ -114,8 +114,16 @@ void EI(){
  GIEL_bit  = 1;  //PERIPHAL INTERRUPTS ENABLE
 }
 void DI(){
-   GIEH_bit  = 0;  //GLOBAL INTERRUPTS ENABLE
+ GIEH_bit  = 0;  //GLOBAL INTERRUPTS ENABLE
+ GIEL_bit  = 0;  //PERIPHAL INTERRUPTS ENABLE
+}
 
+void SetUp_IOCxInterrupts(){
+   IOCB7_bit = 1;
+   IOCB6_bit = 1;
+   RBIE_bit  = on; //ENABLE IOCx
+   RBIP_bit  = 0;
+   RBIF_bit  = 0;
 }
 void ClearAll(){
   tmr.SecNew = -1;

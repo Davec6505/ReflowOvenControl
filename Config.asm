@@ -2,8 +2,8 @@
 _ConfPic:
 
 ;Config.c,6 :: 		void ConfPic(){
-;Config.c,8 :: 		ANSELA = 0x07; //make RA0 to RA3 as analogs
-	MOVLW       7
+;Config.c,8 :: 		ANSELA = 0x03; //make RA0 to RA3 as analogs
+	MOVLW       3
 	MOVWF       ANSELA+0 
 ;Config.c,9 :: 		ANSELB = 0X00; //turn off all analogs attached to Port B
 	CLRF        ANSELB+0 
@@ -12,8 +12,9 @@ _ConfPic:
 ;Config.c,12 :: 		TRISA = 0x3F;  //RA0 - RA5 as inputs
 	MOVLW       63
 	MOVWF       TRISA+0 
-;Config.c,13 :: 		TRISB = 0X00;
-	CLRF        TRISB+0 
+;Config.c,13 :: 		TRISB = 0XC0;
+	MOVLW       192
+	MOVWF       TRISB+0 
 ;Config.c,14 :: 		TRISC = 0x08;  //RC port as outputs;
 	MOVLW       8
 	MOVWF       TRISC+0 
@@ -220,97 +221,117 @@ _DI:
 ;Config.c,116 :: 		void DI(){
 ;Config.c,117 :: 		GIEH_bit  = 0;  //GLOBAL INTERRUPTS ENABLE
 	BCF         GIEH_bit+0, BitPos(GIEH_bit+0) 
+;Config.c,118 :: 		GIEL_bit  = 0;  //PERIPHAL INTERRUPTS ENABLE
+	BCF         GIEL_bit+0, BitPos(GIEL_bit+0) 
 ;Config.c,119 :: 		}
 L_end_DI:
 	RETURN      0
 ; end of _DI
 
+_SetUp_IOCxInterrupts:
+
+;Config.c,121 :: 		void SetUp_IOCxInterrupts(){
+;Config.c,122 :: 		IOCB7_bit = 1;
+	BSF         IOCB7_bit+0, BitPos(IOCB7_bit+0) 
+;Config.c,123 :: 		IOCB6_bit = 1;
+	BSF         IOCB6_bit+0, BitPos(IOCB6_bit+0) 
+;Config.c,124 :: 		RBIE_bit  = on; //ENABLE IOCx
+	BSF         RBIE_bit+0, BitPos(RBIE_bit+0) 
+;Config.c,125 :: 		RBIP_bit  = 0;
+	BCF         RBIP_bit+0, BitPos(RBIP_bit+0) 
+;Config.c,126 :: 		RBIF_bit  = 0;
+	BCF         RBIF_bit+0, BitPos(RBIF_bit+0) 
+;Config.c,127 :: 		}
+L_end_SetUp_IOCxInterrupts:
+	RETURN      0
+; end of _SetUp_IOCxInterrupts
+
 _ClearAll:
 
-;Config.c,120 :: 		void ClearAll(){
-;Config.c,121 :: 		tmr.SecNew = -1;
+;Config.c,128 :: 		void ClearAll(){
+;Config.c,129 :: 		tmr.SecNew = -1;
 	MOVLW       255
 	MOVWF       _tmr+16 
 	MOVLW       255
 	MOVWF       _tmr+17 
-;Config.c,122 :: 		tmr.MinNew = -1;
+;Config.c,130 :: 		tmr.MinNew = -1;
 	MOVLW       255
 	MOVWF       _tmr+18 
 	MOVLW       255
 	MOVWF       _tmr+19 
-;Config.c,123 :: 		tmr.millis  = 0;
+;Config.c,131 :: 		tmr.millis  = 0;
 	CLRF        _tmr+2 
 	CLRF        _tmr+3 
-;Config.c,124 :: 		tmr.ms  = 0;
+;Config.c,132 :: 		tmr.ms  = 0;
 	CLRF        _tmr+6 
 	CLRF        _tmr+7 
-;Config.c,125 :: 		tmr.sec = 0;
+;Config.c,133 :: 		tmr.sec = 0;
 	CLRF        _tmr+10 
 	CLRF        _tmr+11 
-;Config.c,126 :: 		tmr.min = 0;
+;Config.c,134 :: 		tmr.min = 0;
 	CLRF        _tmr+12 
 	CLRF        _tmr+13 
-;Config.c,127 :: 		tmr.I_Dlys  = 0;
+;Config.c,135 :: 		tmr.I_Dlys  = 0;
 	CLRF        _tmr+0 
 	CLRF        _tmr+1 
-;Config.c,128 :: 		Phs.UartWriter = 0;
+;Config.c,136 :: 		Phs.UartWriter = 0;
 	CLRF        _Phs+0 
-;Config.c,129 :: 		Phs.pwmOut = 0;
+;Config.c,137 :: 		Phs.pwmOut = 0;
 	CLRF        _Phs+1 
-;Config.c,130 :: 		Phs.PhasePulsCntr = 0;
+;Config.c,138 :: 		Phs.PhasePulsCntr = 0;
 	CLRF        _Phs+3 
-;Config.c,131 :: 		Phs.PhaseCntr = 1;
+;Config.c,139 :: 		Phs.PhaseCntr = 1;
 	MOVLW       1
 	MOVWF       _Phs+2 
-;Config.c,132 :: 		DegC.sampleTimer = 0;
+;Config.c,140 :: 		DegC.sampleTimer = 0;
 	CLRF        _DegC+19 
-;Config.c,133 :: 		}
+;Config.c,141 :: 		}
 L_end_ClearAll:
 	RETURN      0
 ; end of _ClearAll
 
 _WriteDataOut:
 
-;Config.c,136 :: 		void WriteDataOut(){
-;Config.c,137 :: 		UART1_Write_Text(txt1);
+;Config.c,144 :: 		void WriteDataOut(){
+;Config.c,145 :: 		UART1_Write_Text(txt1);
 	MOVLW       _txt1+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt1+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;Config.c,138 :: 		UART1_Write(',');
+;Config.c,146 :: 		UART1_Write(',');
 	MOVLW       44
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;Config.c,139 :: 		UART1_Write_Text(txt5);
+;Config.c,147 :: 		UART1_Write_Text(txt5);
 	MOVLW       _txt5+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt5+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;Config.c,140 :: 		UART1_Write(',');
+;Config.c,148 :: 		UART1_Write(',');
 	MOVLW       44
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;Config.c,141 :: 		UART1_Write_Text(txt6);
+;Config.c,149 :: 		UART1_Write_Text(txt6);
 	MOVLW       _txt6+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt6+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;Config.c,142 :: 		UART1_Write(',');
+;Config.c,150 :: 		UART1_Write(',');
 	MOVLW       44
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;Config.c,143 :: 		UART1_Write(0x0D);
+;Config.c,151 :: 		UART1_Write(0x0D);
 	MOVLW       13
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;Config.c,144 :: 		UART1_Write(0x0A);
+;Config.c,152 :: 		UART1_Write(0x0A);
 	MOVLW       10
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;Config.c,145 :: 		}
+;Config.c,153 :: 		}
 L_end_WriteDataOut:
 	RETURN      0
 ; end of _WriteDataOut

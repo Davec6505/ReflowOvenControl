@@ -82,7 +82,7 @@ L_High_Priority0:
 	SUBWF       _Phs+3, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_High_Priority6
-L__High_Priority24:
+L__High_Priority28:
 ;IRQs.c,38 :: 		CCP1IE_bit  = off;
 	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
 ;IRQs.c,39 :: 		if(RA3_Bit)LATC2_bit = on;
@@ -113,7 +113,7 @@ L_High_Priority6:
 	GOTO        L_High_Priority10
 	BTFSC       _wait+0, BitPos(_wait+0) 
 	GOTO        L_High_Priority10
-L__High_Priority23:
+L__High_Priority27:
 ;IRQs.c,51 :: 		Phs.PhasePulsCntr++;
 	MOVF        _Phs+3, 0 
 	ADDLW       1
@@ -163,7 +163,7 @@ L_High_Priority3:
 	GOTO        L_High_Priority15
 	BTFSS       LATC1_bit+0, BitPos(LATC1_bit+0) 
 	GOTO        L_High_Priority15
-L__High_Priority22:
+L__High_Priority26:
 ;IRQs.c,71 :: 		CCP2IE_bit = off;
 	BCF         CCP2IE_bit+0, BitPos(CCP2IE_bit+0) 
 ;IRQs.c,72 :: 		CCP2IF_bit = off;
@@ -186,29 +186,46 @@ _Low_Priority:
 ;IRQs.c,79 :: 		TMR3();
 	CALL        _TMR3+0, 0
 L_Low_Priority16:
-;IRQs.c,81 :: 		if(RC1IF_bit)
-	BTFSS       RC1IF_bit+0, BitPos(RC1IF_bit+0) 
+;IRQs.c,81 :: 		if(RBIF_bit){
+	BTFSS       RBIF_bit+0, BitPos(RBIF_bit+0) 
 	GOTO        L_Low_Priority17
-;IRQs.c,82 :: 		Serial();
-	CALL        _Serial+0, 0
+;IRQs.c,82 :: 		RBIF_bit  = 0;
+	BCF         RBIF_bit+0, BitPos(RBIF_bit+0) 
+;IRQs.c,83 :: 		if((IOCB6_bit)||(IOCB7_bit))
+	BTFSC       IOCB6_bit+0, BitPos(IOCB6_bit+0) 
+	GOTO        L__Low_Priority29
+	BTFSC       IOCB7_bit+0, BitPos(IOCB7_bit+0) 
+	GOTO        L__Low_Priority29
+	GOTO        L_Low_Priority20
+L__Low_Priority29:
+;IRQs.c,84 :: 		Encode();
+	CALL        _Encode+0, 0
+L_Low_Priority20:
+;IRQs.c,85 :: 		}
 L_Low_Priority17:
-;IRQs.c,83 :: 		}
+;IRQs.c,87 :: 		if(RC1IF_bit)
+	BTFSS       RC1IF_bit+0, BitPos(RC1IF_bit+0) 
+	GOTO        L_Low_Priority21
+;IRQs.c,88 :: 		Serial();
+	CALL        _Serial+0, 0
+L_Low_Priority21:
+;IRQs.c,89 :: 		}
 L_end_Low_Priority:
 	RETURN      0
 ; end of _Low_Priority
 
 _TMR3:
 
-;IRQs.c,85 :: 		void TMR3(){
-;IRQs.c,86 :: 		TMR3IF_bit = 0;
+;IRQs.c,91 :: 		void TMR3(){
+;IRQs.c,92 :: 		TMR3IF_bit = 0;
 	BCF         TMR3IF_bit+0, BitPos(TMR3IF_bit+0) 
-;IRQs.c,87 :: 		TMR3H      = 0xC1;
+;IRQs.c,93 :: 		TMR3H      = 0xC1;
 	MOVLW       193
 	MOVWF       TMR3H+0 
-;IRQs.c,88 :: 		TMR3L      = 0x80;
+;IRQs.c,94 :: 		TMR3L      = 0x80;
 	MOVLW       128
 	MOVWF       TMR3L+0 
-;IRQs.c,91 :: 		tmr.millis++;
+;IRQs.c,97 :: 		tmr.millis++;
 	MOVLW       1
 	ADDWF       _tmr+2, 0 
 	MOVWF       R0 
@@ -219,7 +236,7 @@ _TMR3:
 	MOVWF       _tmr+2 
 	MOVF        R1, 0 
 	MOVWF       _tmr+3 
-;IRQs.c,93 :: 		tmr.tenMilli++;
+;IRQs.c,99 :: 		tmr.tenMilli++;
 	MOVLW       1
 	ADDWF       _tmr+4, 0 
 	MOVWF       R0 
@@ -230,7 +247,7 @@ _TMR3:
 	MOVWF       _tmr+4 
 	MOVF        R1, 0 
 	MOVWF       _tmr+5 
-;IRQs.c,95 :: 		tmr.ms++;
+;IRQs.c,101 :: 		tmr.ms++;
 	MOVLW       1
 	ADDWF       _tmr+6, 0 
 	MOVWF       R0 
@@ -241,7 +258,7 @@ _TMR3:
 	MOVWF       _tmr+6 
 	MOVF        R1, 0 
 	MOVWF       _tmr+7 
-;IRQs.c,96 :: 		tmr.ten_ms++;
+;IRQs.c,102 :: 		tmr.ten_ms++;
 	MOVLW       1
 	ADDWF       _tmr+8, 0 
 	MOVWF       R0 
@@ -252,58 +269,58 @@ _TMR3:
 	MOVWF       _tmr+8 
 	MOVF        R1, 0 
 	MOVWF       _tmr+9 
-;IRQs.c,97 :: 		if(tmr.ten_ms > 9){
+;IRQs.c,103 :: 		if(tmr.ten_ms > 9){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _tmr+9, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__TMR328
+	GOTO        L__TMR333
 	MOVF        _tmr+8, 0 
 	SUBLW       9
-L__TMR328:
+L__TMR333:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_TMR318
-;IRQs.c,98 :: 		tmr.ten_ms = 0;
+	GOTO        L_TMR322
+;IRQs.c,104 :: 		tmr.ten_ms = 0;
 	CLRF        _tmr+8 
 	CLRF        _tmr+9 
-;IRQs.c,99 :: 		}
-L_TMR318:
-;IRQs.c,100 :: 		}
+;IRQs.c,105 :: 		}
+L_TMR322:
+;IRQs.c,106 :: 		}
 L_end_TMR3:
 	RETURN      0
 ; end of _TMR3
 
 _Serial:
 
-;IRQs.c,101 :: 		void Serial(){
-;IRQs.c,102 :: 		RCIF_bit = off;
+;IRQs.c,107 :: 		void Serial(){
+;IRQs.c,108 :: 		RCIF_bit = off;
 	BCF         RCIF_bit+0, BitPos(RCIF_bit+0) 
-;IRQs.c,103 :: 		TXREG1 = RCREG1;
+;IRQs.c,109 :: 		TXREG1 = RCREG1;
 	MOVF        RCREG1+0, 0 
 	MOVWF       TXREG1+0 
-;IRQs.c,104 :: 		}
+;IRQs.c,110 :: 		}
 L_end_Serial:
 	RETURN      0
 ; end of _Serial
 
 _DoTime:
 
-;IRQs.c,106 :: 		void DoTime(){
-;IRQs.c,107 :: 		if(tmr.ms > 999){
+;IRQs.c,112 :: 		void DoTime(){
+;IRQs.c,113 :: 		if(tmr.ms > 999){
 	MOVF        _tmr+7, 0 
 	SUBLW       3
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime31
+	GOTO        L__DoTime36
 	MOVF        _tmr+6, 0 
 	SUBLW       231
-L__DoTime31:
+L__DoTime36:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime19
-;IRQs.c,108 :: 		tmr.ms = 0;
+	GOTO        L_DoTime23
+;IRQs.c,114 :: 		tmr.ms = 0;
 	CLRF        _tmr+6 
 	CLRF        _tmr+7 
-;IRQs.c,109 :: 		tmr.sec++;
+;IRQs.c,115 :: 		tmr.sec++;
 	MOVLW       1
 	ADDWF       _tmr+10, 0 
 	MOVWF       R0 
@@ -314,22 +331,22 @@ L__DoTime31:
 	MOVWF       _tmr+10 
 	MOVF        R1, 0 
 	MOVWF       _tmr+11 
-;IRQs.c,111 :: 		if(tmr.sec > 59){
+;IRQs.c,117 :: 		if(tmr.sec > 59){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _tmr+11, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime32
+	GOTO        L__DoTime37
 	MOVF        _tmr+10, 0 
 	SUBLW       59
-L__DoTime32:
+L__DoTime37:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime20
-;IRQs.c,113 :: 		tmr.sec = 0;
+	GOTO        L_DoTime24
+;IRQs.c,119 :: 		tmr.sec = 0;
 	CLRF        _tmr+10 
 	CLRF        _tmr+11 
-;IRQs.c,114 :: 		tmr.min++;
+;IRQs.c,120 :: 		tmr.min++;
 	MOVLW       1
 	ADDWF       _tmr+12, 0 
 	MOVWF       R0 
@@ -340,28 +357,28 @@ L__DoTime32:
 	MOVWF       _tmr+12 
 	MOVF        R1, 0 
 	MOVWF       _tmr+13 
-;IRQs.c,116 :: 		if(tmr.min > 59){
+;IRQs.c,122 :: 		if(tmr.min > 59){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        _tmr+13, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime33
+	GOTO        L__DoTime38
 	MOVF        _tmr+12, 0 
 	SUBLW       59
-L__DoTime33:
+L__DoTime38:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime21
-;IRQs.c,118 :: 		tmr.min = 0;
+	GOTO        L_DoTime25
+;IRQs.c,124 :: 		tmr.min = 0;
 	CLRF        _tmr+12 
 	CLRF        _tmr+13 
-;IRQs.c,119 :: 		}
-L_DoTime21:
-;IRQs.c,120 :: 		}
-L_DoTime20:
-;IRQs.c,121 :: 		}
-L_DoTime19:
-;IRQs.c,122 :: 		}
+;IRQs.c,125 :: 		}
+L_DoTime25:
+;IRQs.c,126 :: 		}
+L_DoTime24:
+;IRQs.c,127 :: 		}
+L_DoTime23:
+;IRQs.c,128 :: 		}
 L_end_DoTime:
 	RETURN      0
 ; end of _DoTime

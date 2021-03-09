@@ -4,16 +4,17 @@
 #include "Config.h"
 ////////////////////////////////////////
 //defines
-#define OK    ((But.an2_ >= 600)&&(But.an2_ <= 603))
-#define DEC   ((But.an2_ >= 803)&&(But.an2_ <= 807))
-#define INC   ((But.an2_ >= 400)&&(But.an2_ <= 403))
-#define ENTER ((But.an2_ >= 670)&&(But.an2_ <= 673))
+#define OK    1
+#define DEC   2
+#define INC   3
+#define ENTER 4
 ///////////////////////////////////////
 //structs, unions & enums
 enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolDownDeg,CoolDownTm,KP_,Ki_,Kd_};
 
 
 extern unsigned char B;
+extern sbit Menu_Bit;
 extern sbit OK_Bit;
 extern sbit OK_A;
 extern sbit OK_B;
@@ -29,6 +30,7 @@ extern sbit OK_K;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
+
 struct Buttons{
 unsigned int ButMsVal;
 unsigned int ButMs;
@@ -58,8 +60,6 @@ extern Spts Sps;
 ////////////////////////////////////////
 //function prototypes
 void SampleButtons();
-unsigned int IncValues(unsigned int Val);
-unsigned int IncDec(unsigned int Val);
 void ResetBits();
 void SavedVals();
 void doOFFBitoff();

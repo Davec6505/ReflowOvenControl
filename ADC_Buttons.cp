@@ -239,9 +239,42 @@ extern struct Ticks TempTicks;
 
 
  void CalcTimerTicks();
+#line 1 "c:/users/git/reflowovencontrol/encoder.h"
+#line 1 "c:/users/git/reflowovencontrol/config.h"
+#line 9 "c:/users/git/reflowovencontrol/encoder.h"
+sbit Aphase at RB6_bit;
+sbit Bphase at RB7_bit;
+sbit EncSW at RA2_bit;
+
+
+
+
+
+
+typedef struct _enc{
+ uint8_t codePrevNext;
+ int8_t storeSW;
+ int16_t cntr;
+ int8_t val;
+ uint8_t ROR;
+ uint8_t layer_value[10];
+ uint8_t layer_cnt;
+}enc_Cnt;
+
+
+
+
+void Init_Encoder(uint8_t rotate_value);
+void Encode(void);
+uint8_t _SW(void);
+int8_t SW_Store(void);
+int8_t read_rotary();
+int16_t Get_EncoderValue(void);
+uint8_t Get_Layer_Count(void);
+uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 21 "c:/users/git/reflowovencontrol/config.h"
+#line 22 "c:/users/git/reflowovencontrol/config.h"
 extern enum swt{off,on};
 
 
@@ -267,6 +300,7 @@ void InitTimer2();
 void InitTimer3();
 void InitTimer5();
 void Uart1_En();
+void SetUp_IOCxInterrupts();
 void Set_Priority();
 void EI();
 void DI();
@@ -279,6 +313,7 @@ enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolD
 
 
 extern unsigned char B;
+extern sbit Menu_Bit;
 extern sbit OK_Bit;
 extern sbit OK_A;
 extern sbit OK_B;
@@ -294,6 +329,7 @@ extern sbit OK_K;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
+
 struct Buttons{
 unsigned int ButMsVal;
 unsigned int ButMs;
@@ -323,24 +359,24 @@ extern Spts Sps;
 
 
 void SampleButtons();
-unsigned int IncValues(unsigned int Val);
-unsigned int IncDec(unsigned int Val);
 void ResetBits();
 void SavedVals();
 void doOFFBitoff();
 void EERead();
 void EEWrite();
 #line 5 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
+static unsigned int enC,enC_temp;
 unsigned char txt4_[6];
 unsigned char B;
 unsigned char B_;
 static unsigned int valOf;
 
 
-sbit OK_Bit at B.B0;
-sbit ENT_Bit at B.B1;
-sbit OFF_Bit at B.B2;
-sbit EEWrt at B.B3;
+sbit Menu_Bit at B.B0;
+sbit OK_Bit at B.B1;
+sbit ENT_Bit at B.B2;
+sbit OFF_Bit at B.B3;
+sbit EEWrt at B.B4;
 
 
 
@@ -367,22 +403,27 @@ unsigned int (*Fptr)(unsigned int Arg1);
 
 void SampleButtons(){
 static unsigned int i;
- But.an2_ = ADC_Read(2);
- if((! ((But.an2_ >= 400)&&(But.an2_ <= 403)) )&&(! ((But.an2_ >= 803)&&(But.an2_ <= 807)) ))But.ButMs = 500;
- if( ((But.an2_ >= 600)&&(But.an2_ <= 603)) ){
- if((!OK_Bit)&&(Sps.State!=0))Sps.State = 0;
- if((!OK_Bit)&&(Sps.State==0)) I2C_LCD_Out(LCD_01_ADDRESS,2,6,"  ");
+ if (Button(&PORTA, 2, 10, 0))
+ Menu_Bit = on;
+ else
+ return;
 
- if(i>=900){
- SavedVals();
- i = 0;
- }else i++;
+ if(Menu_Bit && !Ok_Bit){
+ Ok_Bit = on;
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ }
 
+ if(Menu_Bit){
+ enC = Get_EncoderValue();
+ if(enC_temp != enC){
+ sprintf(txt1,"%4d",enC);
+ UART1_Write_Text(txt1);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,11,"Enc:=");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt1);
+ }
+ }
 
- }else i = 0;
-
- if(OK_Bit){
- valOf = IncValues(valOf);
+ if(Ok_Bit){
  if(EEWrt)EEWrt = off;
  switch(Sps.State){
  case Return: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ret     ");
@@ -533,30 +574,6 @@ static unsigned int i;
 
 }
 
-unsigned int IncValues(unsigned int Val){
-static unsigned int k;
- if(( ((But.an2_ >= 400)&&(But.an2_ <= 403)) )||( ((But.an2_ >= 803)&&(But.an2_ <= 807)) )){
- if(tmr.millis > But.ButMs){
- tmr.millis = 0;
- Val = IncDec(Val);
-
- if(k<10)But.ButMs = 500;
- else if ((k>=10)&&(k<30)) But.ButMs = 200;
- else if ((k>=30)&&(k<100)) But.ButMs = 10;
- else But.ButMs = 1;
- k++;
- }
- }else k=0;
-
- return Val;
-}
-unsigned int IncDec(unsigned int Val ){
-
- if( ((But.an2_ >= 400)&&(But.an2_ <= 403)) )Val++;
- if( ((But.an2_ >= 803)&&(But.an2_ <= 807)) ) Val--;
-
- return Val;
-}
 void ResetBits(){
  valOf = 0;
  Sps.State = 0;

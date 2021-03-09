@@ -49,6 +49,7 @@ _spi_master_osc_div64
 _spi_master_tmr2
 _spi_slave_ss_dis
 _spi_slave_ss_enable
+_sw
 a
 abden
 abden_baud1con_bit
@@ -198,6 +199,14 @@ ansc7_bit
 ansela
 anselb
 anselc
+aphase
+aphase
+aphase
+aphase
+aphase
+aphase
+aphase
+aphase
 atof
 atoi
 atol
@@ -250,6 +259,14 @@ boen_bit
 boen_ssp1con3_bit
 bor
 bor_bit
+bphase
+bphase
+bphase
+bphase
+bphase
+bphase
+bphase
+bphase
 brg16
 brg16_baud1con_bit
 brg16_bit
@@ -264,6 +281,7 @@ bsr
 but
 butms
 butmsval
+button
 buttstate
 byte2double
 bytetohex
@@ -558,8 +576,10 @@ cmp1md
 cmp1md_bit
 cmp2md
 cmp2md_bit
+cntr
 cntrl
 cntrltype
+codeprevnext
 comfrem
 compare_double
 configspi
@@ -785,6 +805,16 @@ eeread
 eewrite
 eewrt
 ei
+enc
+encode
+encsw
+encsw
+encsw
+encsw
+encsw
+encsw
+encsw
+encsw
 ent_bit
 equals_double
 err
@@ -833,7 +863,9 @@ fvrst_bit
 gcen
 gcen_bit
 gcen_ssp1con2_bit
+get_encodervalue
 get_fosc_khz
+get_layer_count
 gettemp
 gie
 gie_bit
@@ -926,11 +958,10 @@ idissen
 idissen_bit
 idlen
 idlen_bit
-incdec
-incvalues
 indf0
 indf1
 indf2
+init_encoder
 init_pid
 inittimer0
 inittimer1
@@ -1111,6 +1142,8 @@ latc6
 latc6_bit
 latc7
 latc7_bit
+layer_cnt
+layer_value
 lcd_01_address
 ldiv
 lfiofs
@@ -1169,6 +1202,7 @@ memcmp
 memcpy
 memmove
 memset
+menu_bit
 mfiofs
 mfiofs_bit
 mfiosel
@@ -1701,6 +1735,7 @@ rd16
 rd16_bit
 re3
 re3_bit
+read_rotary
 readmax31855j
 res
 res032
@@ -1711,6 +1746,8 @@ ri
 ri_bit
 rmpdeg
 rmptmr
+ror
+rot_enc_table
 rsen
 rsen_bit
 rsen_ssp1con2_bit
@@ -1814,6 +1851,7 @@ setfun32
 setiov3224
 setjmp
 setptset
+setup_iocxinterrupts
 shorttohex
 shorttostr
 shorttostrwithzeros
@@ -1991,6 +2029,7 @@ sspov
 sspov_bit
 sspov_ssp1con1_bit
 sspstat
+staged_value
 state
 status
 stkful
@@ -2010,6 +2049,7 @@ stkptr4
 stkptr4_bit
 stkunf
 stkunf_bit
+storesw
 str_cut_chr
 str_cut_left
 str_cut_right
@@ -2068,6 +2108,7 @@ strtolongint
 strtoshort
 strtoword
 sub_32x32_fp
+sw_store
 swap
 swdte
 swdte_bit
@@ -2561,6 +2602,7 @@ uart2md
 uart2md_bit
 uartwriter
 uldiv
+val
 vdelay_advanced_ms
 vdelay_ms
 vdirmag

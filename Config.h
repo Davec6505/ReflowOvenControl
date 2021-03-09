@@ -7,6 +7,7 @@
 #include "Max31855J.h"
 #include "PID.h"
 #include "Calcs.h"
+#include "Encoder.h"
 #include "ADC_Buttons.h"
 #include "built_in.h"
 ///////////////////////////////////////////
@@ -43,6 +44,7 @@ void InitTimer2();
 void InitTimer3();
 void InitTimer5();
 void Uart1_En();
+void SetUp_IOCxInterrupts();
 void Set_Priority();
 void EI();
 void DI();

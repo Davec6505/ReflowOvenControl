@@ -6,7 +6,7 @@ Value=0
 [BUILD_TYPE]
 Value=0
 [ACTIVE_TAB]
-Value=ReflowOven.c
+Value=ADC_Buttons.c
 [USE_EEPROM]
 Value=1
 [USE_HEAP]
@@ -23,7 +23,8 @@ File3=PID.c
 File4=Calcs.c
 File5=ADC_Buttons.c
 File6=IRQs.c
-Count=7
+File7=Encoder.c
+Count=8
 [BINARIES]
 Count=0
 [IMAGES]
@@ -42,7 +43,10 @@ File8=PID.h
 File9=IRQs.c
 File10=IRQs.h
 File11=Calcs.h
-Count=12
+File12=Encoder.c
+File13=Encoder.h
+File14=ADC_Buttons.h
+Count=15
 [EEPROM]
 File0=ReflowOven.ihex
 Count=1
@@ -65,7 +69,8 @@ File2=PID.h
 File3=Calcs.h
 File4=ADC_Buttons.h
 File5=IRQs.h
-Count=6
+File6=Encoder.h
+Count=7
 [PLDS]
 Count=0
 [Useses]
@@ -81,22 +86,26 @@ File8=UART
 File9=Conversions
 File10=I2C
 File11=I2C_Lcd
-Count=12
+File12=Button
+Count=13
 [INTERRUPT_DEFS]
 VECTOR_MODE=0
 IVT_BASE=00000008
 [EXPANDED_NODES]
 0=ReflowOven.mcppi
 1=Sources
-9=Header Files
+10=Header Files
 Count=3
 [LIB_EXPANDED_NODES]
+0=mikroE Libraries
 1=System Libraries
+2=ADC
+7=Button
 643=Sprintf
 1980=PID
 1986=I2C_LcdRm
 1987=I2C_Lcd
-Count=5
+Count=8
 [PROGRAMMER_TYPE]
 Value=mikroE mikroProg
 [CODEGRIP_OPTIONS]
