@@ -10,7 +10,19 @@
 #define ENTER 4
 ///////////////////////////////////////
 //structs, unions & enums
-enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolDownDeg,CoolDownTm,KP_,Ki_,Kd_};
+enum StatesOfControl{
+      Return = 1,
+      TempMenu,
+      PIDMenu,
+      RampSettings,
+      SoakSettings,
+      SpikeSettings,
+      CoolSettings,
+      KpSettings,
+      KiSettings,
+      KdSettings,
+      KtimeSettings
+};
 
 
 extern unsigned char B;

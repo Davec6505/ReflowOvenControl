@@ -32,9 +32,6 @@ int8_t SW_Store(void){
 void Encode(void){
       enc.val = read_rotary();
       enc.cntr += enc.val;
-/*enc.layer_cnt += enc.val;
-      if(enc.layer_cnt <= 1)
-          enc.layer_cnt = 1;*/
 }
 
 int8_t read_rotary(){
@@ -47,10 +44,9 @@ int16_t Get_EncoderValue(void){
     return enc.cntr;
 }
 
-uint8_t Get_Layer_Count(void){
-    return enc.layer_cnt;
+
+uint16_t Save_EncoderValue(int16_t new_val){
+    enc.cntr = new_val;
+    return enc.cntr;
 }
 
-uint8_t Staged_Value(uint8_t layer, uint8_t depth){
-  return  enc.layer_value[layer] = depth;
-}

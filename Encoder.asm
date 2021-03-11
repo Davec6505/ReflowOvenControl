@@ -62,15 +62,15 @@ _Encode:
 	MOVWF       _enc+2 
 	MOVF        R1, 0 
 	MOVWF       _enc+3 
-;Encoder.c,38 :: 		}
+;Encoder.c,35 :: 		}
 L_end_Encode:
 	RETURN      0
 ; end of _Encode
 
 _read_rotary:
 
-;Encoder.c,40 :: 		int8_t read_rotary(){
-;Encoder.c,41 :: 		enc.codePrevNext = (enc.codePrevNext << 2)& 0x0f;
+;Encoder.c,37 :: 		int8_t read_rotary(){
+;Encoder.c,38 :: 		enc.codePrevNext = (enc.codePrevNext << 2)& 0x0f;
 	MOVF        _enc+0, 0 
 	MOVWF       R0 
 	RLCF        R0, 1 
@@ -82,7 +82,7 @@ _read_rotary:
 	MOVWF       R3 
 	MOVF        R3, 0 
 	MOVWF       _enc+0 
-;Encoder.c,42 :: 		enc.codePrevNext |= (DATA >> enc.ROR);
+;Encoder.c,39 :: 		enc.codePrevNext |= (DATA >> enc.ROR);
 	MOVLW       192
 	ANDWF       PORTB+0, 0 
 	MOVWF       R2 
@@ -102,7 +102,7 @@ L__read_rotary7:
 	IORWF       R0, 1 
 	MOVF        R0, 0 
 	MOVWF       _enc+0 
-;Encoder.c,43 :: 		return rot_enc_table[enc.codePrevNext & 0x0f];
+;Encoder.c,40 :: 		return rot_enc_table[enc.codePrevNext & 0x0f];
 	MOVLW       15
 	ANDWF       R0, 1 
 	MOVLW       _rot_enc_table+0
@@ -118,56 +118,38 @@ L__read_rotary7:
 	ADDWFC      TBLPTR+2, 1 
 	TBLRD*+
 	MOVFF       TABLAT+0, R0
-;Encoder.c,44 :: 		}
+;Encoder.c,41 :: 		}
 L_end_read_rotary:
 	RETURN      0
 ; end of _read_rotary
 
 _Get_EncoderValue:
 
-;Encoder.c,46 :: 		int16_t Get_EncoderValue(void){
-;Encoder.c,47 :: 		return enc.cntr;
+;Encoder.c,43 :: 		int16_t Get_EncoderValue(void){
+;Encoder.c,44 :: 		return enc.cntr;
 	MOVF        _enc+2, 0 
 	MOVWF       R0 
 	MOVF        _enc+3, 0 
 	MOVWF       R1 
-;Encoder.c,48 :: 		}
+;Encoder.c,45 :: 		}
 L_end_Get_EncoderValue:
 	RETURN      0
 ; end of _Get_EncoderValue
 
-_Get_Layer_Count:
+_Save_EncoderValue:
 
-;Encoder.c,50 :: 		uint8_t Get_Layer_Count(void){
-;Encoder.c,51 :: 		return enc.layer_cnt;
-	MOVF        _enc+16, 0 
+;Encoder.c,48 :: 		uint16_t Save_EncoderValue(int16_t new_val){
+;Encoder.c,49 :: 		enc.cntr = new_val;
+	MOVF        FARG_Save_EncoderValue_new_val+0, 0 
+	MOVWF       _enc+2 
+	MOVF        FARG_Save_EncoderValue_new_val+1, 0 
+	MOVWF       _enc+3 
+;Encoder.c,50 :: 		return enc.cntr;
+	MOVF        FARG_Save_EncoderValue_new_val+0, 0 
 	MOVWF       R0 
-;Encoder.c,52 :: 		}
-L_end_Get_Layer_Count:
-	RETURN      0
-; end of _Get_Layer_Count
-
-_Staged_Value:
-
-;Encoder.c,54 :: 		uint8_t Staged_Value(uint8_t layer, uint8_t depth){
-;Encoder.c,55 :: 		return  enc.layer_value[layer] = depth;
-	MOVLW       _enc+6
-	MOVWF       R0 
-	MOVLW       hi_addr(_enc+6)
+	MOVF        FARG_Save_EncoderValue_new_val+1, 0 
 	MOVWF       R1 
-	MOVF        FARG_Staged_Value_layer+0, 0 
-	ADDWF       R0, 1 
-	BTFSC       STATUS+0, 0 
-	INCF        R1, 1 
-	MOVFF       R0, FSR1L+0
-	MOVFF       R1, FSR1H+0
-	MOVF        FARG_Staged_Value_depth+0, 0 
-	MOVWF       POSTINC1+0 
-	MOVFF       R0, FSR0L+0
-	MOVFF       R1, FSR0H+0
-	MOVF        POSTINC0+0, 0 
-	MOVWF       R0 
-;Encoder.c,56 :: 		}
-L_end_Staged_Value:
+;Encoder.c,51 :: 		}
+L_end_Save_EncoderValue:
 	RETURN      0
-; end of _Staged_Value
+; end of _Save_EncoderValue

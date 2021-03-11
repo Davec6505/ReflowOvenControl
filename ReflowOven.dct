@@ -210,8 +210,6 @@ aphase
 atof
 atoi
 atol
-b
-b_
 b0
 b1
 b2
@@ -865,7 +863,6 @@ gcen_bit
 gcen_ssp1con2_bit
 get_encodervalue
 get_fosc_khz
-get_layer_count
 gettemp
 gie
 gie_bit
@@ -1780,6 +1777,7 @@ s_ssp1stat_bit
 sample_spi
 samplebuttons
 sampletimer
+save_encodervalue
 savedvals
 sbcde
 sbcde_bit
@@ -2029,7 +2027,6 @@ sspov
 sspov_bit
 sspov_ssp1con1_bit
 sspstat
-staged_value
 state
 status
 stkful

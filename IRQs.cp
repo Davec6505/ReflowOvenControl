@@ -229,12 +229,23 @@ uint8_t _SW(void);
 int8_t SW_Store(void);
 int8_t read_rotary();
 int16_t Get_EncoderValue(void);
-uint8_t Get_Layer_Count(void);
-uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
+uint16_t Save_EncoderValue(int16_t new_val);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
 #line 13 "c:/users/git/reflowovencontrol/adc_buttons.h"
-enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolDownDeg,CoolDownTm,KP_,Ki_,Kd_};
+enum StatesOfControl{
+ Return = 1,
+ TempMenu,
+ PIDMenu,
+ RampSettings,
+ SoakSettings,
+ SpikeSettings,
+ CoolSettings,
+ KpSettings,
+ KiSettings,
+ KdSettings,
+ KtimeSettings
+};
 
 
 extern unsigned char B;

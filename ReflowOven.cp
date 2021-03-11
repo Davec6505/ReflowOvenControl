@@ -269,12 +269,23 @@ uint8_t _SW(void);
 int8_t SW_Store(void);
 int8_t read_rotary();
 int16_t Get_EncoderValue(void);
-uint8_t Get_Layer_Count(void);
-uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
+uint16_t Save_EncoderValue(int16_t new_val);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
 #line 13 "c:/users/git/reflowovencontrol/adc_buttons.h"
-enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolDownDeg,CoolDownTm,KP_,Ki_,Kd_};
+enum StatesOfControl{
+ Return = 1,
+ TempMenu,
+ PIDMenu,
+ RampSettings,
+ SoakSettings,
+ SpikeSettings,
+ CoolSettings,
+ KpSettings,
+ KiSettings,
+ KdSettings,
+ KtimeSettings
+};
 
 
 extern unsigned char B;
@@ -409,6 +420,8 @@ void main() {
  I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle);
  Delay_ms(100);
 
+
+
  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-1000,'+',_PID);
  Uart1_En();
  Set_Priority();
@@ -438,6 +451,8 @@ void main() {
  EEWrt = on;
  tmr.sec = 0;
  Bits = 0;
+ Menu_Bit = 0;
+ Ok_Bit = 0;
  CalcTimerTicks();
  phase_cntr_last = Phs.PhaseCntr;
  while(1){
@@ -445,12 +460,17 @@ void main() {
  static unsigned int TempTicPlaceholder;
 
 
- if (Button(&PORTA, 2, 10, 0))
- Menu_Bit = on;
+ LATB5_bit = Menu_Bit;
  if(Menu_Bit)
  SampleButtons();
 
- if(!OK_Bit){
+ if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 200, 0)){
+ Menu_Bit = on;
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ }
+
+
+ if(!Menu_Bit){
 
  if(phase_cntr_last != Phs.PhaseCntr){
  phase_cntr_last = Phs.PhaseCntr;
@@ -572,7 +592,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 218 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 227 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -580,25 +600,27 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 227 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 236 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
  case 5:
  if(!TempBit){
  DegC.sampleTimer++;
+ if(!Menu_Bit){
  sprintf(txt7,"%2u",DegC.sampleTimer);
  I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Clk:=");
  I2C_LCD_Out(LCD_01_ADDRESS,4,6,txt7);
+ }
  TempBit = on;
  if(DegC.sampleTimer == 20){
  DegC.Temp_fPv = ReadMax31855J();
- if(!OK_Bit){
+ if(!Menu_Bit){
  sprintf(txt5,"%3.2f",DegC.Temp_fPv);
  I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
  I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
  I2C_LCD_Out(LCD_01_ADDRESS,3,11,"'C");
- }else I2C_LCD_Out(LCD_01_ADDRESS,3,11,"     ");
+ }
  }
  }
  break;
@@ -607,14 +629,14 @@ void main() {
  pidBit = on;
  if(DegC.sampleTimer >= 20){
  PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
- if(!OK_Bit){
+ if(!Menu_Bit){
  sprintf(txt4,"%5d",pid_t.Mv);
  I2C_LCD_Out(LCD_01_ADDRESS,2,5,txt4);
  }
  }
  }
  break;
-#line 275 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 286 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  default:
  if(Phs.UartWriter > 8){
  Phs.UartWriter = 0;
@@ -623,7 +645,6 @@ void main() {
  if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
  if(TempBit)TempBit = off;
  if(pidBit) pidBit = off;
- if(OK_Bit)I2C_LCD_Out(LCD_01_ADDRESS,2,0,"      ");
  Phs.PhaseCntr = 1;
  break;
  }

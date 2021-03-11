@@ -270,8 +270,7 @@ uint8_t _SW(void);
 int8_t SW_Store(void);
 int8_t read_rotary();
 int16_t Get_EncoderValue(void);
-uint8_t Get_Layer_Count(void);
-uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
+uint16_t Save_EncoderValue(int16_t new_val);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
 #line 22 "c:/users/git/reflowovencontrol/config.h"
@@ -309,7 +308,19 @@ unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
 void WriteDataOut();
 #line 13 "c:/users/git/reflowovencontrol/adc_buttons.h"
-enum StatesOfControl{Return,RampDeg,RampTm,SoakDeg,SoakTm,SpikeDeg,SpikeTm,CoolDownDeg,CoolDownTm,KP_,Ki_,Kd_};
+enum StatesOfControl{
+ Return = 1,
+ TempMenu,
+ PIDMenu,
+ RampSettings,
+ SoakSettings,
+ SpikeSettings,
+ CoolSettings,
+ KpSettings,
+ KiSettings,
+ KdSettings,
+ KtimeSettings
+};
 
 
 extern unsigned char B;
@@ -365,11 +376,12 @@ void doOFFBitoff();
 void EERead();
 void EEWrite();
 #line 5 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
-static unsigned int enC,enC_temp;
+static unsigned int enC,enC_last,enC_line_inc,enC_line_last;
 unsigned char txt4_[6];
-unsigned char B;
-unsigned char B_;
+static unsigned char B;
+static unsigned char B_;
 static unsigned int valOf;
+static bit P0,P1,P2,P3;
 
 
 sbit Menu_Bit at B.B0;
@@ -403,155 +415,348 @@ unsigned int (*Fptr)(unsigned int Arg1);
 
 void SampleButtons(){
 static unsigned int i;
- if (Button(&PORTA, 2, 10, 0))
- Menu_Bit = on;
- else
- return;
 
- if(Menu_Bit && !Ok_Bit){
- Ok_Bit = on;
- I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+
+ if(!Menu_Bit){
+ P0 = 0;
+ return;
  }
 
  if(Menu_Bit){
+ if(!P0 && (enC != 0)){
+ P0 = 1;
+ enC = 0;
+ enC = Save_EncoderValue(enC);
+ }
+
+ if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E && !OK_F && !OK_G)
  enC = Get_EncoderValue();
- if(enC_temp != enC){
- sprintf(txt1,"%4d",enC);
- UART1_Write_Text(txt1);
- I2C_LCD_Out(LCD_01_ADDRESS,2,11,"Enc:=");
- I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt1);
+
+ if(enC < 0 || enC > 65000){
+ enC = 0;
+ enC = Save_EncoderValue(enC);
+ }
+
+ if(enC_last != enC){
+ enC_last = enC;
+ if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E && !OK_F && !OK_G){
+ I2C_LCD_Out(LCD_01_ADDRESS,enC_line_last,1," ");
+ enC_line_inc = enC % 4 + 1;
+ enC_line_last = enC_line_inc;
+ I2C_LCD_Out(LCD_01_ADDRESS,enC_line_inc,1,">");
+ sprintf(txt4_,"%5u",enC_line_inc);
+ I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4_);
+ sprintf(txt4_,"%5u",enC);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4_);
  }
  }
 
- if(Ok_Bit){
+ }
+
+ if(Menu_Bit){
  if(EEWrt)EEWrt = off;
+ state:
  switch(Sps.State){
- case Return: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ret     ");
+ case Return: if(enC > 3){
+ enC = Save_EncoderValue(3);
+ }
+ close:
+ switch(enC){
+ case 0: if (Button(&PORTA, 2, 100, 0) && Menu_Bit && !Ok_Bit){
+ Ok_Bit = 1;
+ enC = 13;
+ goto close;
+ }
+ case 1: if (Button(&PORTA, 2, 200, 0) && (Sps.State != TempMenu)){
+ Sps.State = TempMenu;
+ enC = Save_EncoderValue(1);
+ goto state;
+ }
 
+ case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+ Sps.State = PIDMenu;
+ enC = Save_EncoderValue(2);
+ goto state;
+ }
+ case 3: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Info   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Control");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"PID    ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
  break;
- case RampDeg: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"RampDeg ");
+ case 4:
+ case 5:
+ case 6:
+ case 7: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ case 8:
+ case 9:
+ case 10:
+ case 11: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ default:
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ Delay_ms(800);
+ Menu_Bit = off;
+ Ok_Bit = off;
+ P0 = 0;
+ enC = Save_EncoderValue(0);
+ break;
+ }
+ break;
+ case TempMenu:
+ if(enC > 7){
+ enC = Save_EncoderValue(7);
+ }
+ ret1:
+ switch(enC){
+ case 0: if (Button(&PORTA, 2, 200, 0) && (Sps.State == TempMenu)){
+ Sps.State = Return;
+ enC = 13;
+ goto ret1;
+ }
+ case 1: if (Button(&PORTA, 2, 200, 0) && (Sps.State != RampSettings)){
+ Sps.State = RampSettings;
+ enC = Save_EncoderValue(1);
+ goto state;
+ }
+ case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != SoakSettings)){
+ Sps.State = SoakSettings;
+ enC = Save_EncoderValue(1);
+ goto state;
+ }
+ case 3: if (Button(&PORTA, 2, 200, 0) && (Sps.State != SpikeSettings)){
+ Sps.State = SpikeSettings;
+ enC = Save_EncoderValue(1);
+ goto state;
+ }
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Ramp   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Soak   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spike  ");
+ break;
+ case 4: if (Button(&PORTA, 2, 200, 0) && (Sps.State != CoolSettings)){
+ Sps.State = CoolSettings;
+ enC = Save_EncoderValue(1);
+ goto state;
+ }
+ case 5:
+ case 6:
+ case 7: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Cool   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ case 8:
+ case 9:
+ case 10:
+ case 11: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ default:
+ if(Ok_Bit || (enC > 12)){
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ Sps.State = 1;
+
+ }
+ break;
+ }
+ break;
+ case PIDMenu:
+ if(enC > 7){
+ enC = Save_EncoderValue(7);
+ }
+ ret2:
+ switch(enC){
+ case 0: if (Button(&PORTA, 2, 200, 0) && (Sps.State == PIDMenu)){
+ Sps.State = Return;
+ enC = 13;
+ goto ret2;
+ }
+ case 1: if (Button(&PORTA, 2, 200, 0) && (Sps.State != KpSettings)){
+ Sps.State = KpSettings;
+ enC = Save_EncoderValue(0);
+ goto state;
+ }
+ case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != KiSettings)){
+ Sps.State = KiSettings;
+ enC = Save_EncoderValue(0);
+ goto state;
+ }
+ case 3: if (Button(&PORTA, 2, 200, 0) && (Sps.State != KdSettings)){
+ Sps.State = KdSettings;
+ enC = Save_EncoderValue(0);
+ goto state;
+ }
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Kp     ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Ki     ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Kd     ");
+ break;
+ case 4: if (Button(&PORTA, 2, 200, 0) && (Sps.State != KtimeSettings)){
+ Sps.State = KtimeSettings;
+ enC = Save_EncoderValue(0);
+ goto state;
+ }
+ case 5:
+ case 6:
+ case 7: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Kt     ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ case 8:
+ case 9:
+ case 10:
+ case 11: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ break;
+ default:
+ if(Ok_Bit || (enC > 12)){
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ Sps.State = Return;
+ }
+ break;
+ }
+ break;
+ case RampSettings:
+ if(enC > 3){
+ enC = Save_EncoderValue(3);
+ }
+ ret3:
+ switch(enC){
+ case 0: if (Button(&PORTA, 2, 200, 0) && (Sps.State == RampSettings)){
+ Sps.State = TempMenu;
+ while(!RA2_bit);
+ enC = 13;
+ goto ret3;
+ }
+ case 1: if (Button(&PORTA, 2, 200, 0) && !OK_A){
+ enC = Save_EncoderValue(enC);
+ OK_A = 1;
+ enC_line_inc = 1;
+ Save_EncoderValue(Sps.RmpDeg);
+ }
  if(OK_A){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKA");
- valOf = Sps.RmpDeg;
- OFF_Bit = on;
- }else Sps.RmpDeg = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
- break;
- case RampTm: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"RampTm  ");
+ Sps.RmpDeg = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_A = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc);
+ }
+ }
+ case 2: if (Button(&PORTA, 2, 200, 0) && !OK_B){
+ enC = Save_EncoderValue(enC);
+ OK_B = 1;
+ enC_line_inc = 2;
+ Save_EncoderValue(Sps.RmpTmr);
+ while(!RA2_bit);
+ }
  if(OK_B){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKB");
- valOf = Sps.RmpTmr;
- OFF_Bit = on;
- }else Sps.RmpTmr = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ Sps.RmpTmr = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_B = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc);
+ }
+ }
+ case 3:
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret     ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"RmpDeg:=");
+ sprintf(txt4,"%3d",Sps.RmpDeg);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"RmpTmr:=");
+ sprintf(txt4,"%3d",Sps.RmpTmr);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"        ");
  break;
- case SoakDeg: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"SoakDeg ");
- if(OK_C){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKC");
- valOf = Sps.SokDeg;
- OFF_Bit = on;
- }else Sps.SokDeg = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ default:
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  break;
- case SoakTm: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"SoakTm  ");
- if(OK_D){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKD");
- valOf = Sps.SokTmr;
- OFF_Bit = on;
- }else Sps.SokTmr = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ }
  break;
- case SpikeDeg: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"SpikeDeg");
- if(OK_E){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKE");
- valOf = Sps.SpkeDeg;
- OFF_Bit = on;
- }else Sps.SpkeDeg = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ case SoakSettings:
+ if(enC > 3){
+ enC = Save_EncoderValue(3);
+ }
+ ret4:
+ switch(enC){
+ case 0: if (Button(&PORTA, 2, 200, 0) && (Sps.State == SoakSettings)){
+ Sps.State = TempMenu;
+ while(!RA2_bit);
+ enC = 13;
+ goto ret4;
+ }
+ case 1: if (Button(&PORTA, 2, 200, 0) && !OK_A){
+ enC = Save_EncoderValue(enC);
+ OK_A = 1;
+ enC_line_inc = 1;
+ Save_EncoderValue(Sps.SokDeg);
+ }
+ if(OK_A){
+ Sps.SokDeg = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_A = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc);
+ }
+ }
+ case 2: if (Button(&PORTA, 2, 200, 0) && !OK_B){
+ enC = Save_EncoderValue(enC);
+ OK_B = 1;
+ enC_line_inc = 2;
+ Save_EncoderValue(Sps.SokTmr);
+ while(!RA2_bit);
+ }
+ if(OK_B){
+ Sps.SokTmr = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_B = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc);
+ }
+ }
+ case 3:
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SoakDeg:=");
+ sprintf(txt4,"%3d",Sps.SokDeg);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SoakTmr:=");
+ sprintf(txt4,"%3d",Sps.SokTmr);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
  break;
- case SpikeTm: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"SpikeTm ");
- if(OK_F){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKF");
- valOf = Sps.SpkeTmr;
- OFF_Bit = on;
- }else Sps.SpkeTmr = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ default:
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  break;
- case CoolDownDeg: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"CoolDeg ");
- if(OK_G){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKG");
- valOf = Sps.CoolOffDeg;
- OFF_Bit = on;
- }else Sps.CoolOffDeg = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ }
  break;
- case CoolDownTm: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"CoolTm ");
- if(OK_H){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKH");
- valOf = Sps.CoolOffTmr;
- OFF_Bit = on;
- }else Sps.CoolOffTmr = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ case SpikeSettings:
  break;
- case Kp_: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Kp    ");
- if(OK_I){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKI");
- valOf = pid_t.Kp;
- OFF_Bit = on;
- }else pid_t.Kp = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ case CoolSettings:
  break;
- case Ki_: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ki    ");
- if(OK_J){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKJ");
- valOf = pid_t.Ki;
- OFF_Bit = on;
- }else pid_t.Ki = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ case KpSettings:
  break;
- case Kd_: I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Kd    ");
- if(OK_K){
- if(!OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"OKK");
- valOf = pid_t.Kd;
- OFF_Bit = on;
- }else pid_t.Kd = valOf;
- }else doOFFBitoff();
- sprintf(txt4_,"%5u",valOf);
- I2C_LCD_Out(LCD_01_ADDRESS,1,11,txt4_);
+ case KiSettings:
+ break;
+ case KdSettings:
+ break;
+ case KtimeSettings:
  break;
  default: Sps.State = Return;
- valOf = Sps.State;
  break;
  }
 
@@ -567,7 +772,7 @@ static unsigned int i;
  ResetBits();
  }
  if((!OK_A)&&(!OK_B)&&(!OK_C)&&(!OK_D)&&(!OK_E)&&(!OK_F)&&(!OK_G)&&(!OK_H)&&(!OK_I)&&(!OK_J)&&(!OK_K)){
- Sps.State = valOf;
+
  if((valOf > 11)&&(valOf<50000))valOf = 11;
  else if (valOf >= 50001)valOf = 0;
  }
@@ -577,6 +782,7 @@ static unsigned int i;
 void ResetBits(){
  valOf = 0;
  Sps.State = 0;
+ Menu_Bit = 0;
  OK_Bit = 0;
  OK_A = 0;
  OK_B = 0;
@@ -592,26 +798,10 @@ void ResetBits(){
 }
 
 void SavedVals(){
- if(Sps.State == RampDeg) OK_A = !OK_A;
- else if(Sps.State == RampTm) OK_B = !OK_B;
- else if(Sps.State == SoakDeg) OK_C = !OK_C;
- else if(Sps.State == SoakTm) OK_D = !OK_D;
- else if(Sps.State == SpikeDeg) OK_E = !OK_E;
- else if(Sps.State == SpikeTM) OK_F = !OK_F;
- else if(Sps.State == CoolDownDeg) OK_G = !OK_G;
- else if(Sps.State == CoolDowntM) OK_H = !OK_H;
- else if(Sps.State == Kp_) OK_I = !OK_I;
- else if(Sps.State == Ki_) OK_J = !OK_J;
- else if(Sps.State == Kd_) OK_K = !OK_K;
- else OK_Bit = !OK_Bit;
+
 }
 
 void doOFFBitoff(){
- if(OFF_Bit){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"   ");
- valOf = Sps.State;
- OFF_Bit = off;
- }
 
 }
 

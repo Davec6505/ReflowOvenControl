@@ -154,8 +154,6 @@ main
 	CalcTimerTicks
 		Div_16X16_U
 		S_HWMul
-	Button
-		Delay_500us
 	SampleButtons
 		sprintf
 			_doprntf
@@ -212,6 +210,38 @@ main
 						SETFUN32
 				double2longint
 					SETIOV3224
+		Save_EncoderValue
+		Get_EncoderValue
+		I2C_LCD_Out
+			I2C_LCD_goto
+				I2C_LCD_putcmd
+					I2C_PCF8574_Write
+						I2C1_Start
+							I2C1_Is_Idle
+							____DoIFC
+						I2C1_Wr
+							____DoIFC
+						I2C1_Stop
+						I2C2_Start
+							I2C2_Is_Idle
+							____DoIFC
+						I2C2_Wr
+							____DoIFC
+						I2C2_Stop
+			I2C_LCD_putch
+				I2C_PCF8574_Write
+					I2C1_Start
+						I2C1_Is_Idle
+						____DoIFC
+					I2C1_Wr
+						____DoIFC
+					I2C1_Stop
+					I2C2_Start
+						I2C2_Is_Idle
+						____DoIFC
+					I2C2_Wr
+						____DoIFC
+					I2C2_Stop
 		Button
 			Delay_500us
 		I2C_Lcd_Cmd
@@ -244,70 +274,6 @@ main
 					I2C2_Wr
 						____DoIFC
 					I2C2_Stop
-		Get_EncoderValue
-		UART1_Write_Text
-			UART1_Write
-		I2C_LCD_Out
-			I2C_LCD_goto
-				I2C_LCD_putcmd
-					I2C_PCF8574_Write
-						I2C1_Start
-							I2C1_Is_Idle
-							____DoIFC
-						I2C1_Wr
-							____DoIFC
-						I2C1_Stop
-						I2C2_Start
-							I2C2_Is_Idle
-							____DoIFC
-						I2C2_Wr
-							____DoIFC
-						I2C2_Stop
-			I2C_LCD_putch
-				I2C_PCF8574_Write
-					I2C1_Start
-						I2C1_Is_Idle
-						____DoIFC
-					I2C1_Wr
-						____DoIFC
-					I2C1_Stop
-					I2C2_Start
-						I2C2_Is_Idle
-						____DoIFC
-					I2C2_Wr
-						____DoIFC
-					I2C2_Stop
-		doOFFBitoff
-			I2C_LCD_Out
-				I2C_LCD_goto
-					I2C_LCD_putcmd
-						I2C_PCF8574_Write
-							I2C1_Start
-								I2C1_Is_Idle
-								____DoIFC
-							I2C1_Wr
-								____DoIFC
-							I2C1_Stop
-							I2C2_Start
-								I2C2_Is_Idle
-								____DoIFC
-							I2C2_Wr
-								____DoIFC
-							I2C2_Stop
-				I2C_LCD_putch
-					I2C_PCF8574_Write
-						I2C1_Start
-							I2C1_Is_Idle
-							____DoIFC
-						I2C1_Wr
-							____DoIFC
-						I2C1_Stop
-						I2C2_Start
-							I2C2_Is_Idle
-							____DoIFC
-						I2C2_Wr
-							____DoIFC
-						I2C2_Stop
 		CalcTimerTicks
 			Div_16X16_U
 			S_HWMul
@@ -344,6 +310,8 @@ main
 						I2C2_Stop
 			EEPROM_Write
 		ResetBits
+	Button
+		Delay_500us
 	DoTime
 	UART1_Write_Text
 		UART1_Write

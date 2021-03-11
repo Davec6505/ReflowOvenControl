@@ -50,6 +50,8 @@ void main() {
   I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle); // Sets the I2C1 module active
   Delay_ms(100);
   //|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
+
+  
   PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-1000,'+',_PID);
   Uart1_En();
   Set_Priority();
@@ -79,6 +81,8 @@ void main() {
   EEWrt = on;
   tmr.sec = 0;
   Bits = 0;
+  Menu_Bit = 0;
+  Ok_Bit = 0;
   CalcTimerTicks();
   phase_cntr_last = Phs.PhaseCntr;
   while(1){
@@ -86,12 +90,17 @@ void main() {
   static unsigned int TempTicPlaceholder;
      ////////////////////////////////////////////
      //display the pHase conter
-     if (Button(&PORTA, 2, 10, 0))
-               Menu_Bit = on;
+     LATB5_bit  = Menu_Bit;
      if(Menu_Bit)
          SampleButtons();
+         
+     if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 200, 0)){
+           Menu_Bit = on;
+           I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+      }
+
         
-     if(!OK_Bit){
+     if(!Menu_Bit){
 
        if(phase_cntr_last != Phs.PhaseCntr){
           phase_cntr_last = Phs.PhaseCntr;
@@ -230,18 +239,20 @@ void main() {
       case 5: // spi call to temp chip
                 if(!TempBit){
                    DegC.sampleTimer++;
-                   sprintf(txt7,"%2u",DegC.sampleTimer);
-                   I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Clk:=");
-                   I2C_LCD_Out(LCD_01_ADDRESS,4,6,txt7);
+                   if(!Menu_Bit){
+                     sprintf(txt7,"%2u",DegC.sampleTimer);
+                     I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Clk:=");
+                     I2C_LCD_Out(LCD_01_ADDRESS,4,6,txt7);
+                   }
                    TempBit = on;
                   if(DegC.sampleTimer == 20){
                     DegC.Temp_fPv = ReadMax31855J();
-                    if(!OK_Bit){
+                    if(!Menu_Bit){
                       sprintf(txt5,"%3.2f",DegC.Temp_fPv); //DegC.Temp_
                       I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
                       I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
                       I2C_LCD_Out(LCD_01_ADDRESS,3,11,"'C");
-                    }else I2C_LCD_Out(LCD_01_ADDRESS,3,11,"     ");
+                    }
                   }
                 }
                 break;
@@ -250,7 +261,7 @@ void main() {
                   pidBit = on;
                   if(DegC.sampleTimer >= 20){
                     PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
-                    if(!OK_Bit){
+                    if(!Menu_Bit){
                       sprintf(txt4,"%5d",pid_t.Mv);
                       I2C_LCD_Out(LCD_01_ADDRESS,2,5,txt4);
                     }
@@ -280,7 +291,6 @@ void main() {
                if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
                if(TempBit)TempBit = off;
                if(pidBit) pidBit = off;
-               if(OK_Bit)I2C_LCD_Out(LCD_01_ADDRESS,2,0,"      ");
                Phs.PhaseCntr = 1;
                break;
      }

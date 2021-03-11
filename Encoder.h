@@ -34,7 +34,7 @@ uint8_t _SW(void);
 int8_t SW_Store(void);
 int8_t read_rotary();
 int16_t Get_EncoderValue(void);
-uint8_t Get_Layer_Count(void);
-uint8_t Get_Staged_Value(uint8_t layer,uint8_t depth);
+uint16_t Save_EncoderValue(int16_t new_val);
+
 
 #endif
