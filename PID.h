@@ -45,7 +45,7 @@ typedef struct _PID_{
    int errorP;
    int diffVal;
    long LastCalcVal;
-   
+   short sample_tmr;
 }_PID;
 extern  dirOfCntl Dir_;
 extern  typeOfCntrl Cntrl;

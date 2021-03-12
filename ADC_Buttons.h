@@ -71,6 +71,7 @@ extern Spts Sps;
 
 ////////////////////////////////////////
 //function prototypes
+void RstEntryBits();
 void SampleButtons();
 void ResetBits();
 void SavedVals();
@@ -78,3 +79,11 @@ void doOFFBitoff();
 void EERead();
 void EEWrite();
 #endif
+
+
+///////////////////////////////////////////////////////////////////////////
+//All Debug code below
+           /*sprintf(txt4_,"%5u",enC_line_inc);
+             I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4_);
+             sprintf(txt4_,"%5u",enC);
+             I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4_);*/

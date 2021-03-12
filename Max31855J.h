@@ -19,6 +19,7 @@ struct Temp{
  unsigned int xVal;
  uint8_t Deg_decimal;
  short sampleTimer;
+ short pidTimer;
  unsigned int Sample_SPI;
 };
 

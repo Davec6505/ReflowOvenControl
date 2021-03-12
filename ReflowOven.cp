@@ -149,6 +149,7 @@ struct Temp{
  unsigned int xVal;
  uint8_t Deg_decimal;
  short sampleTimer;
+ short pidTimer;
  unsigned int Sample_SPI;
 };
 
@@ -198,7 +199,7 @@ typedef struct _PID_{
  int errorP;
  int diffVal;
  long LastCalcVal;
-
+ short sample_tmr;
 }_PID;
 extern dirOfCntl Dir_;
 extern typeOfCntrl Cntrl;
@@ -334,6 +335,7 @@ extern Spts Sps;
 
 
 
+void RstEntryBits();
 void SampleButtons();
 void ResetBits();
 void SavedVals();
@@ -375,7 +377,8 @@ void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
 void WriteDataOut();
-#line 9 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 10 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+const unsigned int mulFact = 18;
 unsigned char LCD_01_ADDRESS = 0x4E;
 char *test = "Starting up";
 
@@ -386,18 +389,20 @@ struct Phasing Phs;
 _PID pid_t;
 Spts Sps;
 
-static unsigned char Bits;
-static unsigned int phase_cntr_last;
 
+
+static unsigned char Bits;
 sbit SetPtSet at Bits.B0;
 sbit SetCoolBit at Bits.B1;
 sbit RstTmr at Bits.B2;
 sbit FinCycle at Bits.B3;
 sbit WriteData at Bits.B4;
-
 static bit xDetect,pHase,Serv,buttDetect,TempBit,pidBit;
-char PhaseCnt;
 
+
+char PhaseCnt;
+static unsigned int phase_cntr_last;
+static short pid_sample_last;
 unsigned char txt1[6];
 unsigned char txt2[5];
 unsigned char txt3[5];
@@ -406,7 +411,7 @@ unsigned char txt5[9];
 unsigned char txt6[4];
 unsigned char txt7[3];
 
-const unsigned int mulFact = 18;
+
 
 
 void main() {
@@ -421,8 +426,9 @@ void main() {
  Delay_ms(100);
 
 
-
- PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-1000,'+',_PID);
+ EERead();
+ EEWrt = off;
+ PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
  Uart1_En();
  Set_Priority();
  ConfigSpi();
@@ -447,8 +453,6 @@ void main() {
  Delay_ms(100);
  wait = off;
  DegC.Temp_iPv = 0;
- EERead();
- EEWrt = on;
  tmr.sec = 0;
  Bits = 0;
  Menu_Bit = 0;
@@ -464,9 +468,10 @@ void main() {
  if(Menu_Bit)
  SampleButtons();
 
- if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 200, 0)){
+ if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 100, 0)){
+ RstEntryBits();
  Menu_Bit = on;
- I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ while(!RA2_bit);
  }
 
 
@@ -524,24 +529,24 @@ void main() {
  if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
  if (SetCoolBit)SetCoolBit = off;
  TempTicPlaceholder = TempTicks.RampTick;
- I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Ramp");
+ I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
  sprintf(txt6,"%3u",Sps.RmpDeg);
  }
  else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
  TempTicPlaceholder = TempTicks.SoakTick;
- I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Soak");
+ I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
  sprintf(txt6,"%3u",Sps.SokDeg);
  }
  else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
  TempTicPlaceholder = TempTicks.SpikeTick;
- I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Spke");
+ I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
  sprintf(txt6,"%3u",Sps.SpkeDeg);
  }
  else{
  SetCoolBit = on;
  TempTicPlaceholder = TempTicks.CoolTick;
- if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Cool");
- else I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Finn");
+ if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Cool");
+ else I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Finn");
  sprintf(txt6,"%3u",Sps.CoolOffDeg);
  if(DegC.Deg_Sp < Sps.CoolOffDeg)FinCycle = on;
  }
@@ -556,8 +561,8 @@ void main() {
 
  if(DegC.LastDeg != DegC.Deg_Sp){
  sprintf(txt1,"%3u",DegC.Deg_Sp);
- I2C_LCD_Out(LCD_01_ADDRESS,1,0,txt1);
- I2C_LCD_Out(LCD_01_ADDRESS,2,0,txt6);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
  WriteDataOut();
  DegC.LastDeg = DegC.Deg_Sp;
  }
@@ -592,7 +597,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 227 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 231 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -600,49 +605,64 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 236 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 240 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
  case 5:
  if(!TempBit){
  DegC.sampleTimer++;
- if(!Menu_Bit){
- sprintf(txt7,"%2u",DegC.sampleTimer);
- I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Clk:=");
- I2C_LCD_Out(LCD_01_ADDRESS,4,6,txt7);
- }
  TempBit = on;
- if(DegC.sampleTimer == 20){
+ if(DegC.sampleTimer >= 20){
  DegC.Temp_fPv = ReadMax31855J();
  if(!Menu_Bit){
+ DegC.Temp_iPv = (int)DegC.Temp_fPv;
  sprintf(txt5,"%3.2f",DegC.Temp_fPv);
  I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
  I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
  I2C_LCD_Out(LCD_01_ADDRESS,3,11,"'C");
+ sprintf(txt5,"%3d",DegC.Temp_iPv);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,14,txt5);
  }
  }
  }
  break;
  case 6:
  if(!pidBit){
+ pid_t.sample_tmr++;
  pidBit = on;
- if(DegC.sampleTimer >= 20){
+ if(pid_t.sample_tmr >= 5){
  PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
  if(!Menu_Bit){
+ I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");
  sprintf(txt4,"%5d",pid_t.Mv);
- I2C_LCD_Out(LCD_01_ADDRESS,2,5,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,4,5,txt4);
  }
  }
  }
  break;
-#line 286 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+ case 7:
+ Phs.UartWriter++;
+ if(Phs.UartWriter == 8){
+ if(!WriteData){
+ WriteData = on;
+ UART1_Write_Text(txt1);
+ UART1_Write(',');
+ UART1_Write_Text(txt5);
+ UART1_Write(',');
+ UART1_Write_Text(txt6);
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+ }
+ }
+ break;
  default:
  if(Phs.UartWriter > 8){
  Phs.UartWriter = 0;
  WriteData = off;
  }
  if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
+ if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
  if(TempBit)TempBit = off;
  if(pidBit) pidBit = off;
  Phs.PhaseCntr = 1;

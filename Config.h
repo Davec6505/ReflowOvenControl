@@ -53,3 +53,18 @@ unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
 void WriteDataOut();
 #endif
+
+/////////////////////////////////////////////////
+//Debug code
+        /*if(phase_cntr_last != Phs.PhaseCntr){
+          phase_cntr_last = Phs.PhaseCntr;
+          sprintf(txt7,"%2u",Phs.PhaseCntr); //Phase counter
+          I2C_LCD_Out(LCD_01_ADDRESS,4,14,"Phs:=");
+          I2C_LCD_Out(LCD_01_ADDRESS,4,19,txt7);
+       }*/
+       
+       /*if(!Menu_Bit){
+         sprintf(txt7,"%2u",DegC.sampleTimer);
+         I2C_LCD_Out(LCD_01_ADDRESS,4,14,"Cyc:=");
+         I2C_LCD_Out(LCD_01_ADDRESS,4,19,txt7);
+       }*/

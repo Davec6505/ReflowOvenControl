@@ -109,6 +109,7 @@ struct Temp{
  unsigned int xVal;
  uint8_t Deg_decimal;
  short sampleTimer;
+ short pidTimer;
  unsigned int Sample_SPI;
 };
 
@@ -158,7 +159,7 @@ typedef struct _PID_{
  int errorP;
  int diffVal;
  long LastCalcVal;
-
+ short sample_tmr;
 }_PID;
 extern dirOfCntl Dir_;
 extern typeOfCntrl Cntrl;
@@ -294,6 +295,7 @@ extern Spts Sps;
 
 
 
+void RstEntryBits();
 void SampleButtons();
 void ResetBits();
 void SavedVals();

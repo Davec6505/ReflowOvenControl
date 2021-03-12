@@ -60,6 +60,8 @@ main
 	UART1_Init
 	I2C1_Init
 	I2C_Set_Active
+	EERead
+		EEPROM_Read
 	PID_Init
 	Uart1_En
 	Set_Priority
@@ -149,8 +151,6 @@ main
 					____DoIFC
 				I2C2_Stop
 	EI
-	EERead
-		EEPROM_Read
 	CalcTimerTicks
 		Div_16X16_U
 		S_HWMul
@@ -312,6 +312,37 @@ main
 		ResetBits
 	Button
 		Delay_500us
+	RstEntryBits
+		I2C_Lcd_Cmd
+			I2C_LCD_goto
+				I2C_LCD_putcmd
+					I2C_PCF8574_Write
+						I2C1_Start
+							I2C1_Is_Idle
+							____DoIFC
+						I2C1_Wr
+							____DoIFC
+						I2C1_Stop
+						I2C2_Start
+							I2C2_Is_Idle
+							____DoIFC
+						I2C2_Wr
+							____DoIFC
+						I2C2_Stop
+			I2C_LCD_putcmd
+				I2C_PCF8574_Write
+					I2C1_Start
+						I2C1_Is_Idle
+						____DoIFC
+					I2C1_Wr
+						____DoIFC
+					I2C1_Stop
+					I2C2_Start
+						I2C2_Is_Idle
+						____DoIFC
+					I2C2_Wr
+						____DoIFC
+					I2C2_Stop
 	DoTime
 	UART1_Write_Text
 		UART1_Write
@@ -336,6 +367,8 @@ main
 					SETFOV32
 					RES032
 				SETFOV32
+	double2int
+		SETIOV3224
 	PID_Calc
 		S_HWMul
 Tmr1_Int

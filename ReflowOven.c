@@ -6,28 +6,32 @@ Description: Code for a reflow oven
 
 #include "Config.h"
 
+//constants
+const unsigned int mulFact = 18;
 unsigned char LCD_01_ADDRESS = 0x4E;
 char *test = "Starting up";
-// structs & enums
 
+// structs & enums
 struct Time tmr;
 struct Buttons But;
 struct Phasing Phs;
 _PID  pid_t;
 Spts Sps;
+
+
 //bits
 static unsigned char Bits;
-static unsigned int phase_cntr_last;
-
 sbit SetPtSet   at Bits.B0;
 sbit SetCoolBit at Bits.B1;
 sbit RstTmr     at Bits.B2;
 sbit FinCycle   at Bits.B3;
 sbit WriteData  at Bits.B4;
-
 static bit xDetect,pHase,Serv,buttDetect,TempBit,pidBit;
-char PhaseCnt;
+
 //variable declerations
+char PhaseCnt;
+static unsigned int phase_cntr_last;
+static short pid_sample_last;
 unsigned char txt1[6];
 unsigned char txt2[5];
 unsigned char txt3[5];
@@ -35,8 +39,8 @@ unsigned char txt4[5];
 unsigned char txt5[9];
 unsigned char txt6[4];
 unsigned char txt7[3];
-//constants
-const unsigned int mulFact = 18;
+
+
 
 
 void main() {
@@ -51,8 +55,9 @@ void main() {
   Delay_ms(100);
   //|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
 
-  
-  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-1000,'+',_PID);
+  EERead();
+  EEWrt = off;
+  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
   Uart1_En();
   Set_Priority();
   ConfigSpi();
@@ -77,8 +82,6 @@ void main() {
   Delay_ms(100);
   wait = off;
   DegC.Temp_iPv = 0;
-  EERead();
-  EEWrt = on;
   tmr.sec = 0;
   Bits = 0;
   Menu_Bit = 0;
@@ -94,9 +97,10 @@ void main() {
      if(Menu_Bit)
          SampleButtons();
          
-     if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 200, 0)){
+     if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 100, 0)){
+           RstEntryBits();
            Menu_Bit = on;
-           I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+           while(!RA2_bit);
       }
 
         
@@ -154,24 +158,24 @@ void main() {
           if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
                if (SetCoolBit)SetCoolBit = off;
                TempTicPlaceholder = TempTicks.RampTick;
-               I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Ramp");
+               I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
                sprintf(txt6,"%3u",Sps.RmpDeg);
           }
           else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
                TempTicPlaceholder = TempTicks.SoakTick;
-               I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Soak");
+               I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
                sprintf(txt6,"%3u",Sps.SokDeg);
           }
           else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
                TempTicPlaceholder = TempTicks.SpikeTick;
-               I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Spke");
+               I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
                sprintf(txt6,"%3u",Sps.SpkeDeg);
           }
           else{
               SetCoolBit = on;
               TempTicPlaceholder = TempTicks.CoolTick;
-              if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Cool");
-              else I2C_LCD_Out(LCD_01_ADDRESS,1,7,"Finn");
+              if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Cool");
+              else I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Finn");
               sprintf(txt6,"%3u",Sps.CoolOffDeg);
               if(DegC.Deg_Sp < Sps.CoolOffDeg)FinCycle = on;
           }
@@ -186,8 +190,8 @@ void main() {
 
             if(DegC.LastDeg != DegC.Deg_Sp){
                sprintf(txt1,"%3u",DegC.Deg_Sp);
-               I2C_LCD_Out(LCD_01_ADDRESS,1,0,txt1);
-               I2C_LCD_Out(LCD_01_ADDRESS,2,0,txt6);
+               I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
+               I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
                WriteDataOut();
                DegC.LastDeg = DegC.Deg_Sp;
             }
@@ -239,36 +243,36 @@ void main() {
       case 5: // spi call to temp chip
                 if(!TempBit){
                    DegC.sampleTimer++;
-                   if(!Menu_Bit){
-                     sprintf(txt7,"%2u",DegC.sampleTimer);
-                     I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Clk:=");
-                     I2C_LCD_Out(LCD_01_ADDRESS,4,6,txt7);
-                   }
                    TempBit = on;
-                  if(DegC.sampleTimer == 20){
+                  if(DegC.sampleTimer >= 20){
                     DegC.Temp_fPv = ReadMax31855J();
                     if(!Menu_Bit){
+                      DegC.Temp_iPv = (int)DegC.Temp_fPv;
                       sprintf(txt5,"%3.2f",DegC.Temp_fPv); //DegC.Temp_
                       I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
                       I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
                       I2C_LCD_Out(LCD_01_ADDRESS,3,11,"'C");
+                      sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
+                      I2C_LCD_Out(LCD_01_ADDRESS,3,14,txt5);
                     }
                   }
                 }
                 break;
       case 6://calculate Temp and display
                 if(!pidBit){
+                  pid_t.sample_tmr++;
                   pidBit = on;
-                  if(DegC.sampleTimer >= 20){
+                  if(pid_t.sample_tmr >= 5){
                     PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
                     if(!Menu_Bit){
+                      I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");
                       sprintf(txt4,"%5d",pid_t.Mv);
-                      I2C_LCD_Out(LCD_01_ADDRESS,2,5,txt4);
+                      I2C_LCD_Out(LCD_01_ADDRESS,4,5,txt4);
                     }
                   }
                 }
                 break;
-     /* case 7:   //write data out to pc every 70*4 ms
+      case 7:   //write data out to pc every 70*4 ms
                 Phs.UartWriter++;
                 if(Phs.UartWriter == 8){
                   if(!WriteData){
@@ -282,13 +286,14 @@ void main() {
                      UART1_Write(0x0A);
                   }
                 }
-                break;  */
+                break;
        default:
                if(Phs.UartWriter > 8){
                   Phs.UartWriter = 0;
                   WriteData = off;
                }
                if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
+               if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
                if(TempBit)TempBit = off;
                if(pidBit) pidBit = off;
                Phs.PhaseCntr = 1;
