@@ -38,7 +38,7 @@ extern sbit OK_G;
 extern sbit OK_H;
 extern sbit OK_I;
 extern sbit OK_J;
-extern sbit OK_K;
+extern sbit StartCycle;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
@@ -74,8 +74,6 @@ extern Spts Sps;
 void RstEntryBits();
 void SampleButtons();
 void ResetBits();
-void SavedVals();
-void doOFFBitoff();
 void EERead();
 void EEWrite();
 #endif

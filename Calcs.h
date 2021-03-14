@@ -16,5 +16,5 @@ extern struct Ticks TempTicks;
  
  ///////////////////////////////////////////
  //function prototypes
- void CalcTimerTicks();
+ void CalcTimerTicks(int iPv);
  #endif

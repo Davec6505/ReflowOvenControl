@@ -274,41 +274,13 @@ main
 					I2C2_Wr
 						____DoIFC
 					I2C2_Stop
+		EEWrite
+			EEPROM_Write
+		EERead
+			EEPROM_Read
 		CalcTimerTicks
 			Div_16X16_U
 			S_HWMul
-		EEWrite
-			I2C_LCD_Out
-				I2C_LCD_goto
-					I2C_LCD_putcmd
-						I2C_PCF8574_Write
-							I2C1_Start
-								I2C1_Is_Idle
-								____DoIFC
-							I2C1_Wr
-								____DoIFC
-							I2C1_Stop
-							I2C2_Start
-								I2C2_Is_Idle
-								____DoIFC
-							I2C2_Wr
-								____DoIFC
-							I2C2_Stop
-				I2C_LCD_putch
-					I2C_PCF8574_Write
-						I2C1_Start
-							I2C1_Is_Idle
-							____DoIFC
-						I2C1_Wr
-							____DoIFC
-						I2C1_Stop
-						I2C2_Start
-							I2C2_Is_Idle
-							____DoIFC
-						I2C2_Wr
-							____DoIFC
-						I2C2_Stop
-			EEPROM_Write
 		ResetBits
 	Button
 		Delay_500us
@@ -369,6 +341,7 @@ main
 				SETFOV32
 	double2int
 		SETIOV3224
+	strcat
 	PID_Calc
 		S_HWMul
 Tmr1_Int

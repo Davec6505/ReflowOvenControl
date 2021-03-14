@@ -88,27 +88,6 @@ void Low_Priority(){
         Serial();
 }
 
-void TMR3(){
-    TMR3IF_bit = 0;
-    TMR3H      = 0xC1;
-    TMR3L      = 0x80;
-
-    //I_Dlys for continous wait states
-    tmr.millis++;
-    //ten milliseconds
-    tmr.tenMilli++;
-    //Clock timers for Reflow
-    tmr.ms++;
-    tmr.ten_ms++;
-    if(tmr.ten_ms > 9){
-         tmr.ten_ms = 0;
-    }
-}
-void Serial(){
-     RCIF_bit = off;
-     TXREG1 = RCREG1;
-}
-
 void DoTime(){
   if(tmr.ms > 999){
     tmr.ms = 0;
@@ -126,3 +105,31 @@ void DoTime(){
      }
   }
 }
+
+void TMR3(){
+    TMR3IF_bit = 0;
+    TMR3H      = 0xC1;
+    TMR3L      = 0x80;
+
+    ///////////////////////////////////////////
+    //I_Dlys for continous wait states
+    tmr.millis++;
+    
+    ////////////////////////////////////////////
+    //ten milliseconds
+    tmr.tenMilli++;
+    
+    ////////////////////////////////////////////
+    //Clock timers for Reflow
+    tmr.ms++;
+    tmr.ten_ms++;
+    if(tmr.ten_ms > 9){
+         tmr.ten_ms = 0;
+    }
+}
+
+void Serial(){
+     RCIF_bit = off;
+     TXREG1 = RCREG1;
+}
+

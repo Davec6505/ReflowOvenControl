@@ -213,7 +213,16 @@ L__GetTemp8:
 	MOVWF       GetTemp_Tmp_L0+0 
 	MOVF        R1, 0 
 	MOVWF       GetTemp_Tmp_L0+1 
-;Max31855J.c,62 :: 		ftemp =  (float)Tmp + fdec;
+;Max31855J.c,62 :: 		Tmp -=  DegC.Deg_OffSet;
+	MOVF        _DegC+8, 0 
+	SUBWF       R0, 1 
+	MOVF        _DegC+9, 0 
+	SUBWFB      R1, 1 
+	MOVF        R0, 0 
+	MOVWF       GetTemp_Tmp_L0+0 
+	MOVF        R1, 0 
+	MOVWF       GetTemp_Tmp_L0+1 
+;Max31855J.c,63 :: 		ftemp =  (float)Tmp + fdec;
 	CALL        _int2double+0, 0
 	MOVF        FLOC__GetTemp+0, 0 
 	MOVWF       R4 
@@ -224,8 +233,8 @@ L__GetTemp8:
 	MOVF        FLOC__GetTemp+3, 0 
 	MOVWF       R7 
 	CALL        _Add_32x32_FP+0, 0
-;Max31855J.c,64 :: 		return ftemp;
-;Max31855J.c,65 :: 		}
+;Max31855J.c,65 :: 		return ftemp;
+;Max31855J.c,66 :: 		}
 L_end_GetTemp:
 	RETURN      0
 ; end of _GetTemp

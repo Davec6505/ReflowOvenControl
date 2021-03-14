@@ -13,15 +13,14 @@
 ///////////////////////////////////////////
 //defines
 #define pulseLATC2 500
-#define RevADC 1023
+#define RevADC 1011
 #define ServoSub 1500
 #define ServoPls 4
-#define PhaseOff 17640
+#define PhaseOff 10100
 ///////////////////////////////////////////
 //enums  & structs
+
 extern enum swt{off,on};
-
-
 
 ////////////////////////////////////////////
 //variable declerations

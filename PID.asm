@@ -504,77 +504,77 @@ _S_HWMul:
 ;PID.c,46 :: 		long S_HWMul(int valA,int valB){
 ;PID.c,51 :: 		MOVF    FARG_S_HWMul_valA+0,0     ;
 	MOVF        FARG_S_HWMul_valA+0, 0, 1
-;PID.c,52 :: 		MULWF   FARG_S_HWMul_valB+0          ;
+;PID.c,52 :: 		MULWF   FARG_S_HWMul_valB+0       ;
 	MULWF       FARG_S_HWMul_valB+0, 1
-;PID.c,53 :: 		MOVFF   PRODH,S_HWMul_res_L0+1       ;
+;PID.c,53 :: 		MOVFF   PRODH,S_HWMul_res_L0+1    ;
 	MOVFF       PRODH+0, S_HWMul_res_L0+1
-;PID.c,54 :: 		MOVFF   PRODL,S_HWMul_res_L0+0       ;
+;PID.c,54 :: 		MOVFF   PRODL,S_HWMul_res_L0+0    ;
 	MOVFF       PRODL+0, S_HWMul_res_L0+0
 ;PID.c,56 :: 		MOVF    FARG_S_HWMul_valA+1,0     ;
 	MOVF        FARG_S_HWMul_valA+1, 0, 1
-;PID.c,57 :: 		MULWF   FARG_S_HWMul_valB+1          ;
+;PID.c,57 :: 		MULWF   FARG_S_HWMul_valB+1       ;
 	MULWF       FARG_S_HWMul_valB+1, 1
-;PID.c,58 :: 		MOVFF   PRODH,S_HWMul_res_L0+3       ;
+;PID.c,58 :: 		MOVFF   PRODH,S_HWMul_res_L0+3    ;
 	MOVFF       PRODH+0, S_HWMul_res_L0+3
-;PID.c,59 :: 		MOVFF   PRODL,S_HWMul_res_L0+2       ;
+;PID.c,59 :: 		MOVFF   PRODL,S_HWMul_res_L0+2    ;
 	MOVFF       PRODL+0, S_HWMul_res_L0+2
-;PID.c,62 :: 		MOVF    FARG_S_HWMul_valA+0,0        ;
+;PID.c,62 :: 		MOVF    FARG_S_HWMul_valA+0,0     ;
 	MOVF        FARG_S_HWMul_valA+0, 0, 1
-;PID.c,63 :: 		MULWF   FARG_S_HWMul_valB+1          ;
+;PID.c,63 :: 		MULWF   FARG_S_HWMul_valB+1       ;
 	MULWF       FARG_S_HWMul_valB+1, 1
-;PID.c,65 :: 		MOVF   PRODL,0                      ;
+;PID.c,65 :: 		MOVF   PRODL,0                     ;
 	MOVF        PRODL+0, 0, 1
-;PID.c,66 :: 		ADDWF   S_HWMul_res_L0+1             ;
+;PID.c,66 :: 		ADDWF   S_HWMul_res_L0+1           ;
 	ADDWF       S_HWMul_res_L0+1, 1, 1
-;PID.c,67 :: 		MOVF   PRODH,0                      ;
+;PID.c,67 :: 		MOVF   PRODH,0                     ;
 	MOVF        PRODH+0, 0, 1
-;PID.c,68 :: 		ADDWFC  S_HWMul_res_L0+2             ;
+;PID.c,68 :: 		ADDWFC  S_HWMul_res_L0+2           ;
 	ADDWFC      S_HWMul_res_L0+2, 1, 1
-;PID.c,69 :: 		CLRF    0                            ;
+;PID.c,69 :: 		CLRF    0                          ;
 	CLRF        R0, 1
-;PID.c,70 :: 		ADDWFC  S_HWMul_res_L0+3             ;
+;PID.c,70 :: 		ADDWFC  S_HWMul_res_L0+3           ;
 	ADDWFC      S_HWMul_res_L0+3, 1, 1
-;PID.c,73 :: 		MOVF    FARG_S_HWMul_valA+1,0        ;
+;PID.c,73 :: 		MOVF    FARG_S_HWMul_valA+1,0      ;
 	MOVF        FARG_S_HWMul_valA+1, 0, 1
-;PID.c,74 :: 		MULWF   FARG_S_HWMul_valB+0          ;
+;PID.c,74 :: 		MULWF   FARG_S_HWMul_valB+0        ;
 	MULWF       FARG_S_HWMul_valB+0, 1
-;PID.c,76 :: 		MOVF    PRODL,0                      ;
+;PID.c,76 :: 		MOVF    PRODL,0                    ;
 	MOVF        PRODL+0, 0, 1
-;PID.c,77 :: 		ADDWF   S_HWMul_res_L0+1             ;
+;PID.c,77 :: 		ADDWF   S_HWMul_res_L0+1           ;
 	ADDWF       S_HWMul_res_L0+1, 1, 1
-;PID.c,78 :: 		MOVF    PRODH,0                      ;
+;PID.c,78 :: 		MOVF    PRODH,0                    ;
 	MOVF        PRODH+0, 0, 1
-;PID.c,79 :: 		ADDWFC  S_HWMul_res_L0+2             ;
+;PID.c,79 :: 		ADDWFC  S_HWMul_res_L0+2           ;
 	ADDWFC      S_HWMul_res_L0+2, 1, 1
-;PID.c,80 :: 		CLRF    0                            ;
+;PID.c,80 :: 		CLRF    0                          ;
 	CLRF        R0, 1
-;PID.c,81 :: 		ADDWFC  S_HWMul_res_L0+3             ;
+;PID.c,81 :: 		ADDWFC  S_HWMul_res_L0+3           ;
 	ADDWFC      S_HWMul_res_L0+3, 1, 1
-;PID.c,84 :: 		BTFSS   FARG_S_HWMul_valB+1,7        ;//test if bit 7 of valB hi is on eg negative
+;PID.c,84 :: 		BTFSS   FARG_S_HWMul_valB+1,7      ;//test if bit 7 of valB hi is on eg negative
 	BTFSS       FARG_S_HWMul_valB+1, 7, 1
-;PID.c,85 :: 		BRA     SIGN_val                     ;//if it is on jump to label
+;PID.c,85 :: 		BRA     SIGN_val                   ;//if it is on jump to label
 	BRA         SIGN_val
-;PID.c,86 :: 		MOVF    FARG_S_HWMul_valA+0,0        ;
+;PID.c,86 :: 		MOVF    FARG_S_HWMul_valA+0,0      ;
 	MOVF        FARG_S_HWMul_valA+0, 0, 1
-;PID.c,87 :: 		SUBWF   S_HWMul_res_L0+2             ;
+;PID.c,87 :: 		SUBWF   S_HWMul_res_L0+2           ;
 	SUBWF       S_HWMul_res_L0+2, 1, 1
-;PID.c,88 :: 		MOVF    FARG_S_HWMul_valA+1,0        ;
+;PID.c,88 :: 		MOVF    FARG_S_HWMul_valA+1,0      ;
 	MOVF        FARG_S_HWMul_valA+1, 0, 1
-;PID.c,89 :: 		SUBWFB  S_HWMul_res_L0+3             ;//sub wreg from file reg with the borrow flag
+;PID.c,89 :: 		SUBWFB  S_HWMul_res_L0+3           ;//sub wreg from file reg with the borrow flag
 	SUBWFB      S_HWMul_res_L0+3, 1, 1
 ;PID.c,93 :: 		SIGN_val:   //LABEL to jump to if sign value was on to perform a different subtraction
 SIGN_val:
-;PID.c,94 :: 		BTFSS  FARG_S_HWMul_valA+1,7          ;//again test if bit 7 of valA hi is on sign bit
+;PID.c,94 :: 		BTFSS  FARG_S_HWMul_valA+1,7        ;//again test if bit 7 of valA hi is on sign bit
 	BTFSS       FARG_S_HWMul_valA+1, 7, 1
-;PID.c,95 :: 		BRA    CONT                           ;
+;PID.c,95 :: 		BRA    CONT                         ;
 	BRA         CONT
-;PID.c,96 :: 		MOVF   FARG_S_HWMul_valB+0,0          ;
+;PID.c,96 :: 		MOVF   FARG_S_HWMul_valB+0,0        ;
 	MOVF        FARG_S_HWMul_valB+0, 0, 1
-;PID.c,97 :: 		SUBWF  S_HWMul_res_L0+2               ;
+;PID.c,97 :: 		SUBWF  S_HWMul_res_L0+2             ;
 	SUBWF       S_HWMul_res_L0+2, 1, 1
-;PID.c,98 :: 		MOVF   FARG_S_HWMul_valB+1,0          ;
+;PID.c,98 :: 		MOVF   FARG_S_HWMul_valB+1,0        ;
 	MOVF        FARG_S_HWMul_valB+1, 0, 1
-;PID.c,99 :: 		SUBWFB S_HWMul_res_L0+3               ;
+;PID.c,99 :: 		SUBWFB S_HWMul_res_L0+3             ;
 	SUBWFB      S_HWMul_res_L0+3, 1, 1
 ;PID.c,101 :: 		CONT:
 CONT:

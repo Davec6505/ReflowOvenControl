@@ -144,6 +144,7 @@ struct Temp{
  unsigned char SPIindx;
  unsigned short TempBuff[5];
  unsigned int Deg_Sp;
+ unsigned int Deg_OffSet;
  unsigned int LastDeg;
  float Temp_fPv;
  int Temp_iPv;
@@ -201,6 +202,7 @@ typedef struct _PID_{
  int diffVal;
  long LastCalcVal;
  short sample_tmr;
+ short Kt;
 }_PID;
 extern dirOfCntl Dir_;
 extern typeOfCntrl Cntrl;
@@ -239,7 +241,7 @@ extern struct Ticks TempTicks;
 
 
 
- void CalcTimerTicks();
+ void CalcTimerTicks(int iPv);
 #line 1 "c:/users/git/reflowovencontrol/encoder.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
 #line 9 "c:/users/git/reflowovencontrol/encoder.h"
@@ -274,10 +276,8 @@ int16_t Get_EncoderValue(void);
 uint16_t Save_EncoderValue(int16_t new_val);
 #line 1 "c:/users/git/reflowovencontrol/adc_buttons.h"
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 22 "c:/users/git/reflowovencontrol/config.h"
+#line 23 "c:/users/git/reflowovencontrol/config.h"
 extern enum swt{off,on};
-
-
 
 
 
@@ -337,7 +337,7 @@ extern sbit OK_G;
 extern sbit OK_H;
 extern sbit OK_I;
 extern sbit OK_J;
-extern sbit OK_K;
+extern sbit StartCycle;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
@@ -373,8 +373,6 @@ extern Spts Sps;
 void RstEntryBits();
 void SampleButtons();
 void ResetBits();
-void SavedVals();
-void doOFFBitoff();
 void EERead();
 void EEWrite();
 #line 5 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
@@ -417,6 +415,7 @@ unsigned int (*Fptr)(unsigned int Arg1);
 
 void RstEntryBits(){
  P0 = 0;
+ P2 = 0;
  enC = -1;
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 }
@@ -435,7 +434,7 @@ static unsigned int i;
  enC_last = -1;
  }
 
- if(!OK_A && !OK_B && !OK_C)
+ if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
  enC = Get_EncoderValue();
 
  if(enC < 0 || enC > 65000){
@@ -445,7 +444,7 @@ static unsigned int i;
 
  if(enC_last != enC){
  enC_last = enC;
- if(!OK_A && !OK_B && !OK_C){
+ if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E){
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_last,1," ");
  enC_line_inc = enC % 4 + 1;
  enC_line_last = enC_line_inc;
@@ -459,13 +458,13 @@ static unsigned int i;
  if(Menu_Bit){
 
 
- if(!OK_A && !OK_B && !OK_C)
+ if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15," ");
  else{
  P1 = 1;
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15,"@");
  }
-#line 98 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
+#line 99 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
  state:
  switch(Sps.State){
  case Return: if(enC > 3){
@@ -489,7 +488,13 @@ static unsigned int i;
  enC = Save_EncoderValue(0);
  goto state;
  }
- case 3: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Info   ");
+ case 3:
+ if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+ Ok_Bit = 1;;
+ enC = 13;
+ goto close;
+ }
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Info   ");
  I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Control");
  I2C_LCD_Out(LCD_01_ADDRESS,3,2,"PID    ");
  I2C_LCD_Out(LCD_01_ADDRESS,4,2,"ReStart");
@@ -515,7 +520,6 @@ static unsigned int i;
  Delay_ms(800);
  if(P1) EEWrt = on;
  else Menu_Bit = off;
- Ok_Bit = off;
  P0 = 0;
  enC = Save_EncoderValue(0);
  break;
@@ -582,12 +586,13 @@ static unsigned int i;
  }
  break;
  case PIDMenu:
- if(enC > 3){
- enC = Save_EncoderValue(3);
+ if(enC > 7){
+ enC = Save_EncoderValue(7);
  }
  ret2:
  switch(enC){
- case 0: if (Button(&PORTA, 2, 200, 0) && (Sps.State == PIDMenu)){
+ case 0:
+ if (Button(&PORTA, 2, 200, 0) && (Sps.State == PIDMenu)){
  Sps.State = Return;
  while(!RA2_bit);
  enC = 13;
@@ -596,7 +601,7 @@ static unsigned int i;
  case 1:
  if (Button(&PORTA, 2, 200, 0) && !OK_A){
  enC = Save_EncoderValue(enC);
- OK_A = 1;OK_B = 0;OK_C = 0;
+ OK_A = 1;OK_B = 0;OK_C = 0;OK_D=0;OK_E=0;
  enC_line_inc = 1;
  Save_EncoderValue(pid_t.Kp);
  while(!RA2_bit);
@@ -613,7 +618,7 @@ static unsigned int i;
  case 2:
  if (Button(&PORTA, 2, 200, 0) && !OK_B){
  enC = Save_EncoderValue(enC);
- OK_B = 1;OK_A=0;OK_C=0;
+ OK_B = 1;OK_A=0;OK_C=0;OK_D=0;
  enC_line_inc = 2;
  Save_EncoderValue(pid_t.Ki);
  while(!RA2_bit);
@@ -621,16 +626,20 @@ static unsigned int i;
  if(OK_B){
  pid_t.Ki = Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
- OK_B = 0;OK_A=0;OK_C=0;
+ OK_B = 0;OK_A=0;OK_C=0;OK_D=0;OK_E=0;
  while(!RA2_bit);
  enC_line_inc = 2;
  enC = Save_EncoderValue(enC_line_inc);
  }
  }
  case 3:
+ if(P2){
+ P2 = 0;
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ }
  if (Button(&PORTA, 2, 200, 0) && !OK_C){
  enC = Save_EncoderValue(enC);
- OK_C = 1;OK_A=0;OK_B=0;
+ OK_C = 1;OK_A=0;OK_B=0;OK_D=0;OK_E=0;
  enC_line_inc = 3;
  Save_EncoderValue(pid_t.Kd);
  while(!RA2_bit);
@@ -644,36 +653,73 @@ static unsigned int i;
  enC = Save_EncoderValue(enC_line_inc);
  }
  }
- I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
- I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Kp:=   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu     ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Kp:=     ");
  sprintf(txt4,"%3d",pid_t.Kp);
  I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
- I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Ki:=   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Ki:=     ");
  sprintf(txt4,"%3d",pid_t.Ki);
  I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
- I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Kd:=   ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Kd:=     ");
  sprintf(txt4,"%3d",pid_t.Kd);
  I2C_LCD_Out(LCD_01_ADDRESS,4,16,txt4);
  break;
- case 4: if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
- Sps.State = KtimeSettings;
- enC = Save_EncoderValue(0);
- goto state;
+ case 4:
+ if (Button(&PORTA, 2, 200, 0) && !OK_D){
+ enC = Save_EncoderValue(enC);
+ OK_D = 1;OK_A=0;OK_B=0;OK_C = 0;OK_E=0;
+ enC_line_inc = 0;
+ Save_EncoderValue(pid_t.Kt);
+ while(!RA2_bit);
+ }
+ if(OK_D){
+ pid_t.Kt = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_D = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc+4);
+ }
  }
  case 5:
+ if (Button(&PORTA, 2, 200, 0) && !OK_E){
+ enC = Save_EncoderValue(enC);
+ OK_E = 1;OK_A=0;OK_B=0;OK_C = 0;OK_D=0;
+ enC_line_inc = 0;
+ Save_EncoderValue(DegC.Deg_OffSet);
+ while(!RA2_bit);
+ }
+ if(OK_E){
+ DegC.Deg_OffSet = Get_EncoderValue();
+ if(Button(&PORTA, 2, 200, 0)){
+ OK_E = 0;
+ while(!RA2_bit);
+ enC_line_inc = 0;
+ enC = Save_EncoderValue(enC_line_inc+4);
+ }
+ }
  case 6:
- case 7: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Kt     ");
- I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
- I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
- I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ case 7:
+ if(!P2){
+ P2 = 1;
+ I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+ }
+ I2C_LCD_Out(LCD_01_ADDRESS,1,2,"*Kt");
+ sprintf(txt4,"%3d",pid_t.Kt);
+ I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"*C Offset");
+ sprintf(txt4,"%3d",DegC.Deg_OffSet);
+ I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
  break;
  case 8:
  case 9:
  case 10:
- case 11: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
- I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
- I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
- I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+ case 11: I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare    ");
+ I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare    ");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
+ I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
  break;
  default:
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
@@ -938,20 +984,13 @@ static unsigned int i;
  }
 
  if(EEWrt){
- CalcTimerTicks();
  EEWrite();
- I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Writing To EEPROM...");
+ I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Writing To EEPROM...");
  Delay_ms(1000);
+ EERead();
+ CalcTimerTicks(DegC.Temp_iPv);
  ResetBits();
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
- EEWrt = 0;
- }
-
-
- if((!OK_A)&&(!OK_B)&&(!OK_C)&&(!OK_D)&&(!OK_E)&&(!OK_F)&&(!OK_G)&&(!OK_H)&&(!OK_I)&&(!OK_J)&&(!OK_K)){
-
- if((valOf > 11)&&(valOf<50000))valOf = 11;
- else if (valOf >= 50001)valOf = 0;
  }
 
 }
@@ -960,7 +999,6 @@ void ResetBits(){
  valOf = 0;
  Sps.State = 0;
  Menu_Bit = 0;
- OK_Bit = 0;
  OK_A = 0;
  OK_B = 0;
  OK_C = 0;
@@ -972,14 +1010,8 @@ void ResetBits(){
  OK_I = 0;
  OK_J = 0;
  OK_K = 0;
-}
-
-void SavedVals(){
-
-}
-
-void doOFFBitoff(){
-
+ EEWrt = 0;
+ P1 = 0;
 }
 
 void EERead(){
@@ -1008,20 +1040,22 @@ void EERead(){
   ((char *)&pid_t.Ki)[1]  = EEPROM_Read(0x13);
   ((char *)&pid_t.Kd)[0]  = EEPROM_Read(0x14);
   ((char *)&pid_t.Kd)[1]  = EEPROM_Read(0x15);
+  ((char *)&DegC.Deg_OffSet)[0]  = EEPROM_Read(0x16);
+  ((char *)&DegC.Deg_OffSet)[1]  = EEPROM_Read(0x17);
+ pid_t.Kt = EEPROM_Read(0x18);
 
 
-  ((char *)&TempTicks.RampTick)[0]  = EEPROM_Read(0x16);
-  ((char *)&TempTicks.RampTick)[1]  = EEPROM_Read(0x17);
-  ((char *)&TempTicks.SoakTick)[0]  = EEPROM_Read(0x18);
-  ((char *)&TempTicks.SoakTick)[1]  = EEPROM_Read(0x19);
-  ((char *)&TempTicks.SpikeTick)[0]  = EEPROM_Read(0x1A);
-  ((char *)&TempTicks.SpikeTick)[1]  = EEPROM_Read(0x1B);
-  ((char *)&TempTicks.CoolTick)[0]  = EEPROM_Read(0x1C);
-  ((char *)&TempTicks.CoolTick)[1]  = EEPROM_Read(0x1D);
+  ((char *)&TempTicks.RampTick)[0]  = EEPROM_Read(0x1A);
+  ((char *)&TempTicks.RampTick)[1]  = EEPROM_Read(0x1B);
+  ((char *)&TempTicks.SoakTick)[0]  = EEPROM_Read(0x1C);
+  ((char *)&TempTicks.SoakTick)[1]  = EEPROM_Read(0x1D);
+  ((char *)&TempTicks.SpikeTick)[0]  = EEPROM_Read(0x1E);
+  ((char *)&TempTicks.SpikeTick)[1]  = EEPROM_Read(0x1F);
+  ((char *)&TempTicks.CoolTick)[0]  = EEPROM_Read(0x20);
+  ((char *)&TempTicks.CoolTick)[1]  = EEPROM_Read(0x21);
 
 }
 void EEWrite(){
- I2C_LCD_Out(LCD_01_ADDRESS,2,6,"EEW");
 
  EEPROM_Write(0x00,  ((char *)&Sps.RmpDeg)[0] );
  EEPROM_Write(0x01,  ((char *)&Sps.RmpDeg)[1] );
@@ -1047,15 +1081,18 @@ void EEWrite(){
  EEPROM_Write(0x13,  ((char *)&pid_t.Ki)[1] );
  EEPROM_Write(0x14,  ((char *)&pid_t.Kd)[0] );
  EEPROM_Write(0x15,  ((char *)&pid_t.Kd)[1] );
+ EEPROM_Write(0x16,  ((char *)&DegC.Deg_OffSet)[0] );
+ EEPROM_Write(0x17,  ((char *)&DegC.Deg_OffSet)[1] );
+ EEPROM_Write(0x18, pid_t.Kt);
 
 
- EEPROM_Write(0x16,  ((char *)&TempTicks.RampTick)[0] );
- EEPROM_Write(0x17,  ((char *)&TempTicks.RampTick)[1] );
- EEPROM_Write(0x18,  ((char *)&TempTicks.SoakTick)[0] );
- EEPROM_Write(0x19,  ((char *)&TempTicks.SoakTick)[1] );
- EEPROM_Write(0x1A,  ((char *)&TempTicks.SpikeTick)[0] );
- EEPROM_Write(0x1B,  ((char *)&TempTicks.SpikeTick)[1] );
- EEPROM_Write(0x1C,  ((char *)&TempTicks.CoolTick)[0] );
- EEPROM_Write(0x1D,  ((char *)&TempTicks.CoolTick)[1] );
+ EEPROM_Write(0x1A,  ((char *)&TempTicks.RampTick)[0] );
+ EEPROM_Write(0x1B,  ((char *)&TempTicks.RampTick)[1] );
+ EEPROM_Write(0x1C,  ((char *)&TempTicks.SoakTick)[0] );
+ EEPROM_Write(0x1D,  ((char *)&TempTicks.SoakTick)[1] );
+ EEPROM_Write(0x1E,  ((char *)&TempTicks.SpikeTick)[0] );
+ EEPROM_Write(0x1F,  ((char *)&TempTicks.SpikeTick)[1] );
+ EEPROM_Write(0x20,  ((char *)&TempTicks.CoolTick)[0] );
+ EEPROM_Write(0x21,  ((char *)&TempTicks.CoolTick)[1] );
  Delay_ms(100);
 }

@@ -1,23 +1,23 @@
 
 _CalcTimerTicks:
 
-;Calcs.c,7 :: 		void CalcTimerTicks(){
-;Calcs.c,8 :: 		TempTicks.Ambient = DegC.Temp_iPv;
-	MOVF        _DegC+14, 0 
+;Calcs.c,7 :: 		void CalcTimerTicks(int iPv){
+;Calcs.c,8 :: 		TempTicks.Ambient = iPv;
+	MOVF        FARG_CalcTimerTicks_iPv+0, 0 
 	MOVWF       _TempTicks+0 
-	MOVF        _DegC+15, 0 
+	MOVF        FARG_CalcTimerTicks_iPv+1, 0 
 	MOVWF       _TempTicks+1 
 ;Calcs.c,11 :: 		TempTicks.RampTick = Sps.RmpTmr;
 	MOVF        _Sps+2, 0 
 	MOVWF       _TempTicks+2 
 	MOVF        _Sps+3, 0 
 	MOVWF       _TempTicks+3 
-;Calcs.c,12 :: 		TempTicks.RampTick /= (Sps.RmpDeg - TempTicks.Ambient);
+;Calcs.c,12 :: 		TempTicks.RampTick /= (Sps.RmpDeg + TempTicks.Ambient);
 	MOVF        _TempTicks+0, 0 
-	SUBWF       _Sps+0, 0 
+	ADDWF       _Sps+0, 0 
 	MOVWF       R4 
 	MOVF        _TempTicks+1, 0 
-	SUBWFB      _Sps+1, 0 
+	ADDWFC      _Sps+1, 0 
 	MOVWF       R5 
 	MOVF        _Sps+2, 0 
 	MOVWF       R0 

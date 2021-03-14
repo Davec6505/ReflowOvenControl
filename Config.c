@@ -43,7 +43,7 @@ void InitTimer1(){
   CCP1M1_bit = 1;     // |
   CCP1M0_bit = 1;     // |------
   
-  CCP1IE_bit = on;
+  CCP1IE_bit = off;
   CCP1IF_bit = on;
   CCP1IP_bit = on;
   CCP1MD_bit = off;

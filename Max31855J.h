@@ -13,6 +13,7 @@ struct Temp{
  unsigned char SPIindx;
  unsigned short TempBuff[5];
  unsigned int Deg_Sp;
+ unsigned int Deg_OffSet;
  unsigned int LastDeg;
  float Temp_fPv;
  int   Temp_iPv;

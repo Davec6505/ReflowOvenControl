@@ -73,8 +73,8 @@ _InitTimer1:
 	BSF         CCP1M1_bit+0, BitPos(CCP1M1_bit+0) 
 ;Config.c,44 :: 		CCP1M0_bit = 1;     // |------
 	BSF         CCP1M0_bit+0, BitPos(CCP1M0_bit+0) 
-;Config.c,46 :: 		CCP1IE_bit = on;
-	BSF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
+;Config.c,46 :: 		CCP1IE_bit = off;
+	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
 ;Config.c,47 :: 		CCP1IF_bit = on;
 	BSF         CCP1IF_bit+0, BitPos(CCP1IF_bit+0) 
 ;Config.c,48 :: 		CCP1IP_bit = on;
@@ -284,7 +284,7 @@ _ClearAll:
 	MOVLW       1
 	MOVWF       _Phs+2 
 ;Config.c,140 :: 		DegC.sampleTimer = 0;
-	CLRF        _DegC+19 
+	CLRF        _DegC+21 
 ;Config.c,141 :: 		}
 L_end_ClearAll:
 	RETURN      0

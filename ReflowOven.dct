@@ -689,6 +689,7 @@ dec
 dec2bcd
 dec2bcd16
 deg_decimal
+deg_offset
 deg_sp
 degc
 delay_100ms
@@ -723,7 +724,6 @@ div_8x8_s
 div_8x8_u
 done
 done_bit
-dooffbitoff
 dotime
 double2byte
 double2int
@@ -834,6 +834,7 @@ floattostr
 floattostr_fixlen
 flt0
 flt0_bit
+flttxt
 fptr
 free
 free_bit
@@ -1084,6 +1085,7 @@ kbi3_bit
 kd
 ki
 kp
+kt
 labs
 lastcalcval
 lastdeg
@@ -1781,7 +1783,6 @@ sample_tmr
 samplebuttons
 sampletimer
 save_encodervalue
-savedvals
 sbcde
 sbcde_bit
 sbcde_ssp1con3_bit

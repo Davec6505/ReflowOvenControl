@@ -4,12 +4,12 @@
 struct Ticks TempTicks;
 
 
-void CalcTimerTicks(){
-     TempTicks.Ambient = DegC.Temp_iPv;
+void CalcTimerTicks(int iPv){
+     TempTicks.Ambient = iPv;
     //////////////////////////////////////////////////////
     //calc the ramp timer Ticks in 10 milli seconds
      TempTicks.RampTick = Sps.RmpTmr;
-     TempTicks.RampTick /= (Sps.RmpDeg - TempTicks.Ambient);
+     TempTicks.RampTick /= (Sps.RmpDeg + TempTicks.Ambient);
      TempTicks.RampTick =  S_HWMul(TempTicks.RampTick,10);
      ////////////////////////////////////////////////////
      //calculate the soak timer Ticks in 10 milli seconds

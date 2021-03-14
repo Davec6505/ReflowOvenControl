@@ -144,6 +144,7 @@ struct Temp{
  unsigned char SPIindx;
  unsigned short TempBuff[5];
  unsigned int Deg_Sp;
+ unsigned int Deg_OffSet;
  unsigned int LastDeg;
  float Temp_fPv;
  int Temp_iPv;
@@ -178,7 +179,7 @@ extern struct Ticks TempTicks;
 
 
 
- void CalcTimerTicks();
+ void CalcTimerTicks(int iPv);
 #line 1 "c:/users/git/reflowovencontrol/encoder.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
 #line 9 "c:/users/git/reflowovencontrol/encoder.h"
@@ -242,7 +243,7 @@ extern sbit OK_G;
 extern sbit OK_H;
 extern sbit OK_I;
 extern sbit OK_J;
-extern sbit OK_K;
+extern sbit StartCycle;
 extern sbit ENT_Bit;
 extern sbit OFF_Bit;
 extern sbit EEWrt;
@@ -278,15 +279,11 @@ extern Spts Sps;
 void RstEntryBits();
 void SampleButtons();
 void ResetBits();
-void SavedVals();
-void doOFFBitoff();
 void EERead();
 void EEWrite();
 #line 1 "c:/users/public/documents/mikroelektronika/mikroc pro for pic/include/built_in.h"
-#line 22 "c:/users/git/reflowovencontrol/config.h"
+#line 23 "c:/users/git/reflowovencontrol/config.h"
 extern enum swt{off,on};
-
-
 
 
 
@@ -355,6 +352,7 @@ typedef struct _PID_{
  int diffVal;
  long LastCalcVal;
  short sample_tmr;
+ short Kt;
 }_PID;
 extern dirOfCntl Dir_;
 extern typeOfCntrl Cntrl;

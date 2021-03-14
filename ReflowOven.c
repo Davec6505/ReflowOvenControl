@@ -26,12 +26,13 @@ sbit SetCoolBit at Bits.B1;
 sbit RstTmr     at Bits.B2;
 sbit FinCycle   at Bits.B3;
 sbit WriteData  at Bits.B4;
-static bit xDetect,pHase,Serv,buttDetect,TempBit,pidBit;
+
+static bit TempBit,pidBit;
 
 //variable declerations
-char PhaseCnt;
-static unsigned int phase_cntr_last;
+static unsigned int TempTicPlaceholder_last;
 static short pid_sample_last;
+unsigned char PhaseCnt;
 unsigned char txt1[6];
 unsigned char txt2[5];
 unsigned char txt3[5];
@@ -39,6 +40,7 @@ unsigned char txt4[5];
 unsigned char txt5[9];
 unsigned char txt6[4];
 unsigned char txt7[3];
+unsigned char *flttxt;
 
 
 
@@ -56,7 +58,6 @@ void main() {
   //|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
 
   EERead();
-  EEWrt = off;
   PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
   Uart1_En();
   Set_Priority();
@@ -86,18 +87,20 @@ void main() {
   Bits = 0;
   Menu_Bit = 0;
   Ok_Bit = 0;
-  CalcTimerTicks();
-  phase_cntr_last = Phs.PhaseCntr;
+  CalcTimerTicks(0);
+  TempTicPlaceholder_last = 0;
   while(1){
   long Test;
   static unsigned int TempTicPlaceholder;
+  static unsigned int TempDegPlaceholder;
      ////////////////////////////////////////////
      //display the pHase conter
      LATB5_bit  = Menu_Bit;
+     
      if(Menu_Bit)
          SampleButtons();
          
-     if (!Menu_Bit && !Ok_Bit && Button(&PORTA, 2, 100, 0)){
+     if (!Menu_Bit && Button(&PORTA, 2, 100, 0)){
            RstEntryBits();
            Menu_Bit = on;
            while(!RA2_bit);
@@ -106,67 +109,85 @@ void main() {
         
      if(!Menu_Bit){
 
-       if(phase_cntr_last != Phs.PhaseCntr){
-          phase_cntr_last = Phs.PhaseCntr;
-          sprintf(txt7,"%2u",Phs.PhaseCntr); //Phase counter
-          I2C_LCD_Out(LCD_01_ADDRESS,4,14,"Phs:=");
-          I2C_LCD_Out(LCD_01_ADDRESS,4,19,txt7);
-       }
        ///////////////////////////////////////////
        //get the timer ticks if in run mode
        if((RA3_Bit)&&(!FinCycle)) DoTime();
        ///////////////////////////////////////////
        //do every second
        if(tmr.SecNew != tmr.sec){
-        if(!OK_Bit){
          sprintf(txt2,"%-2d",tmr.sec);
          I2C_LCD_Out(LCD_01_ADDRESS,1,14,txt2);
-        }
          tmr.SecNew = tmr.sec;
        }
        ///////////////////////////////////////////
        //do every min
        if(tmr.MinNew != tmr.min){
-        if(!OK_Bit){
+          tmr.MinNew = tmr.min;
           if(tmr.min>=1){
             sprintf(txt3,"%3d",tmr.min);
             I2C_LCD_Out(LCD_01_ADDRESS,1,10,txt3);
-          }else I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
+          }else 
+            I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
+            
           I2C_LCD_Out(LCD_01_ADDRESS,1,13,":");
-        }
-         tmr.MinNew = tmr.min;
+       }
+       
+       if(TempTicPlaceholder_last != TempTicPlaceholder){
+          TempTicPlaceholder_last = TempTicPlaceholder;
+          sprintf(txt4,"%4d",TempTicPlaceholder); //Phase counter
+          I2C_LCD_Out(LCD_01_ADDRESS,4,12,"'C+:=");
+          I2C_LCD_Out(LCD_01_ADDRESS,4,17,txt4);
+          sprintf(txt4,"%3d",TempDegPlaceholder); //Phase counter
+          I2C_LCD_Out(LCD_01_ADDRESS,2,12,"Spt:=");
+          I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt4);
        }
        //////////////////////////////////////////
        //timer tick deg incrament and Dec Cycle
-       if(RA3_Bit){
-          if(!RstTmr){
-             tmr.sec = 0;
-             tmr.min = 0;
-             RstTmr = on;
-             FinCycle = off;
-          }
-          if(!SetPtSet){
+       if(!SetPtSet){
+             SetPtSet = on;
              DegC.Deg_Sp = DegC.Temp_iPv;
-             CalcTimerTicks();
+             CalcTimerTicks(DegC.Temp_iPv);
              if(!FinCycle){
-               SetPtSet = on;
                UART1_Write_Text("Start");
                UART1_Write(0x0D);
                UART1_Write(0x0A);
              }
+       }
+       
+       if(RA3_Bit){
+          if(!RstTmr){
+             CCP1IE_bit = on;
+             SetPtSet = off;
+             SetCoolBit = off;
+             RstTmr = on;
+             Ok_Bit = off;
+             tmr.MinNew = -1;
+             TempTicPlaceholder_last = 0;
+             tmr.sec = 0;
+             tmr.min = 0;
+             FinCycle = off;
           }
+          if(Ok_Bit){
+              RstTmr = off;
+          }
+          if(FinCycle && CCP1IE_bit)
+             CCP1IE_bit = off;
+          
           if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
                if (SetCoolBit)SetCoolBit = off;
+               TempDegPlaceholder = Sps.RmpDeg;
                TempTicPlaceholder = TempTicks.RampTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
                sprintf(txt6,"%3u",Sps.RmpDeg);
           }
           else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
+               TempDegPlaceholder = Sps.SokDeg;
                TempTicPlaceholder = TempTicks.SoakTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
                sprintf(txt6,"%3u",Sps.SokDeg);
           }
           else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
+               TempDegPlaceholder = Sps.SpkeDeg;
                TempTicPlaceholder = TempTicks.SpikeTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
                sprintf(txt6,"%3u",Sps.SpkeDeg);
@@ -174,9 +195,9 @@ void main() {
           else{
               SetCoolBit = on;
               TempTicPlaceholder = TempTicks.CoolTick;
+              TempDegPlaceholder = Sps.CoolOffDeg;
               if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Cool");
               else I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Finn");
-              sprintf(txt6,"%3u",Sps.CoolOffDeg);
               if(DegC.Deg_Sp < Sps.CoolOffDeg)FinCycle = on;
           }
 
@@ -198,11 +219,13 @@ void main() {
 
           }
        }else{
+         CCP1IE_bit = off;;
          SetCoolBit = off;
          tmr.tenMilli = 0;
          TempTicks.tickActual = 0;
          SetPtSet = off;
          RstTmr = off;
+         Ok_Bit = off;
        }
      }
      //////////////////////////////////////////
@@ -216,7 +239,7 @@ void main() {
                  Phs.an0_ = (unsigned int)pid_t.Mv;// ADC_Read(0);
                  if(Phs.an0_ < 1)Phs.an0_ = 1;
                  Phs.an0_ = RevADC - Phs.an0_;
-                 if(Phs.an0_ >= 980)Phs.an0_ = 980;
+                 if(Phs.an0_ >= 1010)Phs.an0_ = 1010;
                  break;
        case 2:  //pid output ccp for servo control
                 // Phs.an1_ = ADC_Read(1);
@@ -250,10 +273,8 @@ void main() {
                       DegC.Temp_iPv = (int)DegC.Temp_fPv;
                       sprintf(txt5,"%3.2f",DegC.Temp_fPv); //DegC.Temp_
                       I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
+                      strcat(txt5, "'C");
                       I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
-                      I2C_LCD_Out(LCD_01_ADDRESS,3,11,"'C");
-                      sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
-                      I2C_LCD_Out(LCD_01_ADDRESS,3,14,txt5);
                     }
                   }
                 }
@@ -262,13 +283,19 @@ void main() {
                 if(!pidBit){
                   pid_t.sample_tmr++;
                   pidBit = on;
-                  if(pid_t.sample_tmr >= 5){
-                    PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
+                  if(pid_t.sample_tmr >= pid_t.Kt){
+                  
+                    if(!FinCycle)
+                        PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
+                     else
+                        pid_t.Mv = 0;
+                        
                     if(!Menu_Bit){
                       I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");
-                      sprintf(txt4,"%5d",pid_t.Mv);
+                      sprintf(txt4,"%4d",pid_t.Mv);
                       I2C_LCD_Out(LCD_01_ADDRESS,4,5,txt4);
                     }
+                    
                   }
                 }
                 break;

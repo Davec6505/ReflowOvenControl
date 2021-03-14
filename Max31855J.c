@@ -59,6 +59,7 @@ int TConnect;
     Tmp  =  Tmp<<8;
     Tmp  =  Tmp  | (DegC.TempBuff[1] & 0xe0);
     Tmp  =  (Tmp >> 6) & 0x03ff;
+    Tmp -=  DegC.Deg_OffSet;
     ftemp =  (float)Tmp + fdec;
 
     return ftemp;
