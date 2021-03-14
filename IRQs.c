@@ -36,7 +36,7 @@ void High_Priority(){
        CCP1IF_bit = off;
        if((Phs.pwmOut == 0)&&(Phs.PhasePulsCntr < 4)){
          CCP1IE_bit  = off;
-         if(RA3_Bit)LATC2_bit = on;
+         if(RA3_Bit && (pid_t.Mv > 0))LATC2_bit = on;
          Phs.pwmOut = 1;
          TMR1H  = 0;
          TMR1L  = 0;

@@ -120,36 +120,6 @@ main
 				I2C2_Wr
 					____DoIFC
 				I2C2_Stop
-	I2C_LCD_Out
-		I2C_LCD_goto
-			I2C_LCD_putcmd
-				I2C_PCF8574_Write
-					I2C1_Start
-						I2C1_Is_Idle
-						____DoIFC
-					I2C1_Wr
-						____DoIFC
-					I2C1_Stop
-					I2C2_Start
-						I2C2_Is_Idle
-						____DoIFC
-					I2C2_Wr
-						____DoIFC
-					I2C2_Stop
-		I2C_LCD_putch
-			I2C_PCF8574_Write
-				I2C1_Start
-					I2C1_Is_Idle
-					____DoIFC
-				I2C1_Wr
-					____DoIFC
-				I2C1_Stop
-				I2C2_Start
-					I2C2_Is_Idle
-					____DoIFC
-				I2C2_Wr
-					____DoIFC
-				I2C2_Stop
 	EI
 	CalcTimerTicks
 		Div_16X16_U
@@ -316,6 +286,36 @@ main
 						____DoIFC
 					I2C2_Stop
 	DoTime
+	I2C_LCD_Out
+		I2C_LCD_goto
+			I2C_LCD_putcmd
+				I2C_PCF8574_Write
+					I2C1_Start
+						I2C1_Is_Idle
+						____DoIFC
+					I2C1_Wr
+						____DoIFC
+					I2C1_Stop
+					I2C2_Start
+						I2C2_Is_Idle
+						____DoIFC
+					I2C2_Wr
+						____DoIFC
+					I2C2_Stop
+		I2C_LCD_putch
+			I2C_PCF8574_Write
+				I2C1_Start
+					I2C1_Is_Idle
+					____DoIFC
+				I2C1_Wr
+					____DoIFC
+				I2C1_Stop
+				I2C2_Start
+					I2C2_Is_Idle
+					____DoIFC
+				I2C2_Wr
+					____DoIFC
+				I2C2_Stop
 	UART1_Write_Text
 		UART1_Write
 	UART1_Write

@@ -444,7 +444,7 @@ void main() {
  Delay_ms(100);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CURSOR_OFF,1);
- I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
+
  Delay_ms(2000);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  Delay_ms(200);
@@ -479,7 +479,6 @@ void main() {
  if(!Menu_Bit){
 
 
-
  if((RA3_Bit)&&(!FinCycle)) DoTime();
 
 
@@ -506,7 +505,7 @@ void main() {
  sprintf(txt4,"%4d",TempTicPlaceholder);
  I2C_LCD_Out(LCD_01_ADDRESS,4,12,"'C+:=");
  I2C_LCD_Out(LCD_01_ADDRESS,4,17,txt4);
- sprintf(txt4,"%3d",TempDegPlaceholder);
+ sprintf(txt4,"%4d",TempDegPlaceholder);
  I2C_LCD_Out(LCD_01_ADDRESS,2,12,"Spt:=");
  I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt4);
  }
@@ -525,22 +524,19 @@ void main() {
 
  if(RA3_Bit){
  if(!RstTmr){
- CCP1IE_bit = on;
+ RstTmr = on;
+ FinCycle = off;
  SetPtSet = off;
  SetCoolBit = off;
- RstTmr = on;
  Ok_Bit = off;
  tmr.MinNew = -1;
  TempTicPlaceholder_last = 0;
  tmr.sec = 0;
  tmr.min = 0;
- FinCycle = off;
  }
  if(Ok_Bit){
  RstTmr = off;
  }
- if(FinCycle && CCP1IE_bit)
- CCP1IE_bit = off;
 
  if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
  if (SetCoolBit)SetCoolBit = off;
@@ -588,7 +584,6 @@ void main() {
 
  }
  }else{
- CCP1IE_bit = off;;
  SetCoolBit = off;
  tmr.tenMilli = 0;
  TempTicks.tickActual = 0;
@@ -618,7 +613,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 254 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 249 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -626,7 +621,7 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 263 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;

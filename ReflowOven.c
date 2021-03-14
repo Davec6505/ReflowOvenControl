@@ -75,7 +75,7 @@ void main() {
   Delay_ms(100);
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);          // Clear display
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CURSOR_OFF,1);     // Cursor off
-  I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
+ // I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
   Delay_ms(2000);
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);//Lcd_Cmd(0,0x01);               // Clear display
   Delay_ms(200);
@@ -108,7 +108,6 @@ void main() {
 
         
      if(!Menu_Bit){
-
        ///////////////////////////////////////////
        //get the timer ticks if in run mode
        if((RA3_Bit)&&(!FinCycle)) DoTime();
@@ -128,7 +127,7 @@ void main() {
             I2C_LCD_Out(LCD_01_ADDRESS,1,10,txt3);
           }else 
             I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
-            
+
           I2C_LCD_Out(LCD_01_ADDRESS,1,13,":");
        }
        
@@ -137,7 +136,7 @@ void main() {
           sprintf(txt4,"%4d",TempTicPlaceholder); //Phase counter
           I2C_LCD_Out(LCD_01_ADDRESS,4,12,"'C+:=");
           I2C_LCD_Out(LCD_01_ADDRESS,4,17,txt4);
-          sprintf(txt4,"%3d",TempDegPlaceholder); //Phase counter
+          sprintf(txt4,"%4d",TempDegPlaceholder); //Phase counter
           I2C_LCD_Out(LCD_01_ADDRESS,2,12,"Spt:=");
           I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt4);
        }
@@ -156,22 +155,19 @@ void main() {
        
        if(RA3_Bit){
           if(!RstTmr){
-             CCP1IE_bit = on;
+             RstTmr = on;
+             FinCycle = off;
              SetPtSet = off;
              SetCoolBit = off;
-             RstTmr = on;
              Ok_Bit = off;
              tmr.MinNew = -1;
              TempTicPlaceholder_last = 0;
              tmr.sec = 0;
              tmr.min = 0;
-             FinCycle = off;
           }
           if(Ok_Bit){
               RstTmr = off;
           }
-          if(FinCycle && CCP1IE_bit)
-             CCP1IE_bit = off;
           
           if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
                if (SetCoolBit)SetCoolBit = off;
@@ -219,7 +215,6 @@ void main() {
 
           }
        }else{
-         CCP1IE_bit = off;;
          SetCoolBit = off;
          tmr.tenMilli = 0;
          TempTicks.tickActual = 0;

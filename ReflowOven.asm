@@ -178,18 +178,6 @@ L_main1:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ReflowOven.c,78 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
-	MOVF        _LCD_01_ADDRESS+0, 0 
-	MOVWF       FARG_I2C_LCD_Out_addr+0 
-	MOVLW       1
-	MOVWF       FARG_I2C_LCD_Out_row+0 
-	MOVLW       1
-	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr2_ReflowOven+0
-	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr2_ReflowOven+0)
-	MOVWF       FARG_I2C_LCD_Out_s+1 
-	CALL        _I2C_LCD_Out+0, 0
 ;ReflowOven.c,79 :: 		Delay_ms(2000);
 	MOVLW       163
 	MOVWF       R11, 0
@@ -269,12 +257,12 @@ L_main4:
 L_main5:
 ;ReflowOven.c,98 :: 		LATB5_bit  = Menu_Bit;
 	BTFSC       _Menu_Bit+0, BitPos(_Menu_Bit+0) 
-	GOTO        L__main92
+	GOTO        L__main88
 	BCF         LATB5_bit+0, BitPos(LATB5_bit+0) 
-	GOTO        L__main93
-L__main92:
+	GOTO        L__main89
+L__main88:
 	BSF         LATB5_bit+0, BitPos(LATB5_bit+0) 
-L__main93:
+L__main89:
 ;ReflowOven.c,100 :: 		if(Menu_Bit)
 	BTFSS       _Menu_Bit+0, BitPos(_Menu_Bit+0) 
 	GOTO        L_main7
@@ -297,7 +285,7 @@ L_main7:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main10
-L__main90:
+L__main86:
 ;ReflowOven.c,104 :: 		RstEntryBits();
 	CALL        _RstEntryBits+0, 0
 ;ReflowOven.c,105 :: 		Menu_Bit = on;
@@ -313,41 +301,41 @@ L_main10:
 ;ReflowOven.c,110 :: 		if(!Menu_Bit){
 	BTFSC       _Menu_Bit+0, BitPos(_Menu_Bit+0) 
 	GOTO        L_main13
-;ReflowOven.c,114 :: 		if((RA3_Bit)&&(!FinCycle)) DoTime();
+;ReflowOven.c,113 :: 		if((RA3_Bit)&&(!FinCycle)) DoTime();
 	BTFSS       RA3_bit+0, BitPos(RA3_bit+0) 
 	GOTO        L_main16
 	BTFSC       ReflowOven_Bits+0, 3 
 	GOTO        L_main16
-L__main89:
+L__main85:
 	CALL        _DoTime+0, 0
 L_main16:
-;ReflowOven.c,117 :: 		if(tmr.SecNew != tmr.sec){
+;ReflowOven.c,116 :: 		if(tmr.SecNew != tmr.sec){
 	MOVF        _tmr+17, 0 
 	XORWF       _tmr+11, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main94
+	GOTO        L__main90
 	MOVF        _tmr+10, 0 
 	XORWF       _tmr+16, 0 
-L__main94:
+L__main90:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main17
-;ReflowOven.c,118 :: 		sprintf(txt2,"%-2d",tmr.sec);
+;ReflowOven.c,117 :: 		sprintf(txt2,"%-2d",tmr.sec);
 	MOVLW       _txt2+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt2+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_3_ReflowOven+0
+	MOVLW       ?lstr_2_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_3_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_2_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_3_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_2_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _tmr+10, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _tmr+11, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,119 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,14,txt2);
+;ReflowOven.c,118 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,14,txt2);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -359,55 +347,55 @@ L__main94:
 	MOVLW       hi_addr(_txt2+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,120 :: 		tmr.SecNew = tmr.sec;
+;ReflowOven.c,119 :: 		tmr.SecNew = tmr.sec;
 	MOVF        _tmr+10, 0 
 	MOVWF       _tmr+16 
 	MOVF        _tmr+11, 0 
 	MOVWF       _tmr+17 
-;ReflowOven.c,121 :: 		}
+;ReflowOven.c,120 :: 		}
 L_main17:
-;ReflowOven.c,124 :: 		if(tmr.MinNew != tmr.min){
+;ReflowOven.c,123 :: 		if(tmr.MinNew != tmr.min){
 	MOVF        _tmr+19, 0 
 	XORWF       _tmr+13, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main95
+	GOTO        L__main91
 	MOVF        _tmr+12, 0 
 	XORWF       _tmr+18, 0 
-L__main95:
+L__main91:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main18
-;ReflowOven.c,125 :: 		tmr.MinNew = tmr.min;
+;ReflowOven.c,124 :: 		tmr.MinNew = tmr.min;
 	MOVF        _tmr+12, 0 
 	MOVWF       _tmr+18 
 	MOVF        _tmr+13, 0 
 	MOVWF       _tmr+19 
-;ReflowOven.c,126 :: 		if(tmr.min>=1){
+;ReflowOven.c,125 :: 		if(tmr.min>=1){
 	MOVLW       0
 	SUBWF       _tmr+13, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main96
+	GOTO        L__main92
 	MOVLW       1
 	SUBWF       _tmr+12, 0 
-L__main96:
+L__main92:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_main19
-;ReflowOven.c,127 :: 		sprintf(txt3,"%3d",tmr.min);
+;ReflowOven.c,126 :: 		sprintf(txt3,"%3d",tmr.min);
 	MOVLW       _txt3+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt3+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_4_ReflowOven+0
+	MOVLW       ?lstr_3_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_4_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_3_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_4_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_3_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _tmr+12, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _tmr+13, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,128 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,10,txt3);
+;ReflowOven.c,127 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,10,txt3);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -419,80 +407,80 @@ L__main96:
 	MOVLW       hi_addr(_txt3+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,129 :: 		}else
+;ReflowOven.c,128 :: 		}else
 	GOTO        L_main20
 L_main19:
-;ReflowOven.c,130 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
+;ReflowOven.c,129 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       10
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr4_ReflowOven+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr4_ReflowOven+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+L_main20:
+;ReflowOven.c,131 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,13,":");
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       1
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       13
 	MOVWF       FARG_I2C_LCD_Out_col+0 
 	MOVLW       ?lstr5_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
 	MOVLW       hi_addr(?lstr5_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-L_main20:
-;ReflowOven.c,132 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,13,":");
-	MOVF        _LCD_01_ADDRESS+0, 0 
-	MOVWF       FARG_I2C_LCD_Out_addr+0 
-	MOVLW       1
-	MOVWF       FARG_I2C_LCD_Out_row+0 
-	MOVLW       13
-	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr6_ReflowOven+0
-	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr6_ReflowOven+0)
-	MOVWF       FARG_I2C_LCD_Out_s+1 
-	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,133 :: 		}
+;ReflowOven.c,132 :: 		}
 L_main18:
-;ReflowOven.c,135 :: 		if(TempTicPlaceholder_last != TempTicPlaceholder){
+;ReflowOven.c,134 :: 		if(TempTicPlaceholder_last != TempTicPlaceholder){
 	MOVF        ReflowOven_TempTicPlaceholder_last+1, 0 
 	XORWF       main_TempTicPlaceholder_L1+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main97
+	GOTO        L__main93
 	MOVF        main_TempTicPlaceholder_L1+0, 0 
 	XORWF       ReflowOven_TempTicPlaceholder_last+0, 0 
-L__main97:
+L__main93:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_main21
-;ReflowOven.c,136 :: 		TempTicPlaceholder_last = TempTicPlaceholder;
+;ReflowOven.c,135 :: 		TempTicPlaceholder_last = TempTicPlaceholder;
 	MOVF        main_TempTicPlaceholder_L1+0, 0 
 	MOVWF       ReflowOven_TempTicPlaceholder_last+0 
 	MOVF        main_TempTicPlaceholder_L1+1, 0 
 	MOVWF       ReflowOven_TempTicPlaceholder_last+1 
-;ReflowOven.c,137 :: 		sprintf(txt4,"%4d",TempTicPlaceholder); //Phase counter
+;ReflowOven.c,136 :: 		sprintf(txt4,"%4d",TempTicPlaceholder); //Phase counter
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_7_ReflowOven+0
+	MOVLW       ?lstr_6_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_7_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_6_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_7_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_6_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        main_TempTicPlaceholder_L1+0, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        main_TempTicPlaceholder_L1+1, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,138 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,12,"'C+:=");
+;ReflowOven.c,137 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,12,"'C+:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       12
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr8_ReflowOven+0
+	MOVLW       ?lstr7_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr8_ReflowOven+0)
+	MOVLW       hi_addr(?lstr7_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,139 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,17,txt4);
+;ReflowOven.c,138 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,17,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -504,35 +492,35 @@ L__main97:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,140 :: 		sprintf(txt4,"%3d",TempDegPlaceholder); //Phase counter
+;ReflowOven.c,139 :: 		sprintf(txt4,"%4d",TempDegPlaceholder); //Phase counter
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_9_ReflowOven+0
+	MOVLW       ?lstr_8_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_9_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_8_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_9_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_8_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        main_TempDegPlaceholder_L1+0, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        main_TempDegPlaceholder_L1+1, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,141 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,12,"Spt:=");
+;ReflowOven.c,140 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,12,"Spt:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       12
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr10_ReflowOven+0
+	MOVLW       ?lstr9_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr10_ReflowOven+0)
+	MOVLW       hi_addr(?lstr9_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,142 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt4);
+;ReflowOven.c,141 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,17,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -544,295 +532,298 @@ L__main97:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,143 :: 		}
+;ReflowOven.c,142 :: 		}
 L_main21:
-;ReflowOven.c,146 :: 		if(!SetPtSet){
+;ReflowOven.c,145 :: 		if(!SetPtSet){
 	BTFSC       ReflowOven_Bits+0, 0 
 	GOTO        L_main22
-;ReflowOven.c,147 :: 		SetPtSet = on;
+;ReflowOven.c,146 :: 		SetPtSet = on;
 	BSF         ReflowOven_Bits+0, 0 
-;ReflowOven.c,148 :: 		DegC.Deg_Sp = DegC.Temp_iPv;
+;ReflowOven.c,147 :: 		DegC.Deg_Sp = DegC.Temp_iPv;
 	MOVF        _DegC+16, 0 
 	MOVWF       _DegC+6 
 	MOVF        _DegC+17, 0 
 	MOVWF       _DegC+7 
-;ReflowOven.c,149 :: 		CalcTimerTicks(DegC.Temp_iPv);
+;ReflowOven.c,148 :: 		CalcTimerTicks(DegC.Temp_iPv);
 	MOVF        _DegC+16, 0 
 	MOVWF       FARG_CalcTimerTicks_iPv+0 
 	MOVF        _DegC+17, 0 
 	MOVWF       FARG_CalcTimerTicks_iPv+1 
 	CALL        _CalcTimerTicks+0, 0
-;ReflowOven.c,150 :: 		if(!FinCycle){
+;ReflowOven.c,149 :: 		if(!FinCycle){
 	BTFSC       ReflowOven_Bits+0, 3 
 	GOTO        L_main23
-;ReflowOven.c,151 :: 		UART1_Write_Text("Start");
-	MOVLW       ?lstr11_ReflowOven+0
+;ReflowOven.c,150 :: 		UART1_Write_Text("Start");
+	MOVLW       ?lstr10_ReflowOven+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
-	MOVLW       hi_addr(?lstr11_ReflowOven+0)
+	MOVLW       hi_addr(?lstr10_ReflowOven+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;ReflowOven.c,152 :: 		UART1_Write(0x0D);
+;ReflowOven.c,151 :: 		UART1_Write(0x0D);
 	MOVLW       13
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,153 :: 		UART1_Write(0x0A);
+;ReflowOven.c,152 :: 		UART1_Write(0x0A);
 	MOVLW       10
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,154 :: 		}
+;ReflowOven.c,153 :: 		}
 L_main23:
-;ReflowOven.c,155 :: 		}
+;ReflowOven.c,154 :: 		}
 L_main22:
-;ReflowOven.c,157 :: 		if(RA3_Bit){
+;ReflowOven.c,156 :: 		if(RA3_Bit){
 	BTFSS       RA3_bit+0, BitPos(RA3_bit+0) 
 	GOTO        L_main24
-;ReflowOven.c,158 :: 		if(!RstTmr){
+;ReflowOven.c,157 :: 		if(!RstTmr){
 	BTFSC       ReflowOven_Bits+0, 2 
 	GOTO        L_main25
-;ReflowOven.c,159 :: 		CCP1IE_bit = on;
-	BSF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
+;ReflowOven.c,158 :: 		RstTmr = on;
+	BSF         ReflowOven_Bits+0, 2 
+;ReflowOven.c,159 :: 		FinCycle = off;
+	BCF         ReflowOven_Bits+0, 3 
 ;ReflowOven.c,160 :: 		SetPtSet = off;
 	BCF         ReflowOven_Bits+0, 0 
 ;ReflowOven.c,161 :: 		SetCoolBit = off;
 	BCF         ReflowOven_Bits+0, 1 
-;ReflowOven.c,162 :: 		RstTmr = on;
-	BSF         ReflowOven_Bits+0, 2 
-;ReflowOven.c,163 :: 		Ok_Bit = off;
+;ReflowOven.c,162 :: 		Ok_Bit = off;
 	BCF         _OK_Bit+0, BitPos(_OK_Bit+0) 
-;ReflowOven.c,164 :: 		tmr.MinNew = -1;
+;ReflowOven.c,163 :: 		tmr.MinNew = -1;
 	MOVLW       255
 	MOVWF       _tmr+18 
 	MOVLW       255
 	MOVWF       _tmr+19 
-;ReflowOven.c,165 :: 		TempTicPlaceholder_last = 0;
+;ReflowOven.c,164 :: 		TempTicPlaceholder_last = 0;
 	CLRF        ReflowOven_TempTicPlaceholder_last+0 
 	CLRF        ReflowOven_TempTicPlaceholder_last+1 
-;ReflowOven.c,166 :: 		tmr.sec = 0;
+;ReflowOven.c,165 :: 		tmr.sec = 0;
 	CLRF        _tmr+10 
 	CLRF        _tmr+11 
-;ReflowOven.c,167 :: 		tmr.min = 0;
+;ReflowOven.c,166 :: 		tmr.min = 0;
 	CLRF        _tmr+12 
 	CLRF        _tmr+13 
-;ReflowOven.c,168 :: 		FinCycle = off;
-	BCF         ReflowOven_Bits+0, 3 
-;ReflowOven.c,169 :: 		}
+;ReflowOven.c,167 :: 		}
 L_main25:
-;ReflowOven.c,170 :: 		if(Ok_Bit){
+;ReflowOven.c,168 :: 		if(Ok_Bit){
 	BTFSS       _OK_Bit+0, BitPos(_OK_Bit+0) 
 	GOTO        L_main26
-;ReflowOven.c,171 :: 		RstTmr = off;
+;ReflowOven.c,169 :: 		RstTmr = off;
 	BCF         ReflowOven_Bits+0, 2 
-;ReflowOven.c,172 :: 		}
+;ReflowOven.c,170 :: 		}
 L_main26:
-;ReflowOven.c,173 :: 		if(FinCycle && CCP1IE_bit)
-	BTFSS       ReflowOven_Bits+0, 3 
-	GOTO        L_main29
-	BTFSS       CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
-	GOTO        L_main29
-L__main88:
-;ReflowOven.c,174 :: 		CCP1IE_bit = off;
-	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
-L_main29:
-;ReflowOven.c,176 :: 		if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
+;ReflowOven.c,172 :: 		if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
 	MOVF        _Sps+1, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main98
+	GOTO        L__main94
 	MOVF        _Sps+0, 0 
 	SUBWF       _DegC+6, 0 
-L__main98:
+L__main94:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main32
+	GOTO        L_main29
 	BTFSC       ReflowOven_Bits+0, 1 
-	GOTO        L_main32
-L__main87:
-;ReflowOven.c,177 :: 		if (SetCoolBit)SetCoolBit = off;
+	GOTO        L_main29
+L__main84:
+;ReflowOven.c,173 :: 		if (SetCoolBit)SetCoolBit = off;
 	BTFSS       ReflowOven_Bits+0, 1 
-	GOTO        L_main33
+	GOTO        L_main30
 	BCF         ReflowOven_Bits+0, 1 
-L_main33:
-;ReflowOven.c,178 :: 		TempDegPlaceholder = Sps.RmpDeg;
+L_main30:
+;ReflowOven.c,174 :: 		TempDegPlaceholder = Sps.RmpDeg;
 	MOVF        _Sps+0, 0 
 	MOVWF       main_TempDegPlaceholder_L1+0 
 	MOVF        _Sps+1, 0 
 	MOVWF       main_TempDegPlaceholder_L1+1 
-;ReflowOven.c,179 :: 		TempTicPlaceholder = TempTicks.RampTick;
+;ReflowOven.c,175 :: 		TempTicPlaceholder = TempTicks.RampTick;
 	MOVF        _TempTicks+2, 0 
 	MOVWF       main_TempTicPlaceholder_L1+0 
 	MOVF        _TempTicks+3, 0 
 	MOVWF       main_TempTicPlaceholder_L1+1 
-;ReflowOven.c,180 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
+;ReflowOven.c,176 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr12_ReflowOven+0
+	MOVLW       ?lstr11_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr12_ReflowOven+0)
+	MOVLW       hi_addr(?lstr11_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,181 :: 		sprintf(txt6,"%3u",Sps.RmpDeg);
+;ReflowOven.c,177 :: 		sprintf(txt6,"%3u",Sps.RmpDeg);
 	MOVLW       _txt6+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt6+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_13_ReflowOven+0
+	MOVLW       ?lstr_12_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_13_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_12_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_13_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_12_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _Sps+0, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _Sps+1, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,182 :: 		}
-	GOTO        L_main34
-L_main32:
-;ReflowOven.c,183 :: 		else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
+;ReflowOven.c,178 :: 		}
+	GOTO        L_main31
+L_main29:
+;ReflowOven.c,179 :: 		else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
 	MOVF        _Sps+1, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main99
+	GOTO        L__main95
 	MOVF        _Sps+0, 0 
 	SUBWF       _DegC+6, 0 
-L__main99:
+L__main95:
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main37
+	GOTO        L_main34
 	MOVF        _Sps+5, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main100
+	GOTO        L__main96
 	MOVF        _Sps+4, 0 
 	SUBWF       _DegC+6, 0 
-L__main100:
+L__main96:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main37
+	GOTO        L_main34
 	BTFSC       ReflowOven_Bits+0, 1 
-	GOTO        L_main37
-L__main86:
-;ReflowOven.c,184 :: 		TempDegPlaceholder = Sps.SokDeg;
+	GOTO        L_main34
+L__main83:
+;ReflowOven.c,180 :: 		TempDegPlaceholder = Sps.SokDeg;
 	MOVF        _Sps+4, 0 
 	MOVWF       main_TempDegPlaceholder_L1+0 
 	MOVF        _Sps+5, 0 
 	MOVWF       main_TempDegPlaceholder_L1+1 
-;ReflowOven.c,185 :: 		TempTicPlaceholder = TempTicks.SoakTick;
+;ReflowOven.c,181 :: 		TempTicPlaceholder = TempTicks.SoakTick;
 	MOVF        _TempTicks+4, 0 
 	MOVWF       main_TempTicPlaceholder_L1+0 
 	MOVF        _TempTicks+5, 0 
 	MOVWF       main_TempTicPlaceholder_L1+1 
-;ReflowOven.c,186 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
+;ReflowOven.c,182 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr14_ReflowOven+0
+	MOVLW       ?lstr13_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr14_ReflowOven+0)
+	MOVLW       hi_addr(?lstr13_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,187 :: 		sprintf(txt6,"%3u",Sps.SokDeg);
+;ReflowOven.c,183 :: 		sprintf(txt6,"%3u",Sps.SokDeg);
 	MOVLW       _txt6+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt6+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_15_ReflowOven+0
+	MOVLW       ?lstr_14_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_15_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_14_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_15_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_14_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _Sps+4, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _Sps+5, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,188 :: 		}
-	GOTO        L_main38
-L_main37:
-;ReflowOven.c,189 :: 		else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
+;ReflowOven.c,184 :: 		}
+	GOTO        L_main35
+L_main34:
+;ReflowOven.c,185 :: 		else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
 	MOVF        _Sps+5, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main101
+	GOTO        L__main97
 	MOVF        _Sps+4, 0 
 	SUBWF       _DegC+6, 0 
-L__main101:
+L__main97:
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main41
+	GOTO        L_main38
 	MOVF        _Sps+9, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main102
+	GOTO        L__main98
 	MOVF        _Sps+8, 0 
 	SUBWF       _DegC+6, 0 
-L__main102:
+L__main98:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main41
+	GOTO        L_main38
 	BTFSC       ReflowOven_Bits+0, 1 
-	GOTO        L_main41
-L__main85:
-;ReflowOven.c,190 :: 		TempDegPlaceholder = Sps.SpkeDeg;
+	GOTO        L_main38
+L__main82:
+;ReflowOven.c,186 :: 		TempDegPlaceholder = Sps.SpkeDeg;
 	MOVF        _Sps+8, 0 
 	MOVWF       main_TempDegPlaceholder_L1+0 
 	MOVF        _Sps+9, 0 
 	MOVWF       main_TempDegPlaceholder_L1+1 
-;ReflowOven.c,191 :: 		TempTicPlaceholder = TempTicks.SpikeTick;
+;ReflowOven.c,187 :: 		TempTicPlaceholder = TempTicks.SpikeTick;
 	MOVF        _TempTicks+6, 0 
 	MOVWF       main_TempTicPlaceholder_L1+0 
 	MOVF        _TempTicks+7, 0 
 	MOVWF       main_TempTicPlaceholder_L1+1 
-;ReflowOven.c,192 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
+;ReflowOven.c,188 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr16_ReflowOven+0
+	MOVLW       ?lstr15_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr16_ReflowOven+0)
+	MOVLW       hi_addr(?lstr15_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,193 :: 		sprintf(txt6,"%3u",Sps.SpkeDeg);
+;ReflowOven.c,189 :: 		sprintf(txt6,"%3u",Sps.SpkeDeg);
 	MOVLW       _txt6+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt6+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_17_ReflowOven+0
+	MOVLW       ?lstr_16_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_17_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_16_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_17_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_16_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _Sps+8, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _Sps+9, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,194 :: 		}
-	GOTO        L_main42
-L_main41:
-;ReflowOven.c,196 :: 		SetCoolBit = on;
+;ReflowOven.c,190 :: 		}
+	GOTO        L_main39
+L_main38:
+;ReflowOven.c,192 :: 		SetCoolBit = on;
 	BSF         ReflowOven_Bits+0, 1 
-;ReflowOven.c,197 :: 		TempTicPlaceholder = TempTicks.CoolTick;
+;ReflowOven.c,193 :: 		TempTicPlaceholder = TempTicks.CoolTick;
 	MOVF        _TempTicks+8, 0 
 	MOVWF       main_TempTicPlaceholder_L1+0 
 	MOVF        _TempTicks+9, 0 
 	MOVWF       main_TempTicPlaceholder_L1+1 
-;ReflowOven.c,198 :: 		TempDegPlaceholder = Sps.CoolOffDeg;
+;ReflowOven.c,194 :: 		TempDegPlaceholder = Sps.CoolOffDeg;
 	MOVF        _Sps+12, 0 
 	MOVWF       main_TempDegPlaceholder_L1+0 
 	MOVF        _Sps+13, 0 
 	MOVWF       main_TempDegPlaceholder_L1+1 
-;ReflowOven.c,199 :: 		if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Cool");
+;ReflowOven.c,195 :: 		if(!FinCycle)I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Cool");
 	BTFSC       ReflowOven_Bits+0, 3 
-	GOTO        L_main43
+	GOTO        L_main40
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       1
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       1
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr17_ReflowOven+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr17_ReflowOven+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+	GOTO        L_main41
+L_main40:
+;ReflowOven.c,196 :: 		else I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Finn");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -844,51 +835,37 @@ L_main41:
 	MOVLW       hi_addr(?lstr18_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-	GOTO        L_main44
-L_main43:
-;ReflowOven.c,200 :: 		else I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Finn");
-	MOVF        _LCD_01_ADDRESS+0, 0 
-	MOVWF       FARG_I2C_LCD_Out_addr+0 
-	MOVLW       1
-	MOVWF       FARG_I2C_LCD_Out_row+0 
-	MOVLW       1
-	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr19_ReflowOven+0
-	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr19_ReflowOven+0)
-	MOVWF       FARG_I2C_LCD_Out_s+1 
-	CALL        _I2C_LCD_Out+0, 0
-L_main44:
-;ReflowOven.c,201 :: 		if(DegC.Deg_Sp < Sps.CoolOffDeg)FinCycle = on;
+L_main41:
+;ReflowOven.c,197 :: 		if(DegC.Deg_Sp < Sps.CoolOffDeg)FinCycle = on;
 	MOVF        _Sps+13, 0 
 	SUBWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main103
+	GOTO        L__main99
 	MOVF        _Sps+12, 0 
 	SUBWF       _DegC+6, 0 
-L__main103:
+L__main99:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main45
+	GOTO        L_main42
 	BSF         ReflowOven_Bits+0, 3 
-L_main45:
-;ReflowOven.c,202 :: 		}
 L_main42:
-L_main38:
-L_main34:
-;ReflowOven.c,204 :: 		if(tmr.tenMilli > TempTicPlaceholder){
+;ReflowOven.c,198 :: 		}
+L_main39:
+L_main35:
+L_main31:
+;ReflowOven.c,200 :: 		if(tmr.tenMilli > TempTicPlaceholder){
 	MOVF        _tmr+5, 0 
 	SUBWF       main_TempTicPlaceholder_L1+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main104
+	GOTO        L__main100
 	MOVF        _tmr+4, 0 
 	SUBWF       main_TempTicPlaceholder_L1+0, 0 
-L__main104:
+L__main100:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main46
-;ReflowOven.c,205 :: 		tmr.tenMilli = 0;         //rest tick
+	GOTO        L_main43
+;ReflowOven.c,201 :: 		tmr.tenMilli = 0;         //rest tick
 	CLRF        _tmr+4 
 	CLRF        _tmr+5 
-;ReflowOven.c,206 :: 		TempTicks.tickActual++;   //keep track of ticks ??
+;ReflowOven.c,202 :: 		TempTicks.tickActual++;   //keep track of ticks ??
 	MOVLW       1
 	ADDWF       _TempTicks+10, 0 
 	MOVWF       R0 
@@ -899,15 +876,15 @@ L__main104:
 	MOVWF       _TempTicks+10 
 	MOVF        R1, 0 
 	MOVWF       _TempTicks+11 
-;ReflowOven.c,207 :: 		if((SetPtSet)&&(!FinCycle)){
+;ReflowOven.c,203 :: 		if((SetPtSet)&&(!FinCycle)){
 	BTFSS       ReflowOven_Bits+0, 0 
-	GOTO        L_main49
+	GOTO        L_main46
 	BTFSC       ReflowOven_Bits+0, 3 
-	GOTO        L_main49
-L__main84:
-;ReflowOven.c,208 :: 		if(!SetCoolBit)DegC.Deg_Sp++;
+	GOTO        L_main46
+L__main81:
+;ReflowOven.c,204 :: 		if(!SetCoolBit)DegC.Deg_Sp++;
 	BTFSC       ReflowOven_Bits+0, 1 
-	GOTO        L_main50
+	GOTO        L_main47
 	MOVLW       1
 	ADDWF       _DegC+6, 0 
 	MOVWF       R0 
@@ -918,9 +895,9 @@ L__main84:
 	MOVWF       _DegC+6 
 	MOVF        R1, 0 
 	MOVWF       _DegC+7 
-	GOTO        L_main51
-L_main50:
-;ReflowOven.c,209 :: 		else DegC.Deg_Sp--;
+	GOTO        L_main48
+L_main47:
+;ReflowOven.c,205 :: 		else DegC.Deg_Sp--;
 	MOVLW       1
 	SUBWF       _DegC+6, 0 
 	MOVWF       R0 
@@ -931,48 +908,48 @@ L_main50:
 	MOVWF       _DegC+6 
 	MOVF        R1, 0 
 	MOVWF       _DegC+7 
-L_main51:
-;ReflowOven.c,210 :: 		}
-L_main49:
-;ReflowOven.c,212 :: 		if(DegC.LastDeg != DegC.Deg_Sp){
+L_main48:
+;ReflowOven.c,206 :: 		}
+L_main46:
+;ReflowOven.c,208 :: 		if(DegC.LastDeg != DegC.Deg_Sp){
 	MOVF        _DegC+11, 0 
 	XORWF       _DegC+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main105
+	GOTO        L__main101
 	MOVF        _DegC+6, 0 
 	XORWF       _DegC+10, 0 
-L__main105:
+L__main101:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main52
-;ReflowOven.c,213 :: 		sprintf(txt1,"%3u",DegC.Deg_Sp);
+	GOTO        L_main49
+;ReflowOven.c,209 :: 		sprintf(txt1,"%3u",DegC.Deg_Sp);
 	MOVLW       _txt1+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt1+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_20_ReflowOven+0
+	MOVLW       ?lstr_19_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_20_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_19_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_20_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_19_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _DegC+6, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _DegC+7, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,214 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
+;ReflowOven.c,210 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr21_ReflowOven+0
+	MOVLW       ?lstr20_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr21_ReflowOven+0)
+	MOVLW       hi_addr(?lstr20_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,215 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
+;ReflowOven.c,211 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -984,65 +961,63 @@ L__main105:
 	MOVLW       hi_addr(_txt1+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,216 :: 		WriteDataOut();
+;ReflowOven.c,212 :: 		WriteDataOut();
 	CALL        _WriteDataOut+0, 0
-;ReflowOven.c,217 :: 		DegC.LastDeg = DegC.Deg_Sp;
+;ReflowOven.c,213 :: 		DegC.LastDeg = DegC.Deg_Sp;
 	MOVF        _DegC+6, 0 
 	MOVWF       _DegC+10 
 	MOVF        _DegC+7, 0 
 	MOVWF       _DegC+11 
-;ReflowOven.c,218 :: 		}
-L_main52:
-;ReflowOven.c,220 :: 		}
-L_main46:
-;ReflowOven.c,221 :: 		}else{
-	GOTO        L_main53
+;ReflowOven.c,214 :: 		}
+L_main49:
+;ReflowOven.c,216 :: 		}
+L_main43:
+;ReflowOven.c,217 :: 		}else{
+	GOTO        L_main50
 L_main24:
-;ReflowOven.c,222 :: 		CCP1IE_bit = off;;
-	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
-;ReflowOven.c,223 :: 		SetCoolBit = off;
+;ReflowOven.c,218 :: 		SetCoolBit = off;
 	BCF         ReflowOven_Bits+0, 1 
-;ReflowOven.c,224 :: 		tmr.tenMilli = 0;
+;ReflowOven.c,219 :: 		tmr.tenMilli = 0;
 	CLRF        _tmr+4 
 	CLRF        _tmr+5 
-;ReflowOven.c,225 :: 		TempTicks.tickActual = 0;
+;ReflowOven.c,220 :: 		TempTicks.tickActual = 0;
 	CLRF        _TempTicks+10 
 	CLRF        _TempTicks+11 
-;ReflowOven.c,226 :: 		SetPtSet = off;
+;ReflowOven.c,221 :: 		SetPtSet = off;
 	BCF         ReflowOven_Bits+0, 0 
-;ReflowOven.c,227 :: 		RstTmr = off;
+;ReflowOven.c,222 :: 		RstTmr = off;
 	BCF         ReflowOven_Bits+0, 2 
-;ReflowOven.c,228 :: 		Ok_Bit = off;
+;ReflowOven.c,223 :: 		Ok_Bit = off;
 	BCF         _OK_Bit+0, BitPos(_OK_Bit+0) 
-;ReflowOven.c,229 :: 		}
-L_main53:
-;ReflowOven.c,230 :: 		}
+;ReflowOven.c,224 :: 		}
+L_main50:
+;ReflowOven.c,225 :: 		}
 L_main13:
-;ReflowOven.c,237 :: 		switch(Phs.PhaseCntr){
-	GOTO        L_main54
-;ReflowOven.c,238 :: 		case 1:  //pid output to ccp module for pHase control
-L_main56:
-;ReflowOven.c,239 :: 		Phs.an0_ = (unsigned int)pid_t.Mv;// ADC_Read(0);
+;ReflowOven.c,232 :: 		switch(Phs.PhaseCntr){
+	GOTO        L_main51
+;ReflowOven.c,233 :: 		case 1:  //pid output to ccp module for pHase control
+L_main53:
+;ReflowOven.c,234 :: 		Phs.an0_ = (unsigned int)pid_t.Mv;// ADC_Read(0);
 	MOVF        _pid_t+20, 0 
 	MOVWF       _Phs+6 
 	MOVF        _pid_t+21, 0 
 	MOVWF       _Phs+7 
-;ReflowOven.c,240 :: 		if(Phs.an0_ < 1)Phs.an0_ = 1;
+;ReflowOven.c,235 :: 		if(Phs.an0_ < 1)Phs.an0_ = 1;
 	MOVLW       0
 	SUBWF       _pid_t+21, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main106
+	GOTO        L__main102
 	MOVLW       1
 	SUBWF       _pid_t+20, 0 
-L__main106:
+L__main102:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main57
+	GOTO        L_main54
 	MOVLW       1
 	MOVWF       _Phs+6 
 	MOVLW       0
 	MOVWF       _Phs+7 
-L_main57:
-;ReflowOven.c,241 :: 		Phs.an0_ = RevADC - Phs.an0_;
+L_main54:
+;ReflowOven.c,236 :: 		Phs.an0_ = RevADC - Phs.an0_;
 	MOVF        _Phs+6, 0 
 	SUBLW       243
 	MOVWF       R1 
@@ -1054,26 +1029,26 @@ L_main57:
 	MOVWF       _Phs+6 
 	MOVF        R2, 0 
 	MOVWF       _Phs+7 
-;ReflowOven.c,242 :: 		if(Phs.an0_ >= 1010)Phs.an0_ = 1010;
+;ReflowOven.c,237 :: 		if(Phs.an0_ >= 1010)Phs.an0_ = 1010;
 	MOVLW       3
 	SUBWF       R2, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main107
+	GOTO        L__main103
 	MOVLW       242
 	SUBWF       R1, 0 
-L__main107:
+L__main103:
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main58
+	GOTO        L_main55
 	MOVLW       242
 	MOVWF       _Phs+6 
 	MOVLW       3
 	MOVWF       _Phs+7 
-L_main58:
-;ReflowOven.c,243 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,244 :: 		case 2:  //pid output ccp for servo control
-L_main59:
-;ReflowOven.c,246 :: 		Phs.an1_ = ServoSub + pid_t.Mv;//Phs.an1_;
+L_main55:
+;ReflowOven.c,238 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,239 :: 		case 2:  //pid output ccp for servo control
+L_main56:
+;ReflowOven.c,241 :: 		Phs.an1_ = ServoSub + pid_t.Mv;//Phs.an1_;
 	MOVLW       220
 	ADDWF       _pid_t+20, 0 
 	MOVWF       R1 
@@ -1084,36 +1059,36 @@ L_main59:
 	MOVWF       _Phs+14 
 	MOVF        R2, 0 
 	MOVWF       _Phs+15 
-;ReflowOven.c,247 :: 		if(Phs.an1_ > 1500)Phs.an1_ = 1500;
+;ReflowOven.c,242 :: 		if(Phs.an1_ > 1500)Phs.an1_ = 1500;
 	MOVF        R2, 0 
 	SUBLW       5
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main108
+	GOTO        L__main104
 	MOVF        R1, 0 
 	SUBLW       220
-L__main108:
+L__main104:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main60
+	GOTO        L_main57
 	MOVLW       220
 	MOVWF       _Phs+14 
 	MOVLW       5
 	MOVWF       _Phs+15 
-L_main60:
-;ReflowOven.c,248 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,249 :: 		case 3:  //hardware multiplier
-L_main61:
-;ReflowOven.c,250 :: 		if(Phs.olDan0_ != Phs.an0_){
+L_main57:
+;ReflowOven.c,243 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,244 :: 		case 3:  //hardware multiplier
+L_main58:
+;ReflowOven.c,245 :: 		if(Phs.olDan0_ != Phs.an0_){
 	MOVF        _Phs+9, 0 
 	XORWF       _Phs+7, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main109
+	GOTO        L__main105
 	MOVF        _Phs+6, 0 
 	XORWF       _Phs+8, 0 
-L__main109:
+L__main105:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main62
-;ReflowOven.c,251 :: 		Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
+	GOTO        L_main59
+;ReflowOven.c,246 :: 		Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
 	MOVF        _Phs+6, 0 
 	MOVWF       FARG_S_HWMul_valA+0 
 	MOVF        _Phs+7, 0 
@@ -1127,28 +1102,28 @@ L__main109:
 	MOVWF       _Phs+12 
 	MOVF        R1, 0 
 	MOVWF       _Phs+13 
-;ReflowOven.c,254 :: 		Phs.olDan0_ = Phs.an0_;
+;ReflowOven.c,249 :: 		Phs.olDan0_ = Phs.an0_;
 	MOVF        _Phs+6, 0 
 	MOVWF       _Phs+8 
 	MOVF        _Phs+7, 0 
 	MOVWF       _Phs+9 
-;ReflowOven.c,255 :: 		}
-L_main62:
-;ReflowOven.c,257 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,258 :: 		case 4:  //hardware multiplier
-L_main63:
-;ReflowOven.c,259 :: 		if(Phs.olDan1_ != Phs.an1_){
+;ReflowOven.c,250 :: 		}
+L_main59:
+;ReflowOven.c,252 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,253 :: 		case 4:  //hardware multiplier
+L_main60:
+;ReflowOven.c,254 :: 		if(Phs.olDan1_ != Phs.an1_){
 	MOVF        _Phs+17, 0 
 	XORWF       _Phs+15, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__main110
+	GOTO        L__main106
 	MOVF        _Phs+14, 0 
 	XORWF       _Phs+16, 0 
-L__main110:
+L__main106:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main64
-;ReflowOven.c,260 :: 		Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_,ServoPls);
+	GOTO        L_main61
+;ReflowOven.c,255 :: 		Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_,ServoPls);
 	MOVF        _Phs+14, 0 
 	MOVWF       FARG_S_HWMul_valA+0 
 	MOVF        _Phs+15, 0 
@@ -1162,29 +1137,29 @@ L__main110:
 	MOVWF       _Phs+20 
 	MOVF        R1, 0 
 	MOVWF       _Phs+21 
-;ReflowOven.c,263 :: 		Phs.olDan1_ = Phs.an1_;
+;ReflowOven.c,258 :: 		Phs.olDan1_ = Phs.an1_;
 	MOVF        _Phs+14, 0 
 	MOVWF       _Phs+16 
 	MOVF        _Phs+15, 0 
 	MOVWF       _Phs+17 
-;ReflowOven.c,264 :: 		}
-L_main64:
-;ReflowOven.c,265 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,266 :: 		case 5: // spi call to temp chip
-L_main65:
-;ReflowOven.c,267 :: 		if(!TempBit){
+;ReflowOven.c,259 :: 		}
+L_main61:
+;ReflowOven.c,260 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,261 :: 		case 5: // spi call to temp chip
+L_main62:
+;ReflowOven.c,262 :: 		if(!TempBit){
 	BTFSC       ReflowOven_TempBit+0, BitPos(ReflowOven_TempBit+0) 
-	GOTO        L_main66
-;ReflowOven.c,268 :: 		DegC.sampleTimer++;
+	GOTO        L_main63
+;ReflowOven.c,263 :: 		DegC.sampleTimer++;
 	MOVF        _DegC+21, 0 
 	ADDLW       1
 	MOVWF       R0 
 	MOVF        R0, 0 
 	MOVWF       _DegC+21 
-;ReflowOven.c,269 :: 		TempBit = on;
+;ReflowOven.c,264 :: 		TempBit = on;
 	BSF         ReflowOven_TempBit+0, BitPos(ReflowOven_TempBit+0) 
-;ReflowOven.c,270 :: 		if(DegC.sampleTimer >= 20){
+;ReflowOven.c,265 :: 		if(DegC.sampleTimer >= 20){
 	MOVLW       128
 	XORWF       _DegC+21, 0 
 	MOVWF       R0 
@@ -1192,8 +1167,8 @@ L_main65:
 	XORLW       20
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main67
-;ReflowOven.c,271 :: 		DegC.Temp_fPv = ReadMax31855J();
+	GOTO        L_main64
+;ReflowOven.c,266 :: 		DegC.Temp_fPv = ReadMax31855J();
 	CALL        _ReadMax31855J+0, 0
 	MOVF        R0, 0 
 	MOVWF       _DegC+12 
@@ -1203,10 +1178,10 @@ L_main65:
 	MOVWF       _DegC+14 
 	MOVF        R3, 0 
 	MOVWF       _DegC+15 
-;ReflowOven.c,272 :: 		if(!Menu_Bit){
+;ReflowOven.c,267 :: 		if(!Menu_Bit){
 	BTFSC       _Menu_Bit+0, BitPos(_Menu_Bit+0) 
-	GOTO        L_main68
-;ReflowOven.c,273 :: 		DegC.Temp_iPv = (int)DegC.Temp_fPv;
+	GOTO        L_main65
+;ReflowOven.c,268 :: 		DegC.Temp_iPv = (int)DegC.Temp_fPv;
 	MOVF        _DegC+12, 0 
 	MOVWF       R0 
 	MOVF        _DegC+13, 0 
@@ -1220,16 +1195,16 @@ L_main65:
 	MOVWF       _DegC+16 
 	MOVF        R1, 0 
 	MOVWF       _DegC+17 
-;ReflowOven.c,274 :: 		sprintf(txt5,"%3.2f",DegC.Temp_fPv); //DegC.Temp_
+;ReflowOven.c,269 :: 		sprintf(txt5,"%3.2f",DegC.Temp_fPv); //DegC.Temp_
 	MOVLW       _txt5+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt5+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_22_ReflowOven+0
+	MOVLW       ?lstr_21_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_22_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_21_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_22_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_21_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _DegC+12, 0 
 	MOVWF       FARG_sprintf_wh+5 
@@ -1240,29 +1215,29 @@ L_main65:
 	MOVF        _DegC+15, 0 
 	MOVWF       FARG_sprintf_wh+8 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,275 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
+;ReflowOven.c,270 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr23_ReflowOven+0
+	MOVLW       ?lstr22_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr23_ReflowOven+0)
+	MOVLW       hi_addr(?lstr22_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,276 :: 		strcat(txt5, "'C");
+;ReflowOven.c,271 :: 		strcat(txt5, "'C");
 	MOVLW       _txt5+0
 	MOVWF       FARG_strcat_to+0 
 	MOVLW       hi_addr(_txt5+0)
 	MOVWF       FARG_strcat_to+1 
-	MOVLW       ?lstr24_ReflowOven+0
+	MOVLW       ?lstr23_ReflowOven+0
 	MOVWF       FARG_strcat_from+0 
-	MOVLW       hi_addr(?lstr24_ReflowOven+0)
+	MOVLW       hi_addr(?lstr23_ReflowOven+0)
 	MOVWF       FARG_strcat_from+1 
 	CALL        _strcat+0, 0
-;ReflowOven.c,277 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
+;ReflowOven.c,272 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -1274,28 +1249,28 @@ L_main65:
 	MOVLW       hi_addr(_txt5+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,278 :: 		}
-L_main68:
-;ReflowOven.c,279 :: 		}
-L_main67:
-;ReflowOven.c,280 :: 		}
+;ReflowOven.c,273 :: 		}
+L_main65:
+;ReflowOven.c,274 :: 		}
+L_main64:
+;ReflowOven.c,275 :: 		}
+L_main63:
+;ReflowOven.c,276 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,277 :: 		case 6://calculate Temp and display
 L_main66:
-;ReflowOven.c,281 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,282 :: 		case 6://calculate Temp and display
-L_main69:
-;ReflowOven.c,283 :: 		if(!pidBit){
+;ReflowOven.c,278 :: 		if(!pidBit){
 	BTFSC       ReflowOven_pidBit+0, BitPos(ReflowOven_pidBit+0) 
-	GOTO        L_main70
-;ReflowOven.c,284 :: 		pid_t.sample_tmr++;
+	GOTO        L_main67
+;ReflowOven.c,279 :: 		pid_t.sample_tmr++;
 	MOVF        _pid_t+32, 0 
 	ADDLW       1
 	MOVWF       R0 
 	MOVF        R0, 0 
 	MOVWF       _pid_t+32 
-;ReflowOven.c,285 :: 		pidBit = on;
+;ReflowOven.c,280 :: 		pidBit = on;
 	BSF         ReflowOven_pidBit+0, BitPos(ReflowOven_pidBit+0) 
-;ReflowOven.c,286 :: 		if(pid_t.sample_tmr >= pid_t.Kt){
+;ReflowOven.c,281 :: 		if(pid_t.sample_tmr >= pid_t.Kt){
 	MOVLW       128
 	XORWF       _pid_t+32, 0 
 	MOVWF       R0 
@@ -1303,11 +1278,11 @@ L_main69:
 	XORWF       _pid_t+33, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main71
-;ReflowOven.c,288 :: 		if(!FinCycle)
+	GOTO        L_main68
+;ReflowOven.c,283 :: 		if(!FinCycle)
 	BTFSC       ReflowOven_Bits+0, 3 
-	GOTO        L_main72
-;ReflowOven.c,289 :: 		PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
+	GOTO        L_main69
+;ReflowOven.c,284 :: 		PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
 	MOVLW       _pid_t+0
 	MOVWF       FARG_PID_Calc_PID_t+0 
 	MOVLW       hi_addr(_pid_t+0)
@@ -1321,44 +1296,44 @@ L_main69:
 	MOVF        _DegC+17, 0 
 	MOVWF       FARG_PID_Calc_Pv+1 
 	CALL        _PID_Calc+0, 0
-	GOTO        L_main73
-L_main72:
-;ReflowOven.c,291 :: 		pid_t.Mv = 0;
+	GOTO        L_main70
+L_main69:
+;ReflowOven.c,286 :: 		pid_t.Mv = 0;
 	CLRF        _pid_t+20 
 	CLRF        _pid_t+21 
-L_main73:
-;ReflowOven.c,293 :: 		if(!Menu_Bit){
+L_main70:
+;ReflowOven.c,288 :: 		if(!Menu_Bit){
 	BTFSC       _Menu_Bit+0, BitPos(_Menu_Bit+0) 
-	GOTO        L_main74
-;ReflowOven.c,294 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");
+	GOTO        L_main71
+;ReflowOven.c,289 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr25_ReflowOven+0
+	MOVLW       ?lstr24_ReflowOven+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr25_ReflowOven+0)
+	MOVLW       hi_addr(?lstr24_ReflowOven+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,295 :: 		sprintf(txt4,"%4d",pid_t.Mv);
+;ReflowOven.c,290 :: 		sprintf(txt4,"%4d",pid_t.Mv);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_sprintf_wh+1 
-	MOVLW       ?lstr_26_ReflowOven+0
+	MOVLW       ?lstr_25_ReflowOven+0
 	MOVWF       FARG_sprintf_f+0 
-	MOVLW       hi_addr(?lstr_26_ReflowOven+0)
+	MOVLW       hi_addr(?lstr_25_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+1 
-	MOVLW       higher_addr(?lstr_26_ReflowOven+0)
+	MOVLW       higher_addr(?lstr_25_ReflowOven+0)
 	MOVWF       FARG_sprintf_f+2 
 	MOVF        _pid_t+20, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	MOVF        _pid_t+21, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ReflowOven.c,296 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,5,txt4);
+;ReflowOven.c,291 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,5,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -1370,86 +1345,86 @@ L_main73:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ReflowOven.c,297 :: 		}
-L_main74:
-;ReflowOven.c,299 :: 		}
+;ReflowOven.c,292 :: 		}
 L_main71:
-;ReflowOven.c,300 :: 		}
-L_main70:
-;ReflowOven.c,301 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,302 :: 		case 7:   //write data out to pc every 70*4 ms
-L_main75:
-;ReflowOven.c,303 :: 		Phs.UartWriter++;
+;ReflowOven.c,294 :: 		}
+L_main68:
+;ReflowOven.c,295 :: 		}
+L_main67:
+;ReflowOven.c,296 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,297 :: 		case 7:   //write data out to pc every 70*4 ms
+L_main72:
+;ReflowOven.c,298 :: 		Phs.UartWriter++;
 	MOVF        _Phs+0, 0 
 	ADDLW       1
 	MOVWF       R0 
 	MOVF        R0, 0 
 	MOVWF       _Phs+0 
-;ReflowOven.c,304 :: 		if(Phs.UartWriter == 8){
+;ReflowOven.c,299 :: 		if(Phs.UartWriter == 8){
 	MOVF        _Phs+0, 0 
 	XORLW       8
 	BTFSS       STATUS+0, 2 
-	GOTO        L_main76
-;ReflowOven.c,305 :: 		if(!WriteData){
+	GOTO        L_main73
+;ReflowOven.c,300 :: 		if(!WriteData){
 	BTFSC       ReflowOven_Bits+0, 4 
-	GOTO        L_main77
-;ReflowOven.c,306 :: 		WriteData = on;
+	GOTO        L_main74
+;ReflowOven.c,301 :: 		WriteData = on;
 	BSF         ReflowOven_Bits+0, 4 
-;ReflowOven.c,307 :: 		UART1_Write_Text(txt1);
+;ReflowOven.c,302 :: 		UART1_Write_Text(txt1);
 	MOVLW       _txt1+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt1+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;ReflowOven.c,308 :: 		UART1_Write(',');
+;ReflowOven.c,303 :: 		UART1_Write(',');
 	MOVLW       44
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,309 :: 		UART1_Write_Text(txt5);
+;ReflowOven.c,304 :: 		UART1_Write_Text(txt5);
 	MOVLW       _txt5+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt5+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;ReflowOven.c,310 :: 		UART1_Write(',');
+;ReflowOven.c,305 :: 		UART1_Write(',');
 	MOVLW       44
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,311 :: 		UART1_Write_Text(txt6);
+;ReflowOven.c,306 :: 		UART1_Write_Text(txt6);
 	MOVLW       _txt6+0
 	MOVWF       FARG_UART1_Write_Text_uart_text+0 
 	MOVLW       hi_addr(_txt6+0)
 	MOVWF       FARG_UART1_Write_Text_uart_text+1 
 	CALL        _UART1_Write_Text+0, 0
-;ReflowOven.c,312 :: 		UART1_Write(0x0D);
+;ReflowOven.c,307 :: 		UART1_Write(0x0D);
 	MOVLW       13
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,313 :: 		UART1_Write(0x0A);
+;ReflowOven.c,308 :: 		UART1_Write(0x0A);
 	MOVLW       10
 	MOVWF       FARG_UART1_Write_data_+0 
 	CALL        _UART1_Write+0, 0
-;ReflowOven.c,314 :: 		}
-L_main77:
-;ReflowOven.c,315 :: 		}
-L_main76:
-;ReflowOven.c,316 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,317 :: 		default:
-L_main78:
-;ReflowOven.c,318 :: 		if(Phs.UartWriter > 8){
+;ReflowOven.c,309 :: 		}
+L_main74:
+;ReflowOven.c,310 :: 		}
+L_main73:
+;ReflowOven.c,311 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,312 :: 		default:
+L_main75:
+;ReflowOven.c,313 :: 		if(Phs.UartWriter > 8){
 	MOVF        _Phs+0, 0 
 	SUBLW       8
 	BTFSC       STATUS+0, 0 
-	GOTO        L_main79
-;ReflowOven.c,319 :: 		Phs.UartWriter = 0;
+	GOTO        L_main76
+;ReflowOven.c,314 :: 		Phs.UartWriter = 0;
 	CLRF        _Phs+0 
-;ReflowOven.c,320 :: 		WriteData = off;
+;ReflowOven.c,315 :: 		WriteData = off;
 	BCF         ReflowOven_Bits+0, 4 
-;ReflowOven.c,321 :: 		}
-L_main79:
-;ReflowOven.c,322 :: 		if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
+;ReflowOven.c,316 :: 		}
+L_main76:
+;ReflowOven.c,317 :: 		if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
 	MOVLW       128
 	XORWF       _DegC+21, 0 
 	MOVWF       R0 
@@ -1457,10 +1432,10 @@ L_main79:
 	XORLW       20
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main80
+	GOTO        L_main77
 	CLRF        _DegC+21 
-L_main80:
-;ReflowOven.c,323 :: 		if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
+L_main77:
+;ReflowOven.c,318 :: 		if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
 	MOVLW       128
 	XORWF       _pid_t+32, 0 
 	MOVWF       R0 
@@ -1468,71 +1443,71 @@ L_main80:
 	XORLW       5
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L_main81
+	GOTO        L_main78
 	CLRF        _pid_t+32 
-L_main81:
-;ReflowOven.c,324 :: 		if(TempBit)TempBit = off;
+L_main78:
+;ReflowOven.c,319 :: 		if(TempBit)TempBit = off;
 	BTFSS       ReflowOven_TempBit+0, BitPos(ReflowOven_TempBit+0) 
-	GOTO        L_main82
+	GOTO        L_main79
 	BCF         ReflowOven_TempBit+0, BitPos(ReflowOven_TempBit+0) 
-L_main82:
-;ReflowOven.c,325 :: 		if(pidBit) pidBit = off;
+L_main79:
+;ReflowOven.c,320 :: 		if(pidBit) pidBit = off;
 	BTFSS       ReflowOven_pidBit+0, BitPos(ReflowOven_pidBit+0) 
-	GOTO        L_main83
+	GOTO        L_main80
 	BCF         ReflowOven_pidBit+0, BitPos(ReflowOven_pidBit+0) 
-L_main83:
-;ReflowOven.c,326 :: 		Phs.PhaseCntr = 1;
+L_main80:
+;ReflowOven.c,321 :: 		Phs.PhaseCntr = 1;
 	MOVLW       1
 	MOVWF       _Phs+2 
-;ReflowOven.c,327 :: 		break;
-	GOTO        L_main55
-;ReflowOven.c,328 :: 		}
-L_main54:
+;ReflowOven.c,322 :: 		break;
+	GOTO        L_main52
+;ReflowOven.c,323 :: 		}
+L_main51:
 	MOVF        _Phs+2, 0 
 	XORLW       1
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main56
+	GOTO        L_main53
 	MOVF        _Phs+2, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main59
+	GOTO        L_main56
 	MOVF        _Phs+2, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main61
+	GOTO        L_main58
 	MOVF        _Phs+2, 0 
 	XORLW       4
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main63
+	GOTO        L_main60
 	MOVF        _Phs+2, 0 
 	XORLW       5
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main65
+	GOTO        L_main62
 	MOVF        _Phs+2, 0 
 	XORLW       6
 	BTFSC       STATUS+0, 2 
-	GOTO        L_main69
+	GOTO        L_main66
 	MOVF        _Phs+2, 0 
 	XORLW       7
 	BTFSC       STATUS+0, 2 
+	GOTO        L_main72
 	GOTO        L_main75
-	GOTO        L_main78
-L_main55:
-;ReflowOven.c,330 :: 		}
+L_main52:
+;ReflowOven.c,325 :: 		}
 	GOTO        L_main5
-;ReflowOven.c,332 :: 		}
+;ReflowOven.c,327 :: 		}
 L_end_main:
 	GOTO        $+0
 ; end of _main
 
 _HighPrioity:
 
-;ReflowOven.c,337 :: 		void HighPrioity() iv 0x0008 ics ICS_AUTO {
-;ReflowOven.c,338 :: 		High_Priority();
+;ReflowOven.c,332 :: 		void HighPrioity() iv 0x0008 ics ICS_AUTO {
+;ReflowOven.c,333 :: 		High_Priority();
 	CALL        _High_Priority+0, 0
-;ReflowOven.c,339 :: 		}
+;ReflowOven.c,334 :: 		}
 L_end_HighPrioity:
-L__HighPrioity112:
+L__HighPrioity108:
 	RETFIE      1
 ; end of _HighPrioity
 
@@ -1543,12 +1518,12 @@ _Tmr1_Int:
 	MOVF        BSR+0, 0 
 	MOVWF       ___Low_saveBSR+0 
 
-;ReflowOven.c,341 :: 		void Tmr1_Int() iv 0x0018 ics ICS_AUTO {
-;ReflowOven.c,342 :: 		Low_Priority();
+;ReflowOven.c,336 :: 		void Tmr1_Int() iv 0x0018 ics ICS_AUTO {
+;ReflowOven.c,337 :: 		Low_Priority();
 	CALL        _Low_Priority+0, 0
-;ReflowOven.c,343 :: 		}
+;ReflowOven.c,338 :: 		}
 L_end_Tmr1_Int:
-L__Tmr1_Int114:
+L__Tmr1_Int110:
 	MOVF        ___Low_saveBSR+0, 0 
 	MOVWF       BSR+0 
 	MOVF        ___Low_saveSTATUS+0, 0 

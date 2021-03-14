@@ -82,14 +82,27 @@ L_High_Priority0:
 	SUBWF       _Phs+3, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_High_Priority6
-L__High_Priority28:
+L__High_Priority31:
 ;IRQs.c,38 :: 		CCP1IE_bit  = off;
 	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
-;IRQs.c,39 :: 		if(RA3_Bit)LATC2_bit = on;
+;IRQs.c,39 :: 		if(RA3_Bit && (pid_t.Mv > 0))LATC2_bit = on;
 	BTFSS       RA3_bit+0, BitPos(RA3_bit+0) 
-	GOTO        L_High_Priority7
+	GOTO        L_High_Priority9
+	MOVLW       128
+	MOVWF       R0 
+	MOVLW       128
+	XORWF       _pid_t+21, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__High_Priority34
+	MOVF        _pid_t+20, 0 
+	SUBLW       0
+L__High_Priority34:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_High_Priority9
+L__High_Priority30:
 	BSF         LATC2_bit+0, BitPos(LATC2_bit+0) 
-L_High_Priority7:
+L_High_Priority9:
 ;IRQs.c,40 :: 		Phs.pwmOut = 1;
 	MOVLW       1
 	MOVWF       _Phs+1 
@@ -110,10 +123,10 @@ L_High_Priority6:
 	MOVF        _Phs+1, 0 
 	XORLW       1
 	BTFSS       STATUS+0, 2 
-	GOTO        L_High_Priority10
+	GOTO        L_High_Priority12
 	BTFSC       _wait+0, BitPos(_wait+0) 
-	GOTO        L_High_Priority10
-L__High_Priority27:
+	GOTO        L_High_Priority12
+L__High_Priority29:
 ;IRQs.c,51 :: 		Phs.PhasePulsCntr++;
 	MOVF        _Phs+3, 0 
 	ADDLW       1
@@ -137,33 +150,33 @@ L__High_Priority27:
 	MOVLW       3
 	SUBWF       _Phs+3, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L_High_Priority11
+	GOTO        L_High_Priority13
 ;IRQs.c,59 :: 		CCP1IE_bit  = off;
 	BCF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
 ;IRQs.c,60 :: 		Phs.PhasePulsCntr = 4;
 	MOVLW       4
 	MOVWF       _Phs+3 
 ;IRQs.c,61 :: 		}
-L_High_Priority11:
+L_High_Priority13:
 ;IRQs.c,63 :: 		}
-L_High_Priority10:
+L_High_Priority12:
 ;IRQs.c,64 :: 		if(wait){
 	BTFSS       _wait+0, BitPos(_wait+0) 
-	GOTO        L_High_Priority12
+	GOTO        L_High_Priority14
 ;IRQs.c,65 :: 		wait = off;
 	BCF         _wait+0, BitPos(_wait+0) 
 ;IRQs.c,66 :: 		CCP1IE_bit  = on;
 	BSF         CCP1IE_bit+0, BitPos(CCP1IE_bit+0) 
 ;IRQs.c,67 :: 		}
-L_High_Priority12:
+L_High_Priority14:
 ;IRQs.c,69 :: 		}
 L_High_Priority3:
 ;IRQs.c,70 :: 		if((CCP2IF_bit)&&(LATC1_bit)){
 	BTFSS       CCP2IF_bit+0, BitPos(CCP2IF_bit+0) 
-	GOTO        L_High_Priority15
+	GOTO        L_High_Priority17
 	BTFSS       LATC1_bit+0, BitPos(LATC1_bit+0) 
-	GOTO        L_High_Priority15
-L__High_Priority26:
+	GOTO        L_High_Priority17
+L__High_Priority28:
 ;IRQs.c,71 :: 		CCP2IE_bit = off;
 	BCF         CCP2IE_bit+0, BitPos(CCP2IE_bit+0) 
 ;IRQs.c,72 :: 		CCP2IF_bit = off;
@@ -171,7 +184,7 @@ L__High_Priority26:
 ;IRQs.c,73 :: 		LATC0_bit   = off;
 	BCF         LATC0_bit+0, BitPos(LATC0_bit+0) 
 ;IRQs.c,74 :: 		}
-L_High_Priority15:
+L_High_Priority17:
 ;IRQs.c,75 :: 		}
 L_end_High_Priority:
 	RETURN      0
@@ -182,33 +195,33 @@ _Low_Priority:
 ;IRQs.c,77 :: 		void Low_Priority(){
 ;IRQs.c,78 :: 		if (TMR3IF_bit)
 	BTFSS       TMR3IF_bit+0, BitPos(TMR3IF_bit+0) 
-	GOTO        L_Low_Priority16
+	GOTO        L_Low_Priority18
 ;IRQs.c,79 :: 		TMR3();
 	CALL        _TMR3+0, 0
-L_Low_Priority16:
+L_Low_Priority18:
 ;IRQs.c,81 :: 		if(RBIF_bit){
 	BTFSS       RBIF_bit+0, BitPos(RBIF_bit+0) 
-	GOTO        L_Low_Priority17
+	GOTO        L_Low_Priority19
 ;IRQs.c,82 :: 		RBIF_bit  = 0;
 	BCF         RBIF_bit+0, BitPos(RBIF_bit+0) 
 ;IRQs.c,83 :: 		if((IOCB6_bit)||(IOCB7_bit))
 	BTFSC       IOCB6_bit+0, BitPos(IOCB6_bit+0) 
-	GOTO        L__Low_Priority29
+	GOTO        L__Low_Priority32
 	BTFSC       IOCB7_bit+0, BitPos(IOCB7_bit+0) 
-	GOTO        L__Low_Priority29
-	GOTO        L_Low_Priority20
-L__Low_Priority29:
+	GOTO        L__Low_Priority32
+	GOTO        L_Low_Priority22
+L__Low_Priority32:
 ;IRQs.c,84 :: 		Encode();
 	CALL        _Encode+0, 0
-L_Low_Priority20:
+L_Low_Priority22:
 ;IRQs.c,85 :: 		}
-L_Low_Priority17:
+L_Low_Priority19:
 ;IRQs.c,87 :: 		if(RC1IF_bit)
 	BTFSS       RC1IF_bit+0, BitPos(RC1IF_bit+0) 
-	GOTO        L_Low_Priority21
+	GOTO        L_Low_Priority23
 ;IRQs.c,88 :: 		Serial();
 	CALL        _Serial+0, 0
-L_Low_Priority21:
+L_Low_Priority23:
 ;IRQs.c,89 :: 		}
 L_end_Low_Priority:
 	RETURN      0
@@ -221,12 +234,12 @@ _DoTime:
 	MOVF        _tmr+7, 0 
 	SUBLW       3
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime33
+	GOTO        L__DoTime37
 	MOVF        _tmr+6, 0 
 	SUBLW       231
-L__DoTime33:
+L__DoTime37:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime22
+	GOTO        L_DoTime24
 ;IRQs.c,93 :: 		tmr.ms = 0;
 	CLRF        _tmr+6 
 	CLRF        _tmr+7 
@@ -247,12 +260,12 @@ L__DoTime33:
 	MOVF        _tmr+11, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime34
+	GOTO        L__DoTime38
 	MOVF        _tmr+10, 0 
 	SUBLW       59
-L__DoTime34:
+L__DoTime38:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime23
+	GOTO        L_DoTime25
 ;IRQs.c,98 :: 		tmr.sec = 0;
 	CLRF        _tmr+10 
 	CLRF        _tmr+11 
@@ -273,21 +286,21 @@ L__DoTime34:
 	MOVF        _tmr+13, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__DoTime35
+	GOTO        L__DoTime39
 	MOVF        _tmr+12, 0 
 	SUBLW       59
-L__DoTime35:
+L__DoTime39:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_DoTime24
+	GOTO        L_DoTime26
 ;IRQs.c,103 :: 		tmr.min = 0;
 	CLRF        _tmr+12 
 	CLRF        _tmr+13 
 ;IRQs.c,104 :: 		}
-L_DoTime24:
+L_DoTime26:
 ;IRQs.c,105 :: 		}
-L_DoTime23:
+L_DoTime25:
 ;IRQs.c,106 :: 		}
-L_DoTime22:
+L_DoTime24:
 ;IRQs.c,107 :: 		}
 L_end_DoTime:
 	RETURN      0
@@ -354,17 +367,17 @@ _TMR3:
 	MOVF        _tmr+9, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__TMR337
+	GOTO        L__TMR341
 	MOVF        _tmr+8, 0 
 	SUBLW       9
-L__TMR337:
+L__TMR341:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_TMR325
+	GOTO        L_TMR327
 ;IRQs.c,127 :: 		tmr.ten_ms = 0;
 	CLRF        _tmr+8 
 	CLRF        _tmr+9 
 ;IRQs.c,128 :: 		}
-L_TMR325:
+L_TMR327:
 ;IRQs.c,129 :: 		}
 L_end_TMR3:
 	RETURN      0
