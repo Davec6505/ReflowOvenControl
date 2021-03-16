@@ -149,13 +149,30 @@ main
 				I2C2_Stop
 	EERead
 		EEPROM_Read
-	CalcTimerTicks
-		Div_16X16_U
-		S_HWMul
 	PID_Init
 	ResetBits
 	ClearAll
 	RstLocals
+	ReadMax31855J
+		SPI2_Read
+		GetTemp
+			int2double
+				NRM3232
+					RES032
+					SETFUN32
+					FIXSIGN32
+			Add_32x32_FP
+				NRM4032
+					SETFUN32
+					FIXSIGN32
+					SETFOV32
+					RES032
+				SETFOV32
+	double2int
+		SETIOV3224
+	CalcTimerTicks
+		Div_16X16_U
+		S_HWMul
 	EI
 	SampleButtons
 		sprintf
@@ -324,23 +341,6 @@ main
 			UART1_Write
 		UART1_Write
 	S_HWMul
-	ReadMax31855J
-		SPI2_Read
-		GetTemp
-			int2double
-				NRM3232
-					RES032
-					SETFUN32
-					FIXSIGN32
-			Add_32x32_FP
-				NRM4032
-					SETFUN32
-					FIXSIGN32
-					SETFOV32
-					RES032
-				SETFOV32
-	double2int
-		SETIOV3224
 	strcat
 	PID_Calc
 		S_HWMul

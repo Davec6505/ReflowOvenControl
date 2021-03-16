@@ -356,6 +356,8 @@ extern unsigned char txt4[5];
 extern unsigned char txt5[4];
 extern unsigned char txt6[4];
 
+extern unsigned char Bits;
+
 
 extern const unsigned int mulFact = 10;
 

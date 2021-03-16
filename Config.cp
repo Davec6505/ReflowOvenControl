@@ -356,6 +356,8 @@ extern unsigned char txt4[5];
 extern unsigned char txt5[4];
 extern unsigned char txt6[4];
 
+extern unsigned char Bits;
+
 
 extern const unsigned int mulFact = 10;
 
@@ -548,6 +550,7 @@ void ClearAll(){
  OFF_Bit = 0;
  pid_t.Mv = 10;
 }
+
 
 void WriteStart(){
  UART1_Write_Text("Start");

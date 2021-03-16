@@ -287,6 +287,8 @@ extern unsigned char txt4[5];
 extern unsigned char txt5[4];
 extern unsigned char txt6[4];
 
+extern unsigned char Bits;
+
 
 extern const unsigned int mulFact = 10;
 
@@ -477,7 +479,6 @@ void SampleButtons(){
  close:
  switch(enC){
  case 0: if (Button(&PORTA, 2, 100, 0) && Menu_Bit && !Ok_Bit){
- Ok_Bit = 1;
  enC = 13;
  goto close;
  }
@@ -699,7 +700,7 @@ void SampleButtons(){
  if (Button(&PORTA, 2, 200, 0) && !OK_E){
  enC = Save_EncoderValue(enC);
  OK_E = 1;OK_A=0;OK_B=0;OK_C = 0;OK_D=0;
- enC_line_inc = 0;
+ enC_line_inc = 1;
  Save_EncoderValue(DegC.Deg_OffSet);
  while(!RA2_bit);
  }
@@ -708,7 +709,7 @@ void SampleButtons(){
  if(Button(&PORTA, 2, 200, 0)){
  OK_E = 0;
  while(!RA2_bit);
- enC_line_inc = 0;
+ enC_line_inc = 1;
  enC = Save_EncoderValue(enC_line_inc+4);
  }
  }

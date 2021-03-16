@@ -356,6 +356,8 @@ extern unsigned char txt4[5];
 extern unsigned char txt5[4];
 extern unsigned char txt6[4];
 
+extern unsigned char Bits;
+
 
 extern const unsigned int mulFact = 10;
 
@@ -394,7 +396,7 @@ Spts Sps;
 
 
 
-static unsigned char Bits;
+unsigned char Bits;
 sbit SetPtSet at Bits.B0;
 sbit SetCoolBit at Bits.B1;
 sbit RstTmr at Bits.B2;
@@ -432,15 +434,18 @@ void main() {
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 
  EERead();
- CalcTimerTicks(0);
 
  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
  ResetBits();
  ClearAll();
  RstLocals();
+ DegC.Temp_iPv = (int)ReadMax31855J();
+ CalcTimerTicks(DegC.Temp_iPv);
  EI();
  while(1){
+ static bit fp;
  long Test;
+ static int DegSP_last;
  static unsigned int TempTicPlaceholder;
  static unsigned int TempDegPlaceholder;
 
@@ -450,17 +455,36 @@ void main() {
  if(Menu_Bit)
  SampleButtons();
 
+
+ if(!Menu_Bit && fp){
+ fp = off;
+ DegC.Deg_Sp = DegSP_last;
+ TempTicPlaceholder_last = -1;
+ tmr.MinNew = -1;
+ if(!Ok_Bit){
+ SetPtSet = on;
+ RstTmr = on;
+ }
+ }
+
  if (!Menu_Bit && Button(&PORTA, 2, 100, 0)){
+ fp = on;
+ DegSP_last = DegC.Deg_Sp;
  RstEntryBits();
  Menu_Bit = on;
  while(!RA2_bit);
  }
 
 
+
+
+ if((RA3_Bit)&&(!FinCycle))
+ DoTime();
+
+
+
+
  if(!Menu_Bit){
-
-
- if((RA3_Bit)&&(!FinCycle)) DoTime();
 
 
  if(tmr.SecNew != tmr.sec){
@@ -599,7 +623,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 230 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 252 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -607,7 +631,7 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 239 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 261 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
@@ -623,7 +647,7 @@ void main() {
  I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
  strcat(txt5, "'C");
  I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
-#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 280 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  }
  }
  }
@@ -707,12 +731,12 @@ void RstLocals(){
 void I2C1_TimeoutCallback(char errorCode) {
 
  if (errorCode == _I2C_TIMEOUT_RD) {
- LATC5_bit = !LATC5_bit;
- Return;
+ return;
  }
 
  if (errorCode == _I2C_TIMEOUT_WR) {
 
+ LATC5_bit = !LATC5_bit;
  return;
  }
 

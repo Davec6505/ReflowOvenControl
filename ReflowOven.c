@@ -20,7 +20,7 @@ Spts Sps;
 
 
 //bits
-static unsigned char Bits;
+unsigned char Bits;
 sbit SetPtSet   at Bits.B0;
 sbit SetCoolBit at Bits.B1;
 sbit RstTmr     at Bits.B2;
@@ -58,35 +58,57 @@ void main() {
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);//Lcd_Cmd(0,0x01);               // Clear display
 
   EERead();
-  CalcTimerTicks(0);
 //|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
   PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
   ResetBits();
   ClearAll();
   RstLocals();
+  DegC.Temp_iPv = (int)ReadMax31855J();
+  CalcTimerTicks(DegC.Temp_iPv);
   EI();
   while(1){
+  static bit fp;
   long Test;
+  static int DegSP_last;
   static unsigned int TempTicPlaceholder;
   static unsigned int TempDegPlaceholder;    
      ////////////////////////////////////////////
-     //display the pHase conter
+     //LCD Display control
      LATB5_bit  = Menu_Bit;
      
      if(Menu_Bit)
          SampleButtons();
-         
+     
+     //falling edge of Menu_Bit to reactivate display
+     if(!Menu_Bit && fp){
+        fp = off;
+        DegC.Deg_Sp = DegSP_last;
+        TempTicPlaceholder_last = -1;
+        tmr.MinNew = -1;
+        if(!Ok_Bit){
+          SetPtSet = on;
+          RstTmr = on;
+        }
+     }
+     
      if (!Menu_Bit && Button(&PORTA, 2, 100, 0)){
+           fp = on;
+           DegSP_last = DegC.Deg_Sp;
            RstEntryBits();
            Menu_Bit = on;
            while(!RA2_bit);
       }
+      
+      
+     ///////////////////////////////////////////
+     //get the timer ticks if in run mode
+     if((RA3_Bit)&&(!FinCycle)) 
+         DoTime();
 
-        
+     /////////////////////////////////////////////
+     //Block from displaying this data while in
+     //settings page of LCD
      if(!Menu_Bit){
-       ///////////////////////////////////////////
-       //get the timer ticks if in run mode
-       if((RA3_Bit)&&(!FinCycle)) DoTime();
        ///////////////////////////////////////////
        //do every second
        if(tmr.SecNew != tmr.sec){
@@ -101,12 +123,12 @@ void main() {
           if(tmr.min>=1){
             sprintf(txt3,"%3d",tmr.min);
             I2C_LCD_Out(LCD_01_ADDRESS,1,10,txt3);
-          }else 
+          }else
             I2C_LCD_Out(LCD_01_ADDRESS,1,10,"  0");
 
           I2C_LCD_Out(LCD_01_ADDRESS,1,13,":");
        }
-       
+
        if(TempTicPlaceholder_last != TempTicPlaceholder){
           TempTicPlaceholder_last = TempTicPlaceholder;
           sprintf(txt4,"%4d",TempTicPlaceholder); //Phase counter
@@ -338,18 +360,18 @@ void RstLocals(){
 void I2C1_TimeoutCallback(char errorCode) {
 
    if (errorCode == _I2C_TIMEOUT_RD) {
-     LATC5_bit = !LATC5_bit;
-     Return;
+     return;
    }
 
    if (errorCode == _I2C_TIMEOUT_WR) {
      // do something if timeout is caused during write
+     LATC5_bit = !LATC5_bit;
      return;
    }
 
    if (errorCode == _I2C_TIMEOUT_START) {
      // do something if timeout is caused during start
-       LATC5_bit = on;
+     LATC5_bit = on;
        return;
      
    }
