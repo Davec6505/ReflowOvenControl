@@ -8,7 +8,7 @@ Description: Code for a reflow oven
 
 //constants
 const unsigned int mulFact = 18;
-unsigned char LCD_01_ADDRESS = 0x4E;
+unsigned char LCD_01_ADDRESS = 0x4E;//4E = !A || 7E = A
 char *test = "Starting up";
 
 // structs & enums
@@ -46,53 +46,29 @@ unsigned char *flttxt;
 
 
 void main() {
- int a;
   I2Cxx = I2C1;
+  DI();
   ConfPic();
-  ADC_Init();
-  UART1_Init(115200);
-  
-  I2C1_Init(100000);//INIT I2C AT 100KHZ  Delay_ms(100); // I2C1_SetTimeoutCallback(1000,&test);    // enable error flag for I2C1 test
-  I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle); // Sets the I2C1 module active
-  Delay_ms(100);
-  //|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
-
-  EERead();
-  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
-  Uart1_En();
-  Set_Priority();
-  ConfigSpi();
-  InitTimer0();
-  InitTimer1();
-//  InitTimer2();
-  InitTimer3();
-  InitTimer5();
-  SetUp_IOCxInterrupts();
-  ResetBits();
-  ClearAll();
-  
   I2C_LCD_init(LCD_01_ADDRESS,_2Line);
-  Delay_ms(100);
+  Delay_ms(500);
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);          // Clear display
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CURSOR_OFF,1);     // Cursor off
- // I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
+  I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
   Delay_ms(2000);
   I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);//Lcd_Cmd(0,0x01);               // Clear display
-  Delay_ms(200);
-  EI();
-  Delay_ms(100);
-  wait = off;
-  DegC.Temp_iPv = 0;
-  tmr.sec = 0;
-  Bits = 0;
-  Menu_Bit = 0;
-  Ok_Bit = 0;
+
+  EERead();
   CalcTimerTicks(0);
-  TempTicPlaceholder_last = 0;
+//|| | Kp | Ki | Kd | Offset | Max | Min | Dir | P,I,D ||
+  PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
+  ResetBits();
+  ClearAll();
+  RstLocals();
+  EI();
   while(1){
   long Test;
   static unsigned int TempTicPlaceholder;
-  static unsigned int TempDegPlaceholder;
+  static unsigned int TempDegPlaceholder;    
      ////////////////////////////////////////////
      //display the pHase conter
      LATB5_bit  = Menu_Bit;
@@ -147,13 +123,18 @@ void main() {
              DegC.Deg_Sp = DegC.Temp_iPv;
              CalcTimerTicks(DegC.Temp_iPv);
              if(!FinCycle){
-               UART1_Write_Text("Start");
-               UART1_Write(0x0D);
-               UART1_Write(0x0A);
+               WriteStart();
              }
        }
        
        if(RA3_Bit){
+       
+          if(OFF_Bit){
+             FinCycle = on;
+             SetCoolBit = on;
+             OFF_Bit = off;
+          }
+
           if(!RstTmr){
              RstTmr = on;
              FinCycle = off;
@@ -168,6 +149,7 @@ void main() {
           if(Ok_Bit){
               RstTmr = off;
           }
+
           
           if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
                if (SetCoolBit)SetCoolBit = off;
@@ -209,7 +191,6 @@ void main() {
                sprintf(txt1,"%3u",DegC.Deg_Sp);
                I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
                I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
-               WriteDataOut();
                DegC.LastDeg = DegC.Deg_Sp;
             }
 
@@ -262,7 +243,7 @@ void main() {
                 if(!TempBit){
                    DegC.sampleTimer++;
                    TempBit = on;
-                  if(DegC.sampleTimer >= 20){
+                  if(DegC.sampleTimer == DegC.SampleTmrSP){
                     DegC.Temp_fPv = ReadMax31855J();
                     if(!Menu_Bit){
                       DegC.Temp_iPv = (int)DegC.Temp_fPv;
@@ -270,6 +251,10 @@ void main() {
                       I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
                       strcat(txt5, "'C");
                       I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
+                    /*sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
+                      I2C_LCD_Out(LCD_01_ADDRESS,3,12,"iPv:=");
+                      //strcat(txt5, "'C");
+                      I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);*/
                     }
                   }
                 }
@@ -278,7 +263,7 @@ void main() {
                 if(!pidBit){
                   pid_t.sample_tmr++;
                   pidBit = on;
-                  if(pid_t.sample_tmr >= pid_t.Kt){
+                  if(pid_t.sample_tmr == pid_t.Kt){
                   
                     if(!FinCycle)
                         PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
@@ -296,7 +281,7 @@ void main() {
                 break;
       case 7:   //write data out to pc every 70*4 ms
                 Phs.UartWriter++;
-                if(Phs.UartWriter == 8){
+                if(Phs.UartWriter == Sps.SerialWriteDly){
                   if(!WriteData){
                      WriteData = on;
                      UART1_Write_Text(txt1);
@@ -304,18 +289,23 @@ void main() {
                      UART1_Write_Text(txt5);
                      UART1_Write(',');
                      UART1_Write_Text(txt6);
+                     UART1_Write(',');
+                     UART1_Write_Text(txt4);
                      UART1_Write(0x0D);
                      UART1_Write(0x0A);
+                     
+                     if(FinCycle)
+                          WriteFin();
                   }
                 }
                 break;
        default:
-               if(Phs.UartWriter > 8){
+               if((Phs.UartWriter > Sps.SerialWriteDly)&&(!FinCycle)){
                   Phs.UartWriter = 0;
                   WriteData = off;
                }
-               if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
-               if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
+               if(DegC.sampleTimer >= DegC.SampleTmrSP)DegC.sampleTimer = 0;
+               if(pid_t.sample_tmr >= pid_t.Kt)pid_t.sample_tmr = 0;
                if(TempBit)TempBit = off;
                if(pidBit) pidBit = off;
                Phs.PhaseCntr = 1;
@@ -329,10 +319,42 @@ void main() {
 ///////////////////////////////////////////////////
 //interrupt vectors
 
-void HighPrioity() iv 0x0008 ics ICS_AUTO {
+void HighPriority() iv 0x0008 ics ICS_AUTO {
  High_Priority();
 }
 
-void Tmr1_Int() iv 0x0018 ics ICS_AUTO {
+ void LowPriority() iv 0x0018 ics ICS_AUTO {
  Low_Priority();
+}
+
+void RstLocals(){
+  TempTicPlaceholder_last = 0;
+  Bits = 0;
+  SetPtSet = 0;
+  RstTmr = 0;
+}
+
+// define callback function
+void I2C1_TimeoutCallback(char errorCode) {
+
+   if (errorCode == _I2C_TIMEOUT_RD) {
+     LATC5_bit = !LATC5_bit;
+     Return;
+   }
+
+   if (errorCode == _I2C_TIMEOUT_WR) {
+     // do something if timeout is caused during write
+     return;
+   }
+
+   if (errorCode == _I2C_TIMEOUT_START) {
+     // do something if timeout is caused during start
+       LATC5_bit = on;
+       return;
+     
+   }
+
+   if (errorCode == _I2C_TIMEOUT_REPEATED_START) {
+     // do something if timeout is caused during repeated start
+   }
 }

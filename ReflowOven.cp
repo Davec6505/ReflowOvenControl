@@ -149,9 +149,8 @@ struct Temp{
  int Temp_iPv;
  unsigned int xVal;
  uint8_t Deg_decimal;
- short sampleTimer;
- short pidTimer;
- unsigned int Sample_SPI;
+ unsigned short sampleTimer;
+ unsigned short SampleTmrSP;
 };
 
 extern struct Temp DegC;
@@ -284,6 +283,7 @@ enum StatesOfControl{
  SoakSettings,
  SpikeSettings,
  CoolSettings,
+ TimeSettings,
  KpSettings,
  KiSettings,
  KdSettings,
@@ -329,6 +329,7 @@ unsigned int SpkeTmr;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
 unsigned char State;
+unsigned short SerialWriteDly;
 }Spts;
 
 extern enum StatesOfControl Cntrl;
@@ -359,6 +360,7 @@ extern unsigned char txt6[4];
 extern const unsigned int mulFact = 10;
 
 
+void I2C1_TimeoutCallback(char errorCode);
 
 void ConfPic();
 void InitTimer0();
@@ -374,7 +376,10 @@ void DI();
 void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
+void WriteStart();
+void WriteFin();
 void WriteDataOut();
+void RstLocals();
 #line 10 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
 const unsigned int mulFact = 18;
 unsigned char LCD_01_ADDRESS = 0x4E;
@@ -415,49 +420,25 @@ unsigned char *flttxt;
 
 
 void main() {
- int a;
  I2Cxx = I2C1;
+ DI();
  ConfPic();
- ADC_Init();
- UART1_Init(115200);
-
- I2C1_Init(100000);
- I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle);
- Delay_ms(100);
-
-
- EERead();
- PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
- Uart1_En();
- Set_Priority();
- ConfigSpi();
- InitTimer0();
- InitTimer1();
-
- InitTimer3();
- InitTimer5();
- SetUp_IOCxInterrupts();
- ResetBits();
- ClearAll();
-
  I2C_LCD_init(LCD_01_ADDRESS,_2Line);
- Delay_ms(100);
+ Delay_ms(500);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CURSOR_OFF,1);
-
+ I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Starting UP");
  Delay_ms(2000);
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
- Delay_ms(200);
- EI();
- Delay_ms(100);
- wait = off;
- DegC.Temp_iPv = 0;
- tmr.sec = 0;
- Bits = 0;
- Menu_Bit = 0;
- Ok_Bit = 0;
+
+ EERead();
  CalcTimerTicks(0);
- TempTicPlaceholder_last = 0;
+
+ PID_Init(&pid_t,pid_t.Kp,pid_t.Ki,pid_t.Kd,0,1010,-900,'+',_PID);
+ ResetBits();
+ ClearAll();
+ RstLocals();
+ EI();
  while(1){
  long Test;
  static unsigned int TempTicPlaceholder;
@@ -516,13 +497,18 @@ void main() {
  DegC.Deg_Sp = DegC.Temp_iPv;
  CalcTimerTicks(DegC.Temp_iPv);
  if(!FinCycle){
- UART1_Write_Text("Start");
- UART1_Write(0x0D);
- UART1_Write(0x0A);
+ WriteStart();
  }
  }
 
  if(RA3_Bit){
+
+ if(OFF_Bit){
+ FinCycle = on;
+ SetCoolBit = on;
+ OFF_Bit = off;
+ }
+
  if(!RstTmr){
  RstTmr = on;
  FinCycle = off;
@@ -537,6 +523,7 @@ void main() {
  if(Ok_Bit){
  RstTmr = off;
  }
+
 
  if((DegC.Deg_Sp < Sps.RmpDeg)&&(!SetCoolBit)){
  if (SetCoolBit)SetCoolBit = off;
@@ -578,7 +565,6 @@ void main() {
  sprintf(txt1,"%3u",DegC.Deg_Sp);
  I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
  I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
- WriteDataOut();
  DegC.LastDeg = DegC.Deg_Sp;
  }
 
@@ -613,7 +599,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 249 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 230 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -621,7 +607,7 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 239 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
@@ -629,7 +615,7 @@ void main() {
  if(!TempBit){
  DegC.sampleTimer++;
  TempBit = on;
- if(DegC.sampleTimer >= 20){
+ if(DegC.sampleTimer == DegC.SampleTmrSP){
  DegC.Temp_fPv = ReadMax31855J();
  if(!Menu_Bit){
  DegC.Temp_iPv = (int)DegC.Temp_fPv;
@@ -637,6 +623,7 @@ void main() {
  I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
  strcat(txt5, "'C");
  I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
+#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  }
  }
  }
@@ -645,7 +632,7 @@ void main() {
  if(!pidBit){
  pid_t.sample_tmr++;
  pidBit = on;
- if(pid_t.sample_tmr >= pid_t.Kt){
+ if(pid_t.sample_tmr == pid_t.Kt){
 
  if(!FinCycle)
  PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
@@ -663,7 +650,7 @@ void main() {
  break;
  case 7:
  Phs.UartWriter++;
- if(Phs.UartWriter == 8){
+ if(Phs.UartWriter == Sps.SerialWriteDly){
  if(!WriteData){
  WriteData = on;
  UART1_Write_Text(txt1);
@@ -671,18 +658,23 @@ void main() {
  UART1_Write_Text(txt5);
  UART1_Write(',');
  UART1_Write_Text(txt6);
+ UART1_Write(',');
+ UART1_Write_Text(txt4);
  UART1_Write(0x0D);
  UART1_Write(0x0A);
+
+ if(FinCycle)
+ WriteFin();
  }
  }
  break;
  default:
- if(Phs.UartWriter > 8){
+ if((Phs.UartWriter > Sps.SerialWriteDly)&&(!FinCycle)){
  Phs.UartWriter = 0;
  WriteData = off;
  }
- if(DegC.sampleTimer >= 20)DegC.sampleTimer = 0;
- if(pid_t.sample_tmr >=5)pid_t.sample_tmr = 0;
+ if(DegC.sampleTimer >= DegC.SampleTmrSP)DegC.sampleTimer = 0;
+ if(pid_t.sample_tmr >= pid_t.Kt)pid_t.sample_tmr = 0;
  if(TempBit)TempBit = off;
  if(pidBit) pidBit = off;
  Phs.PhaseCntr = 1;
@@ -696,10 +688,42 @@ void main() {
 
 
 
-void HighPrioity() iv 0x0008 ics ICS_AUTO {
+void HighPriority() iv 0x0008 ics ICS_AUTO {
  High_Priority();
 }
 
-void Tmr1_Int() iv 0x0018 ics ICS_AUTO {
+ void LowPriority() iv 0x0018 ics ICS_AUTO {
  Low_Priority();
+}
+
+void RstLocals(){
+ TempTicPlaceholder_last = 0;
+ Bits = 0;
+ SetPtSet = 0;
+ RstTmr = 0;
+}
+
+
+void I2C1_TimeoutCallback(char errorCode) {
+
+ if (errorCode == _I2C_TIMEOUT_RD) {
+ LATC5_bit = !LATC5_bit;
+ Return;
+ }
+
+ if (errorCode == _I2C_TIMEOUT_WR) {
+
+ return;
+ }
+
+ if (errorCode == _I2C_TIMEOUT_START) {
+
+ LATC5_bit = on;
+ return;
+
+ }
+
+ if (errorCode == _I2C_TIMEOUT_REPEATED_START) {
+
+ }
 }

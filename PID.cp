@@ -150,9 +150,8 @@ struct Temp{
  int Temp_iPv;
  unsigned int xVal;
  uint8_t Deg_decimal;
- short sampleTimer;
- short pidTimer;
- unsigned int Sample_SPI;
+ unsigned short sampleTimer;
+ unsigned short SampleTmrSP;
 };
 
 extern struct Temp DegC;
@@ -223,6 +222,7 @@ enum StatesOfControl{
  SoakSettings,
  SpikeSettings,
  CoolSettings,
+ TimeSettings,
  KpSettings,
  KiSettings,
  KdSettings,
@@ -268,6 +268,7 @@ unsigned int SpkeTmr;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
 unsigned char State;
+unsigned short SerialWriteDly;
 }Spts;
 
 extern enum StatesOfControl Cntrl;
@@ -298,6 +299,7 @@ extern unsigned char txt6[4];
 extern const unsigned int mulFact = 10;
 
 
+void I2C1_TimeoutCallback(char errorCode);
 
 void ConfPic();
 void InitTimer0();
@@ -313,7 +315,10 @@ void DI();
 void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
+void WriteStart();
+void WriteFin();
 void WriteDataOut();
+void RstLocals();
 #line 12 "c:/users/git/reflowovencontrol/pid.h"
 typedef enum pidDir{
  Direct_PID = '+',

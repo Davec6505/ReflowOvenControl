@@ -109,9 +109,8 @@ struct Temp{
  int Temp_iPv;
  unsigned int xVal;
  uint8_t Deg_decimal;
- short sampleTimer;
- short pidTimer;
- unsigned int Sample_SPI;
+ unsigned short sampleTimer;
+ unsigned short SampleTmrSP;
 };
 
 extern struct Temp DegC;
@@ -244,6 +243,7 @@ enum StatesOfControl{
  SoakSettings,
  SpikeSettings,
  CoolSettings,
+ TimeSettings,
  KpSettings,
  KiSettings,
  KdSettings,
@@ -289,6 +289,7 @@ unsigned int SpkeTmr;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
 unsigned char State;
+unsigned short SerialWriteDly;
 }Spts;
 
 extern enum StatesOfControl Cntrl;
@@ -319,6 +320,7 @@ extern unsigned char txt6[4];
 extern const unsigned int mulFact = 10;
 
 
+void I2C1_TimeoutCallback(char errorCode);
 
 void ConfPic();
 void InitTimer0();
@@ -334,7 +336,10 @@ void DI();
 void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
+void WriteStart();
+void WriteFin();
 void WriteDataOut();
+void RstLocals();
 #line 8 "c:/users/git/reflowovencontrol/irqs.h"
 extern bit wait;
 
@@ -380,7 +385,13 @@ bit wait;
 
 
 void High_Priority(){
+ if (TMR3IF_bit){
+ TMR3IF_bit = 0;
+ TMR3();
+ }
+
  if(TMR0IF_bit){
+
 
  TMR0IF_bit = off;
  TMR0L = 0xFF;
@@ -451,8 +462,8 @@ void High_Priority(){
 }
 
 void Low_Priority(){
- if (TMR3IF_bit)
- TMR3();
+
+
 
  if(RBIF_bit){
  RBIF_bit = 0;
@@ -460,8 +471,10 @@ void Low_Priority(){
  Encode();
  }
 
- if(RC1IF_bit)
+ if(RC1IF_bit){
+ RCIF_bit = off;
  Serial();
+ }
 }
 
 void DoTime(){
@@ -483,7 +496,6 @@ void DoTime(){
 }
 
 void TMR3(){
- TMR3IF_bit = 0;
  TMR3H = 0xC1;
  TMR3L = 0x80;
 
@@ -505,6 +517,5 @@ void TMR3(){
 }
 
 void Serial(){
- RCIF_bit = off;
  TXREG1 = RCREG1;
 }

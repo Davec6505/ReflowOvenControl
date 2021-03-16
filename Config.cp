@@ -149,9 +149,8 @@ struct Temp{
  int Temp_iPv;
  unsigned int xVal;
  uint8_t Deg_decimal;
- short sampleTimer;
- short pidTimer;
- unsigned int Sample_SPI;
+ unsigned short sampleTimer;
+ unsigned short SampleTmrSP;
 };
 
 extern struct Temp DegC;
@@ -284,6 +283,7 @@ enum StatesOfControl{
  SoakSettings,
  SpikeSettings,
  CoolSettings,
+ TimeSettings,
  KpSettings,
  KiSettings,
  KdSettings,
@@ -329,6 +329,7 @@ unsigned int SpkeTmr;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
 unsigned char State;
+unsigned short SerialWriteDly;
 }Spts;
 
 extern enum StatesOfControl Cntrl;
@@ -359,6 +360,7 @@ extern unsigned char txt6[4];
 extern const unsigned int mulFact = 10;
 
 
+void I2C1_TimeoutCallback(char errorCode);
 
 void ConfPic();
 void InitTimer0();
@@ -374,9 +376,15 @@ void DI();
 void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
+void WriteStart();
+void WriteFin();
 void WriteDataOut();
+void RstLocals();
 #line 6 "C:/Users/GIT/ReflowOvenControl/Config.c"
 void ConfPic(){
+
+ C1ON_bit = 0;
+ C2ON_bit = 0;
 
  ANSELA = 0x03;
  ANSELB = 0X00;
@@ -385,24 +393,43 @@ void ConfPic(){
  TRISA = 0x3F;
  TRISB = 0XC0;
  TRISC = 0x08;
+
+ LATA = 0;
+ LATB = 0;
  LATC = 0;
 
 
 
- C1ON_bit = 0;
- C2ON_bit = 0;
-
  CCPTMRS0 = 0xD0;
  CCPTMRS1 = 0X0F;
+
+ I2C1_Init(100000);
+ Delay_ms(100);
+ I2C1_SetTimeoutCallback(1000,I2C1_TimeoutCallback);
+ I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle);
+ ConfigSpi();
+ SetUp_IOCxInterrupts();
+ Delay_ms(100);
+ UART1_Init(115200);
+ Uart1_En();
+ Delay_ms(100);
+ Set_Priority();
+ InitTimer0();
+ InitTimer1();
+
+ InitTimer3();
+ InitTimer5();
+ ADC_Init();
 }
+
 
 
 void InitTimer0(){
  T0CON = 0xF8;
  TMR0L = 0xFF;
  TMR0IE_bit = on;
- TMR0IF_bit = off;
  TMR0IP_bit = on;
+ TMR0IF_bit = off;
 }
 
 
@@ -410,13 +437,14 @@ void InitTimer1(){
  T1CON = 0x37;
  TMR1GE_bit = off;
  TMR1IE_bit = off;
+ TMR1IF_bit = off;
 
  CCP1M3_bit = 1;
  CCP1M2_bit = 0;
  CCP1M1_bit = 1;
  CCP1M0_bit = 1;
 
- CCP1IE_bit = off;
+ CCP1IE_bit = on;
  CCP1IF_bit = on;
  CCP1IP_bit = on;
  CCP1MD_bit = off;
@@ -437,8 +465,8 @@ void InitTimer2(){
  DC1B1_bit = 0;
  DC1B0_bit = 0;
  T2CON = 0x1C;
- TMR2IF_bit = off;
  TRISC2_bit = off;
+ TMR2IF_bit = off;
 }
 
 
@@ -447,10 +475,11 @@ void InitTimer3(){
  TMR3IF_bit = 0;
  TMR3H = 0xC1;
  TMR3L = 0x80;
- TMR3IE_bit = 1;
- TMR3IP_bit = 0;
-
+ TMR3IE_bit = on;
+ TMR3IP_bit = on;
+ TMR3IF_bit = off;
 }
+
 
 
 void InitTimer5(){
@@ -464,8 +493,8 @@ void InitTimer5(){
  CCP2M0_bit = 0;
 
  CCP2IE_bit = on;
- CCP2IF_bit = off;
  CCP2IP_bit = on;
+ CCP2IF_bit = off;
  CCP2MD_bit = off;
 
  CCPR2H = 0;
@@ -475,8 +504,8 @@ void InitTimer5(){
 
 void Uart1_En(){
  RC1IE_bit = 1;
- RC1IF_bit = 0;
  RC1IP_bit = 0;
+ RC1IF_bit = 0;
 }
 
 void Set_Priority(){
@@ -511,8 +540,26 @@ void ClearAll(){
  Phs.PhasePulsCntr = 0;
  Phs.PhaseCntr = 1;
  DegC.sampleTimer = 0;
+ wait = off;
+ DegC.Temp_iPv = 0;
+ tmr.sec = 0;
+ Menu_Bit = 0;
+ Ok_Bit = 0;
+ OFF_Bit = 0;
+ pid_t.Mv = 10;
 }
 
+void WriteStart(){
+ UART1_Write_Text("Start");
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+}
+
+void WriteFin(){
+ UART1_Write_Text("Finnished");
+ UART1_Write(0x0D);
+ UART1_Write(0x0A);
+}
 
 void WriteDataOut(){
  UART1_Write_Text(txt1);

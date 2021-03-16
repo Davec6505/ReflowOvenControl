@@ -27,28 +27,28 @@ L_end_RstEntryBits:
 _SampleButtons:
 
 ;ADC_Buttons.c,48 :: 		void SampleButtons(){
-;ADC_Buttons.c,54 :: 		if(Menu_Bit){
+;ADC_Buttons.c,53 :: 		if(Menu_Bit){
 	BTFSS       ADC_Buttons_B+0, 0 
 	GOTO        L_SampleButtons0
-;ADC_Buttons.c,55 :: 		if(!P0 && (enC != 0)){
+;ADC_Buttons.c,54 :: 		if(!P0 && (enC != 0)){
 	BTFSC       ADC_Buttons_P0+0, BitPos(ADC_Buttons_P0+0) 
 	GOTO        L_SampleButtons3
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons316
+	GOTO        L__SampleButtons357
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons316:
+L__SampleButtons357:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons3
-L__SampleButtons313:
-;ADC_Buttons.c,56 :: 		P0 = 1;
+L__SampleButtons354:
+;ADC_Buttons.c,55 :: 		P0 = 1;
 	BSF         ADC_Buttons_P0+0, BitPos(ADC_Buttons_P0+0) 
-;ADC_Buttons.c,57 :: 		enC = 0;
+;ADC_Buttons.c,56 :: 		enC = 0;
 	CLRF        ADC_Buttons_enC+0 
 	CLRF        ADC_Buttons_enC+1 
-;ADC_Buttons.c,58 :: 		enC = Save_EncoderValue(enC);
+;ADC_Buttons.c,57 :: 		enC = Save_EncoderValue(enC);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -56,17 +56,17 @@ L__SampleButtons313:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,59 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,58 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,60 :: 		enC_last = -1;
+;ADC_Buttons.c,59 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,61 :: 		}
+;ADC_Buttons.c,60 :: 		}
 L_SampleButtons3:
-;ADC_Buttons.c,63 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
+;ADC_Buttons.c,62 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
 	BTFSC       ADC_Buttons_B_+0, 0 
 	GOTO        L_SampleButtons6
 	BTFSC       ADC_Buttons_B_+0, 1 
@@ -77,39 +77,39 @@ L_SampleButtons3:
 	GOTO        L_SampleButtons6
 	BTFSC       ADC_Buttons_B_+0, 4 
 	GOTO        L_SampleButtons6
-L__SampleButtons312:
-;ADC_Buttons.c,64 :: 		enC = Get_EncoderValue();//get encoder value
+L__SampleButtons353:
+;ADC_Buttons.c,63 :: 		enC = Get_EncoderValue();//get encoder value
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
 L_SampleButtons6:
-;ADC_Buttons.c,66 :: 		if(enC < 0 || enC > 65000){
+;ADC_Buttons.c,65 :: 		if(enC < 0 || enC > 65000){
 	MOVLW       0
 	SUBWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons317
+	GOTO        L__SampleButtons358
 	MOVLW       0
 	SUBWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons317:
+L__SampleButtons358:
 	BTFSS       STATUS+0, 0 
-	GOTO        L__SampleButtons311
+	GOTO        L__SampleButtons352
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBLW       253
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons318
+	GOTO        L__SampleButtons359
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       232
-L__SampleButtons318:
+L__SampleButtons359:
 	BTFSS       STATUS+0, 0 
-	GOTO        L__SampleButtons311
+	GOTO        L__SampleButtons352
 	GOTO        L_SampleButtons9
-L__SampleButtons311:
-;ADC_Buttons.c,67 :: 		enC = 0;
+L__SampleButtons352:
+;ADC_Buttons.c,66 :: 		enC = 0;
 	CLRF        ADC_Buttons_enC+0 
 	CLRF        ADC_Buttons_enC+1 
-;ADC_Buttons.c,68 :: 		enC = Save_EncoderValue(enC);
+;ADC_Buttons.c,67 :: 		enC = Save_EncoderValue(enC);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -117,24 +117,24 @@ L__SampleButtons311:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,69 :: 		}
+;ADC_Buttons.c,68 :: 		}
 L_SampleButtons9:
-;ADC_Buttons.c,71 :: 		if(enC_last != enC){
+;ADC_Buttons.c,70 :: 		if(enC_last != enC){
 	MOVF        ADC_Buttons_enC_last+1, 0 
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons319
+	GOTO        L__SampleButtons360
 	MOVF        ADC_Buttons_enC+0, 0 
 	XORWF       ADC_Buttons_enC_last+0, 0 
-L__SampleButtons319:
+L__SampleButtons360:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons10
-;ADC_Buttons.c,72 :: 		enC_last = enC;
+;ADC_Buttons.c,71 :: 		enC_last = enC;
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,73 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E){
+;ADC_Buttons.c,72 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E){
 	BTFSC       ADC_Buttons_B_+0, 0 
 	GOTO        L_SampleButtons13
 	BTFSC       ADC_Buttons_B_+0, 1 
@@ -145,8 +145,8 @@ L__SampleButtons319:
 	GOTO        L_SampleButtons13
 	BTFSC       ADC_Buttons_B_+0, 4 
 	GOTO        L_SampleButtons13
-L__SampleButtons310:
-;ADC_Buttons.c,74 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_last,1," ");
+L__SampleButtons351:
+;ADC_Buttons.c,73 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_last,1," ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVF        ADC_Buttons_enC_line_last+0, 0 
@@ -158,7 +158,7 @@ L__SampleButtons310:
 	MOVLW       hi_addr(?lstr1_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,75 :: 		enC_line_inc =  enC % 4 + 1;
+;ADC_Buttons.c,74 :: 		enC_line_inc =  enC % 4 + 1;
 	MOVLW       3
 	ANDWF       ADC_Buttons_enC+0, 0 
 	MOVWF       R0 
@@ -172,12 +172,12 @@ L__SampleButtons310:
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,76 :: 		enC_line_last = enC_line_inc;
+;ADC_Buttons.c,75 :: 		enC_line_last = enC_line_inc;
 	MOVF        R0, 0 
 	MOVWF       ADC_Buttons_enC_line_last+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC_line_last+1 
-;ADC_Buttons.c,77 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_inc,1,">");
+;ADC_Buttons.c,76 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_inc,1,">");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVF        R0, 0 
@@ -189,21 +189,21 @@ L__SampleButtons310:
 	MOVLW       hi_addr(?lstr2_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,78 :: 		enC_line_edit = enC_line_inc;
+;ADC_Buttons.c,77 :: 		enC_line_edit = enC_line_inc;
 	MOVF        ADC_Buttons_enC_line_inc+0, 0 
 	MOVWF       ADC_Buttons_enC_line_edit+0 
 	MOVF        ADC_Buttons_enC_line_inc+1, 0 
 	MOVWF       ADC_Buttons_enC_line_edit+1 
-;ADC_Buttons.c,79 :: 		}
+;ADC_Buttons.c,78 :: 		}
 L_SampleButtons13:
-;ADC_Buttons.c,80 :: 		}
+;ADC_Buttons.c,79 :: 		}
 L_SampleButtons10:
-;ADC_Buttons.c,82 :: 		}
+;ADC_Buttons.c,81 :: 		}
 L_SampleButtons0:
-;ADC_Buttons.c,84 :: 		if(Menu_Bit){
+;ADC_Buttons.c,83 :: 		if(Menu_Bit){
 	BTFSS       ADC_Buttons_B+0, 0 
 	GOTO        L_SampleButtons14
-;ADC_Buttons.c,87 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
+;ADC_Buttons.c,86 :: 		if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
 	BTFSC       ADC_Buttons_B_+0, 0 
 	GOTO        L_SampleButtons17
 	BTFSC       ADC_Buttons_B_+0, 1 
@@ -214,8 +214,8 @@ L_SampleButtons0:
 	GOTO        L_SampleButtons17
 	BTFSC       ADC_Buttons_B_+0, 4 
 	GOTO        L_SampleButtons17
-L__SampleButtons309:
-;ADC_Buttons.c,88 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15," ");
+L__SampleButtons350:
+;ADC_Buttons.c,87 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15," ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVF        ADC_Buttons_enC_line_edit+0, 0 
@@ -229,9 +229,9 @@ L__SampleButtons309:
 	CALL        _I2C_LCD_Out+0, 0
 	GOTO        L_SampleButtons18
 L_SampleButtons17:
-;ADC_Buttons.c,90 :: 		P1 = 1;
+;ADC_Buttons.c,89 :: 		P1 = 1;
 	BSF         ADC_Buttons_P1+0, BitPos(ADC_Buttons_P1+0) 
-;ADC_Buttons.c,91 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15,"@");
+;ADC_Buttons.c,90 :: 		I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15,"@");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVF        ADC_Buttons_enC_line_edit+0, 0 
@@ -243,27 +243,27 @@ L_SampleButtons17:
 	MOVLW       hi_addr(?lstr4_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,92 :: 		}
+;ADC_Buttons.c,91 :: 		}
 L_SampleButtons18:
-;ADC_Buttons.c,99 :: 		state:
+;ADC_Buttons.c,98 :: 		state:
 ___SampleButtons_state:
-;ADC_Buttons.c,100 :: 		switch(Sps.State){
+;ADC_Buttons.c,99 :: 		switch(Sps.State){
 	GOTO        L_SampleButtons19
-;ADC_Buttons.c,101 :: 		case Return:   if(enC > 3){
+;ADC_Buttons.c,100 :: 		case Return:   if(enC > 7){
 L_SampleButtons21:
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons320
+	GOTO        L__SampleButtons361
 	MOVF        ADC_Buttons_enC+0, 0 
-	SUBLW       3
-L__SampleButtons320:
+	SUBLW       7
+L__SampleButtons361:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_SampleButtons22
-;ADC_Buttons.c,102 :: 		enC = Save_EncoderValue(3);
-	MOVLW       3
+;ADC_Buttons.c,101 :: 		enC = Save_EncoderValue(7);
+	MOVLW       7
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
@@ -272,13 +272,13 @@ L__SampleButtons320:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,103 :: 		}
+;ADC_Buttons.c,102 :: 		}
 L_SampleButtons22:
-;ADC_Buttons.c,104 :: 		close:
+;ADC_Buttons.c,103 :: 		close:
 ___SampleButtons_close:
-;ADC_Buttons.c,105 :: 		switch(enC){
+;ADC_Buttons.c,104 :: 		switch(enC){
 	GOTO        L_SampleButtons23
-;ADC_Buttons.c,106 :: 		case 0: if (Button(&PORTA, 2, 100, 0) && Menu_Bit && !Ok_Bit){
+;ADC_Buttons.c,105 :: 		case 0: if (Button(&PORTA, 2, 100, 0) && Menu_Bit && !Ok_Bit){
 L_SampleButtons25:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -297,19 +297,19 @@ L_SampleButtons25:
 	GOTO        L_SampleButtons28
 	BTFSC       ADC_Buttons_B+0, 1 
 	GOTO        L_SampleButtons28
-L__SampleButtons308:
-;ADC_Buttons.c,107 :: 		Ok_Bit = 1;
+L__SampleButtons349:
+;ADC_Buttons.c,106 :: 		Ok_Bit = 1;
 	BSF         ADC_Buttons_B+0, 1 
-;ADC_Buttons.c,108 :: 		enC = 13;
+;ADC_Buttons.c,107 :: 		enC = 13;
 	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,109 :: 		goto close;
+;ADC_Buttons.c,108 :: 		goto close;
 	GOTO        ___SampleButtons_close
-;ADC_Buttons.c,110 :: 		}
+;ADC_Buttons.c,109 :: 		}
 L_SampleButtons28:
-;ADC_Buttons.c,111 :: 		case 1:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != TempMenu)){
+;ADC_Buttons.c,110 :: 		case 1:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != TempMenu)){
 L_SampleButtons29:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -328,11 +328,11 @@ L_SampleButtons29:
 	XORLW       2
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons32
-L__SampleButtons307:
-;ADC_Buttons.c,112 :: 		Sps.State = TempMenu;
+L__SampleButtons348:
+;ADC_Buttons.c,111 :: 		Sps.State = TempMenu;
 	MOVLW       2
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,113 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,112 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -340,11 +340,11 @@ L__SampleButtons307:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,114 :: 		goto state;
+;ADC_Buttons.c,113 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,115 :: 		}
+;ADC_Buttons.c,114 :: 		}
 L_SampleButtons32:
-;ADC_Buttons.c,117 :: 		case 2:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+;ADC_Buttons.c,116 :: 		case 2:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
 L_SampleButtons33:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -363,11 +363,11 @@ L_SampleButtons33:
 	XORLW       3
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons36
-L__SampleButtons306:
-;ADC_Buttons.c,118 :: 		Sps.State = PIDMenu;
+L__SampleButtons347:
+;ADC_Buttons.c,117 :: 		Sps.State = PIDMenu;
 	MOVLW       3
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,119 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,118 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -375,13 +375,13 @@ L__SampleButtons306:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,120 :: 		goto state;
+;ADC_Buttons.c,119 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,121 :: 		}
+;ADC_Buttons.c,120 :: 		}
 L_SampleButtons36:
-;ADC_Buttons.c,122 :: 		case 3:
+;ADC_Buttons.c,121 :: 		case 3:
 L_SampleButtons37:
-;ADC_Buttons.c,123 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+;ADC_Buttons.c,122 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -399,19 +399,19 @@ L_SampleButtons37:
 	XORLW       3
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons40
-L__SampleButtons305:
-;ADC_Buttons.c,124 :: 		Ok_Bit = 1;;
+L__SampleButtons346:
+;ADC_Buttons.c,123 :: 		Ok_Bit = 1;;
 	BSF         ADC_Buttons_B+0, 1 
-;ADC_Buttons.c,125 :: 		enC = 13;
+;ADC_Buttons.c,124 :: 		enC = 13;
 	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,126 :: 		goto close;
+;ADC_Buttons.c,125 :: 		goto close;
 	GOTO        ___SampleButtons_close
-;ADC_Buttons.c,127 :: 		}
+;ADC_Buttons.c,126 :: 		}
 L_SampleButtons40:
-;ADC_Buttons.c,128 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Info   ");
+;ADC_Buttons.c,127 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Info   ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -423,7 +423,7 @@ L_SampleButtons40:
 	MOVLW       hi_addr(?lstr5_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,129 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Control");
+;ADC_Buttons.c,128 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Control");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -435,7 +435,7 @@ L_SampleButtons40:
 	MOVLW       hi_addr(?lstr6_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,130 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"PID    ");
+;ADC_Buttons.c,129 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"PID    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -447,7 +447,7 @@ L_SampleButtons40:
 	MOVLW       hi_addr(?lstr7_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,131 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"ReStart");
+;ADC_Buttons.c,130 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"ReStart");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -459,16 +459,46 @@ L_SampleButtons40:
 	MOVLW       hi_addr(?lstr8_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,132 :: 		break;
+;ADC_Buttons.c,131 :: 		break;
 	GOTO        L_SampleButtons24
-;ADC_Buttons.c,133 :: 		case 4:
+;ADC_Buttons.c,132 :: 		case 4:
 L_SampleButtons41:
-;ADC_Buttons.c,134 :: 		case 5:
-L_SampleButtons42:
-;ADC_Buttons.c,135 :: 		case 6:
-L_SampleButtons43:
-;ADC_Buttons.c,136 :: 		case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+;ADC_Buttons.c,133 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons44
+	MOVF        _Sps+16, 0 
+	XORLW       3
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons44
+L__SampleButtons345:
+;ADC_Buttons.c,134 :: 		OFF_Bit = 1;;
+	BSF         ADC_Buttons_B+0, 3 
+;ADC_Buttons.c,135 :: 		enC = 13;
+	MOVLW       13
+	MOVWF       ADC_Buttons_enC+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,136 :: 		goto close;
+	GOTO        ___SampleButtons_close
+;ADC_Buttons.c,137 :: 		}
 L_SampleButtons44:
+;ADC_Buttons.c,138 :: 		case 5:
+L_SampleButtons45:
+;ADC_Buttons.c,139 :: 		case 6:
+L_SampleButtons46:
+;ADC_Buttons.c,140 :: 		case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Stop   ");
+L_SampleButtons47:
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -480,7 +510,7 @@ L_SampleButtons44:
 	MOVLW       hi_addr(?lstr9_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,137 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+;ADC_Buttons.c,141 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -492,7 +522,7 @@ L_SampleButtons44:
 	MOVLW       hi_addr(?lstr10_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,138 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+;ADC_Buttons.c,142 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -504,7 +534,7 @@ L_SampleButtons44:
 	MOVLW       hi_addr(?lstr11_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,139 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+;ADC_Buttons.c,143 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -516,16 +546,16 @@ L_SampleButtons44:
 	MOVLW       hi_addr(?lstr12_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,140 :: 		break;
+;ADC_Buttons.c,144 :: 		break;
 	GOTO        L_SampleButtons24
-;ADC_Buttons.c,141 :: 		case 8:
-L_SampleButtons45:
-;ADC_Buttons.c,142 :: 		case 9:
-L_SampleButtons46:
-;ADC_Buttons.c,143 :: 		case 10:
-L_SampleButtons47:
-;ADC_Buttons.c,144 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+;ADC_Buttons.c,145 :: 		case 8:
 L_SampleButtons48:
+;ADC_Buttons.c,146 :: 		case 9:
+L_SampleButtons49:
+;ADC_Buttons.c,147 :: 		case 10:
+L_SampleButtons50:
+;ADC_Buttons.c,148 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+L_SampleButtons51:
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -537,7 +567,7 @@ L_SampleButtons48:
 	MOVLW       hi_addr(?lstr13_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,145 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+;ADC_Buttons.c,149 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -549,7 +579,7 @@ L_SampleButtons48:
 	MOVLW       hi_addr(?lstr14_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,146 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+;ADC_Buttons.c,150 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -561,7 +591,7 @@ L_SampleButtons48:
 	MOVLW       hi_addr(?lstr15_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,147 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+;ADC_Buttons.c,151 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -573,11 +603,11 @@ L_SampleButtons48:
 	MOVLW       hi_addr(?lstr16_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,148 :: 		break;
+;ADC_Buttons.c,152 :: 		break;
 	GOTO        L_SampleButtons24
-;ADC_Buttons.c,149 :: 		default:
-L_SampleButtons49:
-;ADC_Buttons.c,150 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,153 :: 		default:
+L_SampleButtons52:
+;ADC_Buttons.c,154 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -585,32 +615,32 @@ L_SampleButtons49:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,151 :: 		Delay_ms(800);
+;ADC_Buttons.c,155 :: 		Delay_ms(800);
 	MOVLW       65
 	MOVWF       R11, 0
 	MOVLW       240
 	MOVWF       R12, 0
 	MOVLW       51
 	MOVWF       R13, 0
-L_SampleButtons50:
+L_SampleButtons53:
 	DECFSZ      R13, 1, 1
-	BRA         L_SampleButtons50
+	BRA         L_SampleButtons53
 	DECFSZ      R12, 1, 1
-	BRA         L_SampleButtons50
+	BRA         L_SampleButtons53
 	DECFSZ      R11, 1, 1
-	BRA         L_SampleButtons50
-;ADC_Buttons.c,152 :: 		if(P1) EEWrt = on;
+	BRA         L_SampleButtons53
+;ADC_Buttons.c,156 :: 		if(P1) EEWrt = on;
 	BTFSS       ADC_Buttons_P1+0, BitPos(ADC_Buttons_P1+0) 
-	GOTO        L_SampleButtons51
+	GOTO        L_SampleButtons54
 	BSF         ADC_Buttons_B+0, 4 
-	GOTO        L_SampleButtons52
-L_SampleButtons51:
-;ADC_Buttons.c,153 :: 		else Menu_Bit = off;
+	GOTO        L_SampleButtons55
+L_SampleButtons54:
+;ADC_Buttons.c,157 :: 		else Menu_Bit = off;
 	BCF         ADC_Buttons_B+0, 0 
-L_SampleButtons52:
-;ADC_Buttons.c,154 :: 		P0 = 0;
+L_SampleButtons55:
+;ADC_Buttons.c,158 :: 		P0 = 0;
 	BCF         ADC_Buttons_P0+0, BitPos(ADC_Buttons_P0+0) 
-;ADC_Buttons.c,155 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,159 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -618,137 +648,137 @@ L_SampleButtons52:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,156 :: 		break;
+;ADC_Buttons.c,160 :: 		break;
 	GOTO        L_SampleButtons24
-;ADC_Buttons.c,157 :: 		}
+;ADC_Buttons.c,161 :: 		}
 L_SampleButtons23:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons321
+	GOTO        L__SampleButtons362
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons321:
+L__SampleButtons362:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons25
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons322
+	GOTO        L__SampleButtons363
 	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons322:
+L__SampleButtons363:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons29
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons323
+	GOTO        L__SampleButtons364
 	MOVLW       2
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons323:
+L__SampleButtons364:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons33
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons324
+	GOTO        L__SampleButtons365
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons324:
+L__SampleButtons365:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons37
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons325
+	GOTO        L__SampleButtons366
 	MOVLW       4
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons325:
+L__SampleButtons366:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons41
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons326
+	GOTO        L__SampleButtons367
 	MOVLW       5
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons326:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons42
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons327
-	MOVLW       6
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons327:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons43
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons328
-	MOVLW       7
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons328:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons44
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons329
-	MOVLW       8
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons329:
+L__SampleButtons367:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons45
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons330
-	MOVLW       9
+	GOTO        L__SampleButtons368
+	MOVLW       6
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons330:
+L__SampleButtons368:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons46
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons331
-	MOVLW       10
+	GOTO        L__SampleButtons369
+	MOVLW       7
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons331:
+L__SampleButtons369:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons47
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons332
-	MOVLW       11
+	GOTO        L__SampleButtons370
+	MOVLW       8
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons332:
+L__SampleButtons370:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons48
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons371
+	MOVLW       9
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons371:
+	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons49
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons372
+	MOVLW       10
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons372:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons50
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons373
+	MOVLW       11
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons373:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons51
+	GOTO        L_SampleButtons52
 L_SampleButtons24:
-;ADC_Buttons.c,158 :: 		break;
+;ADC_Buttons.c,162 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,159 :: 		case TempMenu:
-L_SampleButtons53:
-;ADC_Buttons.c,160 :: 		if(enC > 7){
+;ADC_Buttons.c,163 :: 		case TempMenu:
+L_SampleButtons56:
+;ADC_Buttons.c,164 :: 		if(enC > 7){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons333
+	GOTO        L__SampleButtons374
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       7
-L__SampleButtons333:
+L__SampleButtons374:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons54
-;ADC_Buttons.c,161 :: 		enC = Save_EncoderValue(7);
+	GOTO        L_SampleButtons57
+;ADC_Buttons.c,165 :: 		enC = Save_EncoderValue(7);
 	MOVLW       7
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -758,14 +788,14 @@ L__SampleButtons333:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,162 :: 		}
-L_SampleButtons54:
-;ADC_Buttons.c,163 :: 		ret1:
-___SampleButtons_ret1:
-;ADC_Buttons.c,164 :: 		switch(enC){
-	GOTO        L_SampleButtons55
-;ADC_Buttons.c,165 :: 		case 0:   if (Button(&PORTA, 2, 200, 0) && (Sps.State == TempMenu)){
+;ADC_Buttons.c,166 :: 		}
 L_SampleButtons57:
+;ADC_Buttons.c,167 :: 		ret1:
+___SampleButtons_ret1:
+;ADC_Buttons.c,168 :: 		switch(enC){
+	GOTO        L_SampleButtons58
+;ADC_Buttons.c,169 :: 		case 0:   if (Button(&PORTA, 2, 200, 0) && (Sps.State == TempMenu)){
+L_SampleButtons60:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -778,26 +808,26 @@ L_SampleButtons57:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons60
+	GOTO        L_SampleButtons63
 	MOVF        _Sps+16, 0 
 	XORLW       2
 	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons60
-L__SampleButtons304:
-;ADC_Buttons.c,166 :: 		Sps.State = Return;
+	GOTO        L_SampleButtons63
+L__SampleButtons344:
+;ADC_Buttons.c,170 :: 		Sps.State = Return;
 	MOVLW       1
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,167 :: 		enC = 13;
+;ADC_Buttons.c,171 :: 		enC = 13;
 	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,168 :: 		goto ret1;
+;ADC_Buttons.c,172 :: 		goto ret1;
 	GOTO        ___SampleButtons_ret1
-;ADC_Buttons.c,169 :: 		}
-L_SampleButtons60:
-;ADC_Buttons.c,170 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && (Sps.State != RampSettings)){
-L_SampleButtons61:
+;ADC_Buttons.c,173 :: 		}
+L_SampleButtons63:
+;ADC_Buttons.c,174 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && (Sps.State != RampSettings)){
+L_SampleButtons64:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -810,16 +840,16 @@ L_SampleButtons61:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons64
+	GOTO        L_SampleButtons67
 	MOVF        _Sps+16, 0 
 	XORLW       4
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons64
-L__SampleButtons303:
-;ADC_Buttons.c,171 :: 		Sps.State = RampSettings;
+	GOTO        L_SampleButtons67
+L__SampleButtons343:
+;ADC_Buttons.c,175 :: 		Sps.State = RampSettings;
 	MOVLW       4
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,172 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,176 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -827,12 +857,12 @@ L__SampleButtons303:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,173 :: 		goto state;
+;ADC_Buttons.c,177 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,174 :: 		}
-L_SampleButtons64:
-;ADC_Buttons.c,175 :: 		case 2:   if (Button(&PORTA, 2, 200, 0) && (Sps.State != SoakSettings)){
-L_SampleButtons65:
+;ADC_Buttons.c,178 :: 		}
+L_SampleButtons67:
+;ADC_Buttons.c,179 :: 		case 2:   if (Button(&PORTA, 2, 200, 0) && (Sps.State != SoakSettings)){
+L_SampleButtons68:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -845,16 +875,16 @@ L_SampleButtons65:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons68
+	GOTO        L_SampleButtons71
 	MOVF        _Sps+16, 0 
 	XORLW       5
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons68
-L__SampleButtons302:
-;ADC_Buttons.c,176 :: 		Sps.State = SoakSettings;
+	GOTO        L_SampleButtons71
+L__SampleButtons342:
+;ADC_Buttons.c,180 :: 		Sps.State = SoakSettings;
 	MOVLW       5
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,177 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,181 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -862,12 +892,12 @@ L__SampleButtons302:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,178 :: 		goto state;
+;ADC_Buttons.c,182 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,179 :: 		}
-L_SampleButtons68:
-;ADC_Buttons.c,180 :: 		case 3:   if (Button(&PORTA, 2, 200, 0) && (Sps.State != SpikeSettings)){
-L_SampleButtons69:
+;ADC_Buttons.c,183 :: 		}
+L_SampleButtons71:
+;ADC_Buttons.c,184 :: 		case 3:   if (Button(&PORTA, 2, 200, 0) && (Sps.State != SpikeSettings)){
+L_SampleButtons72:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -880,16 +910,16 @@ L_SampleButtons69:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons72
+	GOTO        L_SampleButtons75
 	MOVF        _Sps+16, 0 
 	XORLW       6
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons72
-L__SampleButtons301:
-;ADC_Buttons.c,181 :: 		Sps.State = SpikeSettings;
+	GOTO        L_SampleButtons75
+L__SampleButtons341:
+;ADC_Buttons.c,185 :: 		Sps.State = SpikeSettings;
 	MOVLW       6
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,182 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,186 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -897,11 +927,11 @@ L__SampleButtons301:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,183 :: 		goto state;
+;ADC_Buttons.c,187 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,184 :: 		}
-L_SampleButtons72:
-;ADC_Buttons.c,185 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
+;ADC_Buttons.c,188 :: 		}
+L_SampleButtons75:
+;ADC_Buttons.c,189 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -913,7 +943,7 @@ L_SampleButtons72:
 	MOVLW       hi_addr(?lstr17_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,186 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Ramp   ");
+;ADC_Buttons.c,190 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Ramp   ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -925,7 +955,7 @@ L_SampleButtons72:
 	MOVLW       hi_addr(?lstr18_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,187 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Soak   ");
+;ADC_Buttons.c,191 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Soak   ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -937,7 +967,7 @@ L_SampleButtons72:
 	MOVLW       hi_addr(?lstr19_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,188 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spike  ");
+;ADC_Buttons.c,192 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spike  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -949,10 +979,10 @@ L_SampleButtons72:
 	MOVLW       hi_addr(?lstr20_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,189 :: 		break;
-	GOTO        L_SampleButtons56
-;ADC_Buttons.c,190 :: 		case 4:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != CoolSettings)){
-L_SampleButtons73:
+;ADC_Buttons.c,193 :: 		break;
+	GOTO        L_SampleButtons59
+;ADC_Buttons.c,194 :: 		case 4:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != CoolSettings)){
+L_SampleButtons76:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -965,16 +995,16 @@ L_SampleButtons73:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons76
+	GOTO        L_SampleButtons79
 	MOVF        _Sps+16, 0 
 	XORLW       7
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons76
-L__SampleButtons300:
-;ADC_Buttons.c,191 :: 		Sps.State = CoolSettings;
+	GOTO        L_SampleButtons79
+L__SampleButtons340:
+;ADC_Buttons.c,195 :: 		Sps.State = CoolSettings;
 	MOVLW       7
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,192 :: 		enC = Save_EncoderValue(0);
+;ADC_Buttons.c,196 :: 		enC = Save_EncoderValue(0);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -982,16 +1012,50 @@ L__SampleButtons300:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,193 :: 		goto state;
+;ADC_Buttons.c,197 :: 		goto state;
 	GOTO        ___SampleButtons_state
-;ADC_Buttons.c,194 :: 		}
-L_SampleButtons76:
-;ADC_Buttons.c,195 :: 		case 5:
-L_SampleButtons77:
-;ADC_Buttons.c,196 :: 		case 6:
-L_SampleButtons78:
-;ADC_Buttons.c,197 :: 		case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Cool   ");
+;ADC_Buttons.c,198 :: 		}
 L_SampleButtons79:
+;ADC_Buttons.c,199 :: 		case 5:
+L_SampleButtons80:
+;ADC_Buttons.c,200 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State != TimeSettings)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons83
+	MOVF        _Sps+16, 0 
+	XORLW       8
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons83
+L__SampleButtons339:
+;ADC_Buttons.c,201 :: 		Sps.State = TimeSettings;
+	MOVLW       8
+	MOVWF       _Sps+16 
+;ADC_Buttons.c,202 :: 		enC = Save_EncoderValue(0);
+	CLRF        FARG_Save_EncoderValue_new_val+0 
+	CLRF        FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,203 :: 		goto state;
+	GOTO        ___SampleButtons_state
+;ADC_Buttons.c,204 :: 		}
+L_SampleButtons83:
+;ADC_Buttons.c,205 :: 		case 6:
+L_SampleButtons84:
+;ADC_Buttons.c,206 :: 		case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Cool   ");
+L_SampleButtons85:
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -1003,7 +1067,7 @@ L_SampleButtons79:
 	MOVLW       hi_addr(?lstr21_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,198 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+;ADC_Buttons.c,207 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Timers ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -1015,7 +1079,7 @@ L_SampleButtons79:
 	MOVLW       hi_addr(?lstr22_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,199 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+;ADC_Buttons.c,208 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -1027,7 +1091,7 @@ L_SampleButtons79:
 	MOVLW       hi_addr(?lstr23_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,200 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+;ADC_Buttons.c,209 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -1039,16 +1103,16 @@ L_SampleButtons79:
 	MOVLW       hi_addr(?lstr24_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,201 :: 		break;
-	GOTO        L_SampleButtons56
-;ADC_Buttons.c,202 :: 		case 8:
-L_SampleButtons80:
-;ADC_Buttons.c,203 :: 		case 9:
-L_SampleButtons81:
-;ADC_Buttons.c,204 :: 		case 10:
-L_SampleButtons82:
-;ADC_Buttons.c,205 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
-L_SampleButtons83:
+;ADC_Buttons.c,210 :: 		break;
+	GOTO        L_SampleButtons59
+;ADC_Buttons.c,211 :: 		case 8:
+L_SampleButtons86:
+;ADC_Buttons.c,212 :: 		case 9:
+L_SampleButtons87:
+;ADC_Buttons.c,213 :: 		case 10:
+L_SampleButtons88:
+;ADC_Buttons.c,214 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+L_SampleButtons89:
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -1060,7 +1124,7 @@ L_SampleButtons83:
 	MOVLW       hi_addr(?lstr25_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,206 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+;ADC_Buttons.c,215 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -1072,7 +1136,7 @@ L_SampleButtons83:
 	MOVLW       hi_addr(?lstr26_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,207 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
+;ADC_Buttons.c,216 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -1084,7 +1148,7 @@ L_SampleButtons83:
 	MOVLW       hi_addr(?lstr27_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,208 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
+;ADC_Buttons.c,217 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -1096,11 +1160,11 @@ L_SampleButtons83:
 	MOVLW       hi_addr(?lstr28_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,209 :: 		break;
-	GOTO        L_SampleButtons56
-;ADC_Buttons.c,210 :: 		default:    //clear screen & update cursor position
-L_SampleButtons84:
-;ADC_Buttons.c,211 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,218 :: 		break;
+	GOTO        L_SampleButtons59
+;ADC_Buttons.c,219 :: 		default:    //clear screen & update cursor position
+L_SampleButtons90:
+;ADC_Buttons.c,220 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -1108,13 +1172,13 @@ L_SampleButtons84:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,212 :: 		Sps.State = 1;
+;ADC_Buttons.c,221 :: 		Sps.State = 1;
 	MOVLW       1
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,213 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,222 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,214 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,223 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -1122,142 +1186,142 @@ L_SampleButtons84:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,215 :: 		enC_last = -1;
+;ADC_Buttons.c,224 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,216 :: 		break;
-	GOTO        L_SampleButtons56
-;ADC_Buttons.c,217 :: 		}
-L_SampleButtons55:
+;ADC_Buttons.c,225 :: 		break;
+	GOTO        L_SampleButtons59
+;ADC_Buttons.c,226 :: 		}
+L_SampleButtons58:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons334
+	GOTO        L__SampleButtons375
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons334:
+L__SampleButtons375:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons57
+	GOTO        L_SampleButtons60
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons335
+	GOTO        L__SampleButtons376
 	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons335:
+L__SampleButtons376:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons61
+	GOTO        L_SampleButtons64
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons336
+	GOTO        L__SampleButtons377
 	MOVLW       2
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons336:
+L__SampleButtons377:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons65
+	GOTO        L_SampleButtons68
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons337
+	GOTO        L__SampleButtons378
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons337:
+L__SampleButtons378:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons69
+	GOTO        L_SampleButtons72
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons338
+	GOTO        L__SampleButtons379
 	MOVLW       4
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons338:
+L__SampleButtons379:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons73
+	GOTO        L_SampleButtons76
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons339
+	GOTO        L__SampleButtons380
 	MOVLW       5
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons339:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons77
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons340
-	MOVLW       6
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons340:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons78
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons341
-	MOVLW       7
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons341:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons79
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons342
-	MOVLW       8
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons342:
+L__SampleButtons380:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons80
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons343
+	GOTO        L__SampleButtons381
+	MOVLW       6
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons381:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons84
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons382
+	MOVLW       7
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons382:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons85
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons383
+	MOVLW       8
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons383:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons86
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons384
 	MOVLW       9
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons343:
+L__SampleButtons384:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons81
+	GOTO        L_SampleButtons87
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons344
+	GOTO        L__SampleButtons385
 	MOVLW       10
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons344:
+L__SampleButtons385:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons82
+	GOTO        L_SampleButtons88
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons345
+	GOTO        L__SampleButtons386
 	MOVLW       11
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons345:
+L__SampleButtons386:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons83
-	GOTO        L_SampleButtons84
-L_SampleButtons56:
-;ADC_Buttons.c,218 :: 		break;
+	GOTO        L_SampleButtons89
+	GOTO        L_SampleButtons90
+L_SampleButtons59:
+;ADC_Buttons.c,227 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,219 :: 		case PIDMenu:
-L_SampleButtons85:
-;ADC_Buttons.c,220 :: 		if(enC > 7){
+;ADC_Buttons.c,228 :: 		case PIDMenu:
+L_SampleButtons91:
+;ADC_Buttons.c,229 :: 		if(enC > 7){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons346
+	GOTO        L__SampleButtons387
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       7
-L__SampleButtons346:
+L__SampleButtons387:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons86
-;ADC_Buttons.c,221 :: 		enC = Save_EncoderValue(7);
+	GOTO        L_SampleButtons92
+;ADC_Buttons.c,230 :: 		enC = Save_EncoderValue(7);
 	MOVLW       7
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1267,15 +1331,15 @@ L__SampleButtons346:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,222 :: 		}
-L_SampleButtons86:
-;ADC_Buttons.c,223 :: 		ret2:
+;ADC_Buttons.c,231 :: 		}
+L_SampleButtons92:
+;ADC_Buttons.c,232 :: 		ret2:
 ___SampleButtons_ret2:
-;ADC_Buttons.c,224 :: 		switch(enC){
-	GOTO        L_SampleButtons87
-;ADC_Buttons.c,225 :: 		case 0:
-L_SampleButtons89:
-;ADC_Buttons.c,226 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State == PIDMenu)){
+;ADC_Buttons.c,233 :: 		switch(enC){
+	GOTO        L_SampleButtons93
+;ADC_Buttons.c,234 :: 		case 0:
+L_SampleButtons95:
+;ADC_Buttons.c,235 :: 		if (Button(&PORTA, 2, 200, 0) && (Sps.State == PIDMenu)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1288,137 +1352,33 @@ L_SampleButtons89:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons92
+	GOTO        L_SampleButtons98
 	MOVF        _Sps+16, 0 
 	XORLW       3
 	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons92
-L__SampleButtons299:
-;ADC_Buttons.c,227 :: 		Sps.State = Return;
+	GOTO        L_SampleButtons98
+L__SampleButtons338:
+;ADC_Buttons.c,236 :: 		Sps.State = Return;
 	MOVLW       1
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,228 :: 		while(!RA2_bit);
-L_SampleButtons93:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons94
-	GOTO        L_SampleButtons93
-L_SampleButtons94:
-;ADC_Buttons.c,229 :: 		enC = 13;
-	MOVLW       13
-	MOVWF       ADC_Buttons_enC+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,230 :: 		goto ret2;
-	GOTO        ___SampleButtons_ret2
-;ADC_Buttons.c,231 :: 		}
-L_SampleButtons92:
-;ADC_Buttons.c,232 :: 		case 1:
-L_SampleButtons95:
-;ADC_Buttons.c,233 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_A){
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons98
-	BTFSC       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons98
-L__SampleButtons298:
-;ADC_Buttons.c,234 :: 		enC = Save_EncoderValue(enC);
-	MOVF        ADC_Buttons_enC+0, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        ADC_Buttons_enC+1, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,235 :: 		OK_A = 1;OK_B = 0;OK_C = 0;OK_D=0;OK_E=0;
-	BSF         ADC_Buttons_B_+0, 0 
-	BCF         ADC_Buttons_B_+0, 1 
-	BCF         ADC_Buttons_B_+0, 2 
-	BCF         ADC_Buttons_B_+0, 3 
-	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,236 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,237 :: 		Save_EncoderValue(pid_t.Kp);
-	MOVF        _pid_t+0, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _pid_t+1, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,238 :: 		while(!RA2_bit);
+;ADC_Buttons.c,237 :: 		while(!RA2_bit);
 L_SampleButtons99:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
 	GOTO        L_SampleButtons100
 	GOTO        L_SampleButtons99
 L_SampleButtons100:
-;ADC_Buttons.c,239 :: 		}
-L_SampleButtons98:
-;ADC_Buttons.c,240 :: 		if(OK_A){
-	BTFSS       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons101
-;ADC_Buttons.c,241 :: 		pid_t.Kp = Get_EncoderValue();
-	CALL        _Get_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       _pid_t+0 
-	MOVF        R1, 0 
-	MOVWF       _pid_t+1 
-;ADC_Buttons.c,242 :: 		if(Button(&PORTA, 2, 200, 0)){
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons102
-;ADC_Buttons.c,243 :: 		OK_A = 0;
-	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,244 :: 		while(!RA2_bit);
-L_SampleButtons103:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons104
-	GOTO        L_SampleButtons103
-L_SampleButtons104:
-;ADC_Buttons.c,245 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,246 :: 		enC = Save_EncoderValue(enC_line_inc);
-	MOVLW       1
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVLW       0
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
+;ADC_Buttons.c,238 :: 		enC = 13;
+	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
+	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,247 :: 		}
-L_SampleButtons102:
-;ADC_Buttons.c,248 :: 		}
+;ADC_Buttons.c,239 :: 		goto ret2;
+	GOTO        ___SampleButtons_ret2
+;ADC_Buttons.c,240 :: 		}
+L_SampleButtons98:
+;ADC_Buttons.c,241 :: 		case 1:
 L_SampleButtons101:
-;ADC_Buttons.c,249 :: 		case 2:
-L_SampleButtons105:
-;ADC_Buttons.c,250 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_B){
+;ADC_Buttons.c,242 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_A){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1431,11 +1391,11 @@ L_SampleButtons105:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons108
-	BTFSC       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons108
-L__SampleButtons297:
-;ADC_Buttons.c,251 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons104
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons104
+L__SampleButtons337:
+;ADC_Buttons.c,243 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -1445,40 +1405,41 @@ L__SampleButtons297:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,252 :: 		OK_B = 1;OK_A=0;OK_C=0;OK_D=0;
-	BSF         ADC_Buttons_B_+0, 1 
-	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,244 :: 		OK_A = 1;OK_B = 0;OK_C = 0;OK_D=0;OK_E=0;
+	BSF         ADC_Buttons_B_+0, 0 
+	BCF         ADC_Buttons_B_+0, 1 
 	BCF         ADC_Buttons_B_+0, 2 
 	BCF         ADC_Buttons_B_+0, 3 
-;ADC_Buttons.c,253 :: 		enC_line_inc = 2;
-	MOVLW       2
+	BCF         ADC_Buttons_B_+0, 4 
+;ADC_Buttons.c,245 :: 		enC_line_inc = 1;
+	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,254 :: 		Save_EncoderValue(pid_t.Ki);
-	MOVF        _pid_t+2, 0 
+;ADC_Buttons.c,246 :: 		Save_EncoderValue(pid_t.Kp);
+	MOVF        _pid_t+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _pid_t+3, 0 
+	MOVF        _pid_t+1, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,255 :: 		while(!RA2_bit);
-L_SampleButtons109:
+;ADC_Buttons.c,247 :: 		while(!RA2_bit);
+L_SampleButtons105:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons110
-	GOTO        L_SampleButtons109
-L_SampleButtons110:
-;ADC_Buttons.c,256 :: 		}
-L_SampleButtons108:
-;ADC_Buttons.c,257 :: 		if(OK_B){
-	BTFSS       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons111
-;ADC_Buttons.c,258 :: 		pid_t.Ki = Get_EncoderValue();
+	GOTO        L_SampleButtons106
+	GOTO        L_SampleButtons105
+L_SampleButtons106:
+;ADC_Buttons.c,248 :: 		}
+L_SampleButtons104:
+;ADC_Buttons.c,249 :: 		if(OK_A){
+	BTFSS       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons107
+;ADC_Buttons.c,250 :: 		pid_t.Kp = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
-	MOVWF       _pid_t+2 
+	MOVWF       _pid_t+0 
 	MOVF        R1, 0 
-	MOVWF       _pid_t+3 
-;ADC_Buttons.c,259 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVWF       _pid_t+1 
+;ADC_Buttons.c,251 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1491,25 +1452,128 @@ L_SampleButtons108:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons112
-;ADC_Buttons.c,260 :: 		OK_B = 0;OK_A=0;OK_C=0;OK_D=0;OK_E=0;
-	BCF         ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons108
+;ADC_Buttons.c,252 :: 		OK_A = 0;
+	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,253 :: 		while(!RA2_bit);
+L_SampleButtons109:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons110
+	GOTO        L_SampleButtons109
+L_SampleButtons110:
+;ADC_Buttons.c,254 :: 		enC_line_inc = 1;
+	MOVLW       1
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,255 :: 		enC = Save_EncoderValue(enC_line_inc);
+	MOVLW       1
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,256 :: 		}
+L_SampleButtons108:
+;ADC_Buttons.c,257 :: 		}
+L_SampleButtons107:
+;ADC_Buttons.c,258 :: 		case 2:
+L_SampleButtons111:
+;ADC_Buttons.c,259 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_B){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons114
+	BTFSC       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons114
+L__SampleButtons336:
+;ADC_Buttons.c,260 :: 		enC = Save_EncoderValue(enC);
+	MOVF        ADC_Buttons_enC+0, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,261 :: 		OK_B = 1;OK_A=0;OK_C=0;OK_D=0;
+	BSF         ADC_Buttons_B_+0, 1 
 	BCF         ADC_Buttons_B_+0, 0 
 	BCF         ADC_Buttons_B_+0, 2 
 	BCF         ADC_Buttons_B_+0, 3 
-	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,261 :: 		while(!RA2_bit);
-L_SampleButtons113:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons114
-	GOTO        L_SampleButtons113
-L_SampleButtons114:
 ;ADC_Buttons.c,262 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,263 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,263 :: 		Save_EncoderValue(pid_t.Ki);
+	MOVF        _pid_t+2, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        _pid_t+3, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+;ADC_Buttons.c,264 :: 		while(!RA2_bit);
+L_SampleButtons115:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons116
+	GOTO        L_SampleButtons115
+L_SampleButtons116:
+;ADC_Buttons.c,265 :: 		}
+L_SampleButtons114:
+;ADC_Buttons.c,266 :: 		if(OK_B){
+	BTFSS       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons117
+;ADC_Buttons.c,267 :: 		pid_t.Ki = Get_EncoderValue();
+	CALL        _Get_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       _pid_t+2 
+	MOVF        R1, 0 
+	MOVWF       _pid_t+3 
+;ADC_Buttons.c,268 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons118
+;ADC_Buttons.c,269 :: 		OK_B = 0;OK_A=0;OK_C=0;OK_D=0;OK_E=0;
+	BCF         ADC_Buttons_B_+0, 1 
+	BCF         ADC_Buttons_B_+0, 0 
+	BCF         ADC_Buttons_B_+0, 2 
+	BCF         ADC_Buttons_B_+0, 3 
+	BCF         ADC_Buttons_B_+0, 4 
+;ADC_Buttons.c,270 :: 		while(!RA2_bit);
+L_SampleButtons119:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons120
+	GOTO        L_SampleButtons119
+L_SampleButtons120:
+;ADC_Buttons.c,271 :: 		enC_line_inc = 2;
+	MOVLW       2
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,272 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       2
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1519,18 +1583,18 @@ L_SampleButtons114:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,264 :: 		}
-L_SampleButtons112:
-;ADC_Buttons.c,265 :: 		}
-L_SampleButtons111:
-;ADC_Buttons.c,266 :: 		case 3:
-L_SampleButtons115:
-;ADC_Buttons.c,267 :: 		if(P2){
+;ADC_Buttons.c,273 :: 		}
+L_SampleButtons118:
+;ADC_Buttons.c,274 :: 		}
+L_SampleButtons117:
+;ADC_Buttons.c,275 :: 		case 3:
+L_SampleButtons121:
+;ADC_Buttons.c,276 :: 		if(P2){
 	BTFSS       ADC_Buttons_P2+0, BitPos(ADC_Buttons_P2+0) 
-	GOTO        L_SampleButtons116
-;ADC_Buttons.c,268 :: 		P2 = 0;
+	GOTO        L_SampleButtons122
+;ADC_Buttons.c,277 :: 		P2 = 0;
 	BCF         ADC_Buttons_P2+0, BitPos(ADC_Buttons_P2+0) 
-;ADC_Buttons.c,269 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,278 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -1538,9 +1602,9 @@ L_SampleButtons115:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,270 :: 		}
-L_SampleButtons116:
-;ADC_Buttons.c,271 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_C){
+;ADC_Buttons.c,279 :: 		}
+L_SampleButtons122:
+;ADC_Buttons.c,280 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_C){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1553,11 +1617,11 @@ L_SampleButtons116:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons119
+	GOTO        L_SampleButtons125
 	BTFSC       ADC_Buttons_B_+0, 2 
-	GOTO        L_SampleButtons119
-L__SampleButtons296:
-;ADC_Buttons.c,272 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons125
+L__SampleButtons335:
+;ADC_Buttons.c,281 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -1567,41 +1631,41 @@ L__SampleButtons296:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,273 :: 		OK_C = 1;OK_A=0;OK_B=0;OK_D=0;OK_E=0;
+;ADC_Buttons.c,282 :: 		OK_C = 1;OK_A=0;OK_B=0;OK_D=0;OK_E=0;
 	BSF         ADC_Buttons_B_+0, 2 
 	BCF         ADC_Buttons_B_+0, 0 
 	BCF         ADC_Buttons_B_+0, 1 
 	BCF         ADC_Buttons_B_+0, 3 
 	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,274 :: 		enC_line_inc = 3;
+;ADC_Buttons.c,283 :: 		enC_line_inc = 3;
 	MOVLW       3
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,275 :: 		Save_EncoderValue(pid_t.Kd);
+;ADC_Buttons.c,284 :: 		Save_EncoderValue(pid_t.Kd);
 	MOVF        _pid_t+4, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _pid_t+5, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,276 :: 		while(!RA2_bit);
-L_SampleButtons120:
+;ADC_Buttons.c,285 :: 		while(!RA2_bit);
+L_SampleButtons126:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons121
-	GOTO        L_SampleButtons120
-L_SampleButtons121:
-;ADC_Buttons.c,277 :: 		}
-L_SampleButtons119:
-;ADC_Buttons.c,278 :: 		if(OK_C){
+	GOTO        L_SampleButtons127
+	GOTO        L_SampleButtons126
+L_SampleButtons127:
+;ADC_Buttons.c,286 :: 		}
+L_SampleButtons125:
+;ADC_Buttons.c,287 :: 		if(OK_C){
 	BTFSS       ADC_Buttons_B_+0, 2 
-	GOTO        L_SampleButtons122
-;ADC_Buttons.c,279 :: 		pid_t.Kd = Get_EncoderValue();
+	GOTO        L_SampleButtons128
+;ADC_Buttons.c,288 :: 		pid_t.Kd = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+4 
 	MOVF        R1, 0 
 	MOVWF       _pid_t+5 
-;ADC_Buttons.c,280 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,289 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1614,21 +1678,21 @@ L_SampleButtons119:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons123
-;ADC_Buttons.c,281 :: 		OK_C = 0;
+	GOTO        L_SampleButtons129
+;ADC_Buttons.c,290 :: 		OK_C = 0;
 	BCF         ADC_Buttons_B_+0, 2 
-;ADC_Buttons.c,282 :: 		while(!RA2_bit);
-L_SampleButtons124:
+;ADC_Buttons.c,291 :: 		while(!RA2_bit);
+L_SampleButtons130:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons125
-	GOTO        L_SampleButtons124
-L_SampleButtons125:
-;ADC_Buttons.c,283 :: 		enC_line_inc = 3;
+	GOTO        L_SampleButtons131
+	GOTO        L_SampleButtons130
+L_SampleButtons131:
+;ADC_Buttons.c,292 :: 		enC_line_inc = 3;
 	MOVLW       3
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,284 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,293 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       3
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1638,11 +1702,11 @@ L_SampleButtons125:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,285 :: 		}
-L_SampleButtons123:
-;ADC_Buttons.c,286 :: 		}
-L_SampleButtons122:
-;ADC_Buttons.c,287 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu     ");
+;ADC_Buttons.c,294 :: 		}
+L_SampleButtons129:
+;ADC_Buttons.c,295 :: 		}
+L_SampleButtons128:
+;ADC_Buttons.c,296 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu     ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -1654,7 +1718,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(?lstr29_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,288 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Kp:=     ");
+;ADC_Buttons.c,297 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Kp:=     ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -1666,7 +1730,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(?lstr30_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,289 :: 		sprintf(txt4,"%3d",pid_t.Kp);
+;ADC_Buttons.c,298 :: 		sprintf(txt4,"%3d",pid_t.Kp);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -1682,7 +1746,7 @@ L_SampleButtons122:
 	MOVF        _pid_t+1, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,290 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,299 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -1694,7 +1758,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,291 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Ki:=     ");
+;ADC_Buttons.c,300 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Ki:=     ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -1706,7 +1770,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(?lstr32_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,292 :: 		sprintf(txt4,"%3d",pid_t.Ki);
+;ADC_Buttons.c,301 :: 		sprintf(txt4,"%3d",pid_t.Ki);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -1722,7 +1786,7 @@ L_SampleButtons122:
 	MOVF        _pid_t+3, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,293 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+;ADC_Buttons.c,302 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -1734,7 +1798,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,294 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Kd:=     ");
+;ADC_Buttons.c,303 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Kd:=     ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -1746,7 +1810,7 @@ L_SampleButtons122:
 	MOVLW       hi_addr(?lstr34_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,295 :: 		sprintf(txt4,"%3d",pid_t.Kd);
+;ADC_Buttons.c,304 :: 		sprintf(txt4,"%3d",pid_t.Kd);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -1762,7 +1826,7 @@ L_SampleButtons122:
 	MOVF        _pid_t+5, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,296 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,16,txt4);
+;ADC_Buttons.c,305 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -1774,11 +1838,11 @@ L_SampleButtons122:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,297 :: 		break;
-	GOTO        L_SampleButtons88
-;ADC_Buttons.c,298 :: 		case 4:
-L_SampleButtons126:
-;ADC_Buttons.c,299 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_D){
+;ADC_Buttons.c,306 :: 		break;
+	GOTO        L_SampleButtons94
+;ADC_Buttons.c,307 :: 		case 4:
+L_SampleButtons132:
+;ADC_Buttons.c,308 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_D){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1791,11 +1855,11 @@ L_SampleButtons126:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons129
+	GOTO        L_SampleButtons135
 	BTFSC       ADC_Buttons_B_+0, 3 
-	GOTO        L_SampleButtons129
-L__SampleButtons295:
-;ADC_Buttons.c,300 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons135
+L__SampleButtons334:
+;ADC_Buttons.c,309 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -1805,16 +1869,16 @@ L__SampleButtons295:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,301 :: 		OK_D = 1;OK_A=0;OK_B=0;OK_C = 0;OK_E=0;
+;ADC_Buttons.c,310 :: 		OK_D = 1;OK_A=0;OK_B=0;OK_C = 0;OK_E=0;
 	BSF         ADC_Buttons_B_+0, 3 
 	BCF         ADC_Buttons_B_+0, 0 
 	BCF         ADC_Buttons_B_+0, 1 
 	BCF         ADC_Buttons_B_+0, 2 
 	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,302 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,311 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,303 :: 		Save_EncoderValue(pid_t.Kt);
+;ADC_Buttons.c,312 :: 		Save_EncoderValue(pid_t.Kt);
 	MOVF        _pid_t+33, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1822,22 +1886,22 @@ L__SampleButtons295:
 	MOVLW       255
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,304 :: 		while(!RA2_bit);
-L_SampleButtons130:
+;ADC_Buttons.c,313 :: 		while(!RA2_bit);
+L_SampleButtons136:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons131
-	GOTO        L_SampleButtons130
-L_SampleButtons131:
-;ADC_Buttons.c,305 :: 		}
-L_SampleButtons129:
-;ADC_Buttons.c,306 :: 		if(OK_D){
+	GOTO        L_SampleButtons137
+	GOTO        L_SampleButtons136
+L_SampleButtons137:
+;ADC_Buttons.c,314 :: 		}
+L_SampleButtons135:
+;ADC_Buttons.c,315 :: 		if(OK_D){
 	BTFSS       ADC_Buttons_B_+0, 3 
-	GOTO        L_SampleButtons132
-;ADC_Buttons.c,307 :: 		pid_t.Kt = Get_EncoderValue();
+	GOTO        L_SampleButtons138
+;ADC_Buttons.c,316 :: 		pid_t.Kt = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+33 
-;ADC_Buttons.c,308 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,317 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1850,19 +1914,19 @@ L_SampleButtons129:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons133
-;ADC_Buttons.c,309 :: 		OK_D = 0;
+	GOTO        L_SampleButtons139
+;ADC_Buttons.c,318 :: 		OK_D = 0;
 	BCF         ADC_Buttons_B_+0, 3 
-;ADC_Buttons.c,310 :: 		while(!RA2_bit);
-L_SampleButtons134:
+;ADC_Buttons.c,319 :: 		while(!RA2_bit);
+L_SampleButtons140:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons135
-	GOTO        L_SampleButtons134
-L_SampleButtons135:
-;ADC_Buttons.c,311 :: 		enC_line_inc = 0;
+	GOTO        L_SampleButtons141
+	GOTO        L_SampleButtons140
+L_SampleButtons141:
+;ADC_Buttons.c,320 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,312 :: 		enC = Save_EncoderValue(enC_line_inc+4);
+;ADC_Buttons.c,321 :: 		enC = Save_EncoderValue(enC_line_inc+4);
 	MOVLW       4
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1872,13 +1936,13 @@ L_SampleButtons135:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,313 :: 		}
-L_SampleButtons133:
-;ADC_Buttons.c,314 :: 		}
-L_SampleButtons132:
-;ADC_Buttons.c,315 :: 		case 5:
-L_SampleButtons136:
-;ADC_Buttons.c,316 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_E){
+;ADC_Buttons.c,322 :: 		}
+L_SampleButtons139:
+;ADC_Buttons.c,323 :: 		}
+L_SampleButtons138:
+;ADC_Buttons.c,324 :: 		case 5:
+L_SampleButtons142:
+;ADC_Buttons.c,325 :: 		if (Button(&PORTA, 2, 200, 0) && !OK_E){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1891,11 +1955,11 @@ L_SampleButtons136:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons139
+	GOTO        L_SampleButtons145
 	BTFSC       ADC_Buttons_B_+0, 4 
-	GOTO        L_SampleButtons139
-L__SampleButtons294:
-;ADC_Buttons.c,317 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons145
+L__SampleButtons333:
+;ADC_Buttons.c,326 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -1905,39 +1969,39 @@ L__SampleButtons294:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,318 :: 		OK_E = 1;OK_A=0;OK_B=0;OK_C = 0;OK_D=0;
+;ADC_Buttons.c,327 :: 		OK_E = 1;OK_A=0;OK_B=0;OK_C = 0;OK_D=0;
 	BSF         ADC_Buttons_B_+0, 4 
 	BCF         ADC_Buttons_B_+0, 0 
 	BCF         ADC_Buttons_B_+0, 1 
 	BCF         ADC_Buttons_B_+0, 2 
 	BCF         ADC_Buttons_B_+0, 3 
-;ADC_Buttons.c,319 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,328 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,320 :: 		Save_EncoderValue(DegC.Deg_OffSet);
+;ADC_Buttons.c,329 :: 		Save_EncoderValue(DegC.Deg_OffSet);
 	MOVF        _DegC+8, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _DegC+9, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,321 :: 		while(!RA2_bit);
-L_SampleButtons140:
+;ADC_Buttons.c,330 :: 		while(!RA2_bit);
+L_SampleButtons146:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons141
-	GOTO        L_SampleButtons140
-L_SampleButtons141:
-;ADC_Buttons.c,322 :: 		}
-L_SampleButtons139:
-;ADC_Buttons.c,323 :: 		if(OK_E){
+	GOTO        L_SampleButtons147
+	GOTO        L_SampleButtons146
+L_SampleButtons147:
+;ADC_Buttons.c,331 :: 		}
+L_SampleButtons145:
+;ADC_Buttons.c,332 :: 		if(OK_E){
 	BTFSS       ADC_Buttons_B_+0, 4 
-	GOTO        L_SampleButtons142
-;ADC_Buttons.c,324 :: 		DegC.Deg_OffSet = Get_EncoderValue();
+	GOTO        L_SampleButtons148
+;ADC_Buttons.c,333 :: 		DegC.Deg_OffSet = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _DegC+8 
 	MOVF        R1, 0 
 	MOVWF       _DegC+9 
-;ADC_Buttons.c,325 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,334 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -1950,19 +2014,19 @@ L_SampleButtons139:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons143
-;ADC_Buttons.c,326 :: 		OK_E = 0;
+	GOTO        L_SampleButtons149
+;ADC_Buttons.c,335 :: 		OK_E = 0;
 	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,327 :: 		while(!RA2_bit);
-L_SampleButtons144:
+;ADC_Buttons.c,336 :: 		while(!RA2_bit);
+L_SampleButtons150:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons145
-	GOTO        L_SampleButtons144
-L_SampleButtons145:
-;ADC_Buttons.c,328 :: 		enC_line_inc = 0;
+	GOTO        L_SampleButtons151
+	GOTO        L_SampleButtons150
+L_SampleButtons151:
+;ADC_Buttons.c,337 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,329 :: 		enC = Save_EncoderValue(enC_line_inc+4);
+;ADC_Buttons.c,338 :: 		enC = Save_EncoderValue(enC_line_inc+4);
 	MOVLW       4
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -1972,20 +2036,20 @@ L_SampleButtons145:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,330 :: 		}
-L_SampleButtons143:
-;ADC_Buttons.c,331 :: 		}
-L_SampleButtons142:
-;ADC_Buttons.c,332 :: 		case 6:
-L_SampleButtons146:
-;ADC_Buttons.c,333 :: 		case 7:
-L_SampleButtons147:
-;ADC_Buttons.c,334 :: 		if(!P2){
+;ADC_Buttons.c,339 :: 		}
+L_SampleButtons149:
+;ADC_Buttons.c,340 :: 		}
+L_SampleButtons148:
+;ADC_Buttons.c,341 :: 		case 6:
+L_SampleButtons152:
+;ADC_Buttons.c,342 :: 		case 7:
+L_SampleButtons153:
+;ADC_Buttons.c,343 :: 		if(!P2){
 	BTFSC       ADC_Buttons_P2+0, BitPos(ADC_Buttons_P2+0) 
-	GOTO        L_SampleButtons148
-;ADC_Buttons.c,335 :: 		P2 = 1;
+	GOTO        L_SampleButtons154
+;ADC_Buttons.c,344 :: 		P2 = 1;
 	BSF         ADC_Buttons_P2+0, BitPos(ADC_Buttons_P2+0) 
-;ADC_Buttons.c,336 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,345 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -1993,9 +2057,9 @@ L_SampleButtons147:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,337 :: 		}
-L_SampleButtons148:
-;ADC_Buttons.c,338 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"*Kt");
+;ADC_Buttons.c,346 :: 		}
+L_SampleButtons154:
+;ADC_Buttons.c,347 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"*Kt");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -2007,7 +2071,7 @@ L_SampleButtons148:
 	MOVLW       hi_addr(?lstr36_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,339 :: 		sprintf(txt4,"%3d",pid_t.Kt);
+;ADC_Buttons.c,348 :: 		sprintf(txt4,"%4d",pid_t.Kt);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -2021,7 +2085,7 @@ L_SampleButtons148:
 	MOVF        _pid_t+33, 0 
 	MOVWF       FARG_sprintf_wh+5 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,340 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4);
+;ADC_Buttons.c,349 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -2033,7 +2097,7 @@ L_SampleButtons148:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,341 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"*C Offset");
+;ADC_Buttons.c,350 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"*C Offset");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -2045,7 +2109,7 @@ L_SampleButtons148:
 	MOVLW       hi_addr(?lstr38_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,342 :: 		sprintf(txt4,"%3d",DegC.Deg_OffSet);
+;ADC_Buttons.c,351 :: 		sprintf(txt4,"%4d",DegC.Deg_OffSet);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -2061,7 +2125,7 @@ L_SampleButtons148:
 	MOVF        _DegC+9, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,343 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,352 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -2073,7 +2137,7 @@ L_SampleButtons148:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,344 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
+;ADC_Buttons.c,353 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -2085,7 +2149,7 @@ L_SampleButtons148:
 	MOVLW       hi_addr(?lstr40_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,345 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
+;ADC_Buttons.c,354 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -2097,16 +2161,16 @@ L_SampleButtons148:
 	MOVLW       hi_addr(?lstr41_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,346 :: 		break;
-	GOTO        L_SampleButtons88
-;ADC_Buttons.c,347 :: 		case 8:
-L_SampleButtons149:
-;ADC_Buttons.c,348 :: 		case 9:
-L_SampleButtons150:
-;ADC_Buttons.c,349 :: 		case 10:
-L_SampleButtons151:
-;ADC_Buttons.c,350 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare    ");
-L_SampleButtons152:
+;ADC_Buttons.c,355 :: 		break;
+	GOTO        L_SampleButtons94
+;ADC_Buttons.c,356 :: 		case 8:
+L_SampleButtons155:
+;ADC_Buttons.c,357 :: 		case 9:
+L_SampleButtons156:
+;ADC_Buttons.c,358 :: 		case 10:
+L_SampleButtons157:
+;ADC_Buttons.c,359 :: 		case 11:   I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare    ");
+L_SampleButtons158:
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -2118,7 +2182,7 @@ L_SampleButtons152:
 	MOVLW       hi_addr(?lstr42_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,351 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare    ");
+;ADC_Buttons.c,360 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -2130,7 +2194,7 @@ L_SampleButtons152:
 	MOVLW       hi_addr(?lstr43_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,352 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
+;ADC_Buttons.c,361 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -2142,7 +2206,7 @@ L_SampleButtons152:
 	MOVLW       hi_addr(?lstr44_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,353 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
+;ADC_Buttons.c,362 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -2154,11 +2218,11 @@ L_SampleButtons152:
 	MOVLW       hi_addr(?lstr45_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,354 :: 		break;
-	GOTO        L_SampleButtons88
-;ADC_Buttons.c,355 :: 		default:   //clear screen & update cursor position
-L_SampleButtons153:
-;ADC_Buttons.c,356 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,363 :: 		break;
+	GOTO        L_SampleButtons94
+;ADC_Buttons.c,364 :: 		default:   //clear screen & update cursor position
+L_SampleButtons159:
+;ADC_Buttons.c,365 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -2166,13 +2230,13 @@ L_SampleButtons153:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,357 :: 		Sps.State = Return;
+;ADC_Buttons.c,366 :: 		Sps.State = Return;
 	MOVLW       1
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,358 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,367 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,359 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,368 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -2180,142 +2244,142 @@ L_SampleButtons153:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,360 :: 		enC_last = -1;
+;ADC_Buttons.c,369 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,361 :: 		break;
-	GOTO        L_SampleButtons88
-;ADC_Buttons.c,362 :: 		}
-L_SampleButtons87:
+;ADC_Buttons.c,370 :: 		break;
+	GOTO        L_SampleButtons94
+;ADC_Buttons.c,371 :: 		}
+L_SampleButtons93:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons347
+	GOTO        L__SampleButtons388
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons347:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons89
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons348
-	MOVLW       1
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons348:
+L__SampleButtons388:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons95
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons349
+	GOTO        L__SampleButtons389
+	MOVLW       1
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons389:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons101
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons390
 	MOVLW       2
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons349:
+L__SampleButtons390:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons105
+	GOTO        L_SampleButtons111
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons350
+	GOTO        L__SampleButtons391
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons350:
+L__SampleButtons391:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons115
+	GOTO        L_SampleButtons121
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons351
+	GOTO        L__SampleButtons392
 	MOVLW       4
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons351:
+L__SampleButtons392:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons126
+	GOTO        L_SampleButtons132
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons352
+	GOTO        L__SampleButtons393
 	MOVLW       5
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons352:
+L__SampleButtons393:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons136
+	GOTO        L_SampleButtons142
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons353
+	GOTO        L__SampleButtons394
 	MOVLW       6
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons353:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons146
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons354
-	MOVLW       7
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons354:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons147
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons355
-	MOVLW       8
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons355:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons149
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons356
-	MOVLW       9
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons356:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons150
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons357
-	MOVLW       10
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons357:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons151
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons358
-	MOVLW       11
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons358:
+L__SampleButtons394:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons152
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons395
+	MOVLW       7
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons395:
+	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons153
-L_SampleButtons88:
-;ADC_Buttons.c,363 :: 		break;
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons396
+	MOVLW       8
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons396:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons155
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons397
+	MOVLW       9
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons397:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons156
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons398
+	MOVLW       10
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons398:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons157
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons399
+	MOVLW       11
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons399:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons158
+	GOTO        L_SampleButtons159
+L_SampleButtons94:
+;ADC_Buttons.c,372 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,364 :: 		case RampSettings:
-L_SampleButtons154:
-;ADC_Buttons.c,365 :: 		if(enC > 3){
+;ADC_Buttons.c,373 :: 		case RampSettings:
+L_SampleButtons160:
+;ADC_Buttons.c,374 :: 		if(enC > 3){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons359
+	GOTO        L__SampleButtons400
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       3
-L__SampleButtons359:
+L__SampleButtons400:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons155
-;ADC_Buttons.c,366 :: 		enC = Save_EncoderValue(3);
+	GOTO        L_SampleButtons161
+;ADC_Buttons.c,375 :: 		enC = Save_EncoderValue(3);
 	MOVLW       3
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -2325,51 +2389,13 @@ L__SampleButtons359:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,367 :: 		}
-L_SampleButtons155:
-;ADC_Buttons.c,368 :: 		ret3:
-___SampleButtons_ret3:
-;ADC_Buttons.c,369 :: 		switch(enC){
-	GOTO        L_SampleButtons156
-;ADC_Buttons.c,370 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == RampSettings)){
-L_SampleButtons158:
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons161
-	MOVF        _Sps+16, 0 
-	XORLW       4
-	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons161
-L__SampleButtons293:
-;ADC_Buttons.c,371 :: 		Sps.State = TempMenu;
-	MOVLW       2
-	MOVWF       _Sps+16 
-;ADC_Buttons.c,372 :: 		while(!RA2_bit);
-L_SampleButtons162:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons163
-	GOTO        L_SampleButtons162
-L_SampleButtons163:
-;ADC_Buttons.c,373 :: 		enC = 13;
-	MOVLW       13
-	MOVWF       ADC_Buttons_enC+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,374 :: 		goto ret3;
-	GOTO        ___SampleButtons_ret3
-;ADC_Buttons.c,375 :: 		}
+;ADC_Buttons.c,376 :: 		}
 L_SampleButtons161:
-;ADC_Buttons.c,376 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+;ADC_Buttons.c,377 :: 		ret3:
+___SampleButtons_ret3:
+;ADC_Buttons.c,378 :: 		switch(enC){
+	GOTO        L_SampleButtons162
+;ADC_Buttons.c,379 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == RampSettings)){
 L_SampleButtons164:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -2384,92 +2410,31 @@ L_SampleButtons164:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons167
-	BTFSC       ADC_Buttons_B_+0, 0 
+	MOVF        _Sps+16, 0 
+	XORLW       4
+	BTFSS       STATUS+0, 2 
 	GOTO        L_SampleButtons167
-L__SampleButtons292:
-;ADC_Buttons.c,377 :: 		enC = Save_EncoderValue(enC);
-	MOVF        ADC_Buttons_enC+0, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        ADC_Buttons_enC+1, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,378 :: 		OK_A = 1;
-	BSF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,379 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,380 :: 		Save_EncoderValue(Sps.RmpDeg);
-	MOVF        _Sps+0, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _Sps+1, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
+L__SampleButtons332:
+;ADC_Buttons.c,380 :: 		Sps.State = TempMenu;
+	MOVLW       2
+	MOVWF       _Sps+16 
 ;ADC_Buttons.c,381 :: 		while(!RA2_bit);
 L_SampleButtons168:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
 	GOTO        L_SampleButtons169
 	GOTO        L_SampleButtons168
 L_SampleButtons169:
-;ADC_Buttons.c,382 :: 		}
-L_SampleButtons167:
-;ADC_Buttons.c,383 :: 		if(OK_A){
-	BTFSS       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons170
-;ADC_Buttons.c,384 :: 		Sps.RmpDeg = Get_EncoderValue();
-	CALL        _Get_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       _Sps+0 
-	MOVF        R1, 0 
-	MOVWF       _Sps+1 
-;ADC_Buttons.c,385 :: 		if(Button(&PORTA, 2, 200, 0)){
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons171
-;ADC_Buttons.c,386 :: 		OK_A = 0;
-	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,387 :: 		while(!RA2_bit);
-L_SampleButtons172:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons173
-	GOTO        L_SampleButtons172
-L_SampleButtons173:
-;ADC_Buttons.c,388 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,389 :: 		enC = Save_EncoderValue(enC_line_inc);
-	MOVLW       1
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVLW       0
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
+;ADC_Buttons.c,382 :: 		enC = 13;
+	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
+	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,390 :: 		}
-L_SampleButtons171:
-;ADC_Buttons.c,391 :: 		}
+;ADC_Buttons.c,383 :: 		goto ret3;
+	GOTO        ___SampleButtons_ret3
+;ADC_Buttons.c,384 :: 		}
+L_SampleButtons167:
+;ADC_Buttons.c,385 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
 L_SampleButtons170:
-;ADC_Buttons.c,392 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
-L_SampleButtons174:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -2482,11 +2447,11 @@ L_SampleButtons174:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons177
-	BTFSC       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons177
-L__SampleButtons291:
-;ADC_Buttons.c,393 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons173
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons173
+L__SampleButtons331:
+;ADC_Buttons.c,386 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -2496,37 +2461,37 @@ L__SampleButtons291:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,394 :: 		OK_B = 1;
-	BSF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,395 :: 		enC_line_inc = 2;
-	MOVLW       2
+;ADC_Buttons.c,387 :: 		OK_A = 1;
+	BSF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,388 :: 		enC_line_inc = 1;
+	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,396 :: 		Save_EncoderValue(Sps.RmpTmr);
-	MOVF        _Sps+2, 0 
+;ADC_Buttons.c,389 :: 		Save_EncoderValue(Sps.RmpDeg);
+	MOVF        _Sps+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _Sps+3, 0 
+	MOVF        _Sps+1, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,397 :: 		while(!RA2_bit);
-L_SampleButtons178:
+;ADC_Buttons.c,390 :: 		while(!RA2_bit);
+L_SampleButtons174:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons179
-	GOTO        L_SampleButtons178
-L_SampleButtons179:
-;ADC_Buttons.c,398 :: 		}
-L_SampleButtons177:
-;ADC_Buttons.c,399 :: 		if(OK_B){
-	BTFSS       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons180
-;ADC_Buttons.c,400 :: 		Sps.RmpTmr = Get_EncoderValue();
+	GOTO        L_SampleButtons175
+	GOTO        L_SampleButtons174
+L_SampleButtons175:
+;ADC_Buttons.c,391 :: 		}
+L_SampleButtons173:
+;ADC_Buttons.c,392 :: 		if(OK_A){
+	BTFSS       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons176
+;ADC_Buttons.c,393 :: 		Sps.RmpDeg = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
-	MOVWF       _Sps+2 
+	MOVWF       _Sps+0 
 	MOVF        R1, 0 
-	MOVWF       _Sps+3 
-;ADC_Buttons.c,401 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVWF       _Sps+1 
+;ADC_Buttons.c,394 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -2539,21 +2504,120 @@ L_SampleButtons177:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons181
-;ADC_Buttons.c,402 :: 		OK_B = 0;
-	BCF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,403 :: 		while(!RA2_bit);
-L_SampleButtons182:
+	GOTO        L_SampleButtons177
+;ADC_Buttons.c,395 :: 		OK_A = 0;
+	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,396 :: 		while(!RA2_bit);
+L_SampleButtons178:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons179
+	GOTO        L_SampleButtons178
+L_SampleButtons179:
+;ADC_Buttons.c,397 :: 		enC_line_inc = 1;
+	MOVLW       1
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,398 :: 		enC = Save_EncoderValue(enC_line_inc);
+	MOVLW       1
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,399 :: 		}
+L_SampleButtons177:
+;ADC_Buttons.c,400 :: 		}
+L_SampleButtons176:
+;ADC_Buttons.c,401 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+L_SampleButtons180:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons183
-	GOTO        L_SampleButtons182
-L_SampleButtons183:
+	BTFSC       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons183
+L__SampleButtons330:
+;ADC_Buttons.c,402 :: 		enC = Save_EncoderValue(enC);
+	MOVF        ADC_Buttons_enC+0, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,403 :: 		OK_B = 1;
+	BSF         ADC_Buttons_B_+0, 1 
 ;ADC_Buttons.c,404 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,405 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,405 :: 		Save_EncoderValue(Sps.RmpTmr);
+	MOVF        _Sps+2, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        _Sps+3, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+;ADC_Buttons.c,406 :: 		while(!RA2_bit);
+L_SampleButtons184:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons185
+	GOTO        L_SampleButtons184
+L_SampleButtons185:
+;ADC_Buttons.c,407 :: 		}
+L_SampleButtons183:
+;ADC_Buttons.c,408 :: 		if(OK_B){
+	BTFSS       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons186
+;ADC_Buttons.c,409 :: 		Sps.RmpTmr = Get_EncoderValue();
+	CALL        _Get_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       _Sps+2 
+	MOVF        R1, 0 
+	MOVWF       _Sps+3 
+;ADC_Buttons.c,410 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons187
+;ADC_Buttons.c,411 :: 		OK_B = 0;
+	BCF         ADC_Buttons_B_+0, 1 
+;ADC_Buttons.c,412 :: 		while(!RA2_bit);
+L_SampleButtons188:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons189
+	GOTO        L_SampleButtons188
+L_SampleButtons189:
+;ADC_Buttons.c,413 :: 		enC_line_inc = 2;
+	MOVLW       2
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,414 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       2
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -2563,13 +2627,13 @@ L_SampleButtons183:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,406 :: 		}
-L_SampleButtons181:
-;ADC_Buttons.c,407 :: 		}
-L_SampleButtons180:
-;ADC_Buttons.c,408 :: 		case 3:
-L_SampleButtons184:
-;ADC_Buttons.c,409 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret     ");
+;ADC_Buttons.c,415 :: 		}
+L_SampleButtons187:
+;ADC_Buttons.c,416 :: 		}
+L_SampleButtons186:
+;ADC_Buttons.c,417 :: 		case 3:
+L_SampleButtons190:
+;ADC_Buttons.c,418 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret     ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -2581,7 +2645,7 @@ L_SampleButtons184:
 	MOVLW       hi_addr(?lstr46_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,410 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"RmpDeg:=");
+;ADC_Buttons.c,419 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"RmpDeg:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -2593,7 +2657,7 @@ L_SampleButtons184:
 	MOVLW       hi_addr(?lstr47_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,411 :: 		sprintf(txt4,"%3d",Sps.RmpDeg);
+;ADC_Buttons.c,420 :: 		sprintf(txt4,"%3d",Sps.RmpDeg);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -2609,7 +2673,7 @@ L_SampleButtons184:
 	MOVF        _Sps+1, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,412 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,421 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -2621,7 +2685,7 @@ L_SampleButtons184:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,413 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"RmpTmr:=");
+;ADC_Buttons.c,422 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"RmpTmr:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -2633,7 +2697,7 @@ L_SampleButtons184:
 	MOVLW       hi_addr(?lstr49_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,414 :: 		sprintf(txt4,"%3d",Sps.RmpTmr);
+;ADC_Buttons.c,423 :: 		sprintf(txt4,"%3d",Sps.RmpTmr);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -2649,7 +2713,7 @@ L_SampleButtons184:
 	MOVF        _Sps+3, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,415 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+;ADC_Buttons.c,424 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -2661,7 +2725,7 @@ L_SampleButtons184:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,416 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"        ");
+;ADC_Buttons.c,425 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"        ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -2673,11 +2737,11 @@ L_SampleButtons184:
 	MOVLW       hi_addr(?lstr51_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,417 :: 		break;
-	GOTO        L_SampleButtons157
-;ADC_Buttons.c,418 :: 		default:    //clear screen & update cursor position
-L_SampleButtons185:
-;ADC_Buttons.c,419 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,426 :: 		break;
+	GOTO        L_SampleButtons163
+;ADC_Buttons.c,427 :: 		default:    //clear screen & update cursor position
+L_SampleButtons191:
+;ADC_Buttons.c,428 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -2685,10 +2749,10 @@ L_SampleButtons185:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,420 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,429 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,421 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,430 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -2696,70 +2760,70 @@ L_SampleButtons185:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,422 :: 		enC_last = -1;
+;ADC_Buttons.c,431 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,423 :: 		break;
-	GOTO        L_SampleButtons157
-;ADC_Buttons.c,424 :: 		}
-L_SampleButtons156:
+;ADC_Buttons.c,432 :: 		break;
+	GOTO        L_SampleButtons163
+;ADC_Buttons.c,433 :: 		}
+L_SampleButtons162:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons360
+	GOTO        L__SampleButtons401
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons360:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons158
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons361
-	MOVLW       1
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons361:
+L__SampleButtons401:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons164
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons362
-	MOVLW       2
+	GOTO        L__SampleButtons402
+	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons362:
+L__SampleButtons402:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons174
+	GOTO        L_SampleButtons170
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons363
+	GOTO        L__SampleButtons403
+	MOVLW       2
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons403:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons180
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons404
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons363:
+L__SampleButtons404:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons184
-	GOTO        L_SampleButtons185
-L_SampleButtons157:
-;ADC_Buttons.c,425 :: 		break;
+	GOTO        L_SampleButtons190
+	GOTO        L_SampleButtons191
+L_SampleButtons163:
+;ADC_Buttons.c,434 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,426 :: 		case SoakSettings:
-L_SampleButtons186:
-;ADC_Buttons.c,427 :: 		if(enC > 3){
+;ADC_Buttons.c,435 :: 		case SoakSettings:
+L_SampleButtons192:
+;ADC_Buttons.c,436 :: 		if(enC > 3){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons364
+	GOTO        L__SampleButtons405
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       3
-L__SampleButtons364:
+L__SampleButtons405:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons187
-;ADC_Buttons.c,428 :: 		enC = Save_EncoderValue(3);
+	GOTO        L_SampleButtons193
+;ADC_Buttons.c,437 :: 		enC = Save_EncoderValue(3);
 	MOVLW       3
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -2769,51 +2833,13 @@ L__SampleButtons364:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,429 :: 		}
-L_SampleButtons187:
-;ADC_Buttons.c,430 :: 		ret4:
-___SampleButtons_ret4:
-;ADC_Buttons.c,431 :: 		switch(enC){
-	GOTO        L_SampleButtons188
-;ADC_Buttons.c,432 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == SoakSettings)){
-L_SampleButtons190:
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons193
-	MOVF        _Sps+16, 0 
-	XORLW       5
-	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons193
-L__SampleButtons290:
-;ADC_Buttons.c,433 :: 		Sps.State = TempMenu;
-	MOVLW       2
-	MOVWF       _Sps+16 
-;ADC_Buttons.c,434 :: 		while(!RA2_bit);
-L_SampleButtons194:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons195
-	GOTO        L_SampleButtons194
-L_SampleButtons195:
-;ADC_Buttons.c,435 :: 		enC = 13;
-	MOVLW       13
-	MOVWF       ADC_Buttons_enC+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,436 :: 		goto ret4;
-	GOTO        ___SampleButtons_ret4
-;ADC_Buttons.c,437 :: 		}
+;ADC_Buttons.c,438 :: 		}
 L_SampleButtons193:
-;ADC_Buttons.c,438 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+;ADC_Buttons.c,439 :: 		ret4:
+___SampleButtons_ret4:
+;ADC_Buttons.c,440 :: 		switch(enC){
+	GOTO        L_SampleButtons194
+;ADC_Buttons.c,441 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == SoakSettings)){
 L_SampleButtons196:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -2828,92 +2854,31 @@ L_SampleButtons196:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons199
-	BTFSC       ADC_Buttons_B_+0, 0 
+	MOVF        _Sps+16, 0 
+	XORLW       5
+	BTFSS       STATUS+0, 2 
 	GOTO        L_SampleButtons199
-L__SampleButtons289:
-;ADC_Buttons.c,439 :: 		enC = Save_EncoderValue(enC);
-	MOVF        ADC_Buttons_enC+0, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        ADC_Buttons_enC+1, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,440 :: 		OK_A = 1;
-	BSF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,441 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,442 :: 		Save_EncoderValue(Sps.SokDeg);
-	MOVF        _Sps+4, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _Sps+5, 0 
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
+L__SampleButtons329:
+;ADC_Buttons.c,442 :: 		Sps.State = TempMenu;
+	MOVLW       2
+	MOVWF       _Sps+16 
 ;ADC_Buttons.c,443 :: 		while(!RA2_bit);
 L_SampleButtons200:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
 	GOTO        L_SampleButtons201
 	GOTO        L_SampleButtons200
 L_SampleButtons201:
-;ADC_Buttons.c,444 :: 		}
-L_SampleButtons199:
-;ADC_Buttons.c,445 :: 		if(OK_A){
-	BTFSS       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons202
-;ADC_Buttons.c,446 :: 		Sps.SokDeg = Get_EncoderValue();
-	CALL        _Get_EncoderValue+0, 0
-	MOVF        R0, 0 
-	MOVWF       _Sps+4 
-	MOVF        R1, 0 
-	MOVWF       _Sps+5 
-;ADC_Buttons.c,447 :: 		if(Button(&PORTA, 2, 200, 0)){
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons203
-;ADC_Buttons.c,448 :: 		OK_A = 0;
-	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,449 :: 		while(!RA2_bit);
-L_SampleButtons204:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons205
-	GOTO        L_SampleButtons204
-L_SampleButtons205:
-;ADC_Buttons.c,450 :: 		enC_line_inc = 1;
-	MOVLW       1
-	MOVWF       ADC_Buttons_enC_line_inc+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,451 :: 		enC = Save_EncoderValue(enC_line_inc);
-	MOVLW       1
-	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVLW       0
-	MOVWF       FARG_Save_EncoderValue_new_val+1 
-	CALL        _Save_EncoderValue+0, 0
-	MOVF        R0, 0 
+;ADC_Buttons.c,444 :: 		enC = 13;
+	MOVLW       13
 	MOVWF       ADC_Buttons_enC+0 
-	MOVF        R1, 0 
+	MOVLW       0
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,452 :: 		}
-L_SampleButtons203:
-;ADC_Buttons.c,453 :: 		}
+;ADC_Buttons.c,445 :: 		goto ret4;
+	GOTO        ___SampleButtons_ret4
+;ADC_Buttons.c,446 :: 		}
+L_SampleButtons199:
+;ADC_Buttons.c,447 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
 L_SampleButtons202:
-;ADC_Buttons.c,454 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
-L_SampleButtons206:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -2926,11 +2891,11 @@ L_SampleButtons206:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons209
-	BTFSC       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons209
-L__SampleButtons288:
-;ADC_Buttons.c,455 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons205
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons205
+L__SampleButtons328:
+;ADC_Buttons.c,448 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -2940,37 +2905,37 @@ L__SampleButtons288:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,456 :: 		OK_B = 1;
-	BSF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,457 :: 		enC_line_inc = 2;
-	MOVLW       2
+;ADC_Buttons.c,449 :: 		OK_A = 1;
+	BSF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,450 :: 		enC_line_inc = 1;
+	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,458 :: 		Save_EncoderValue(Sps.SokTmr);
-	MOVF        _Sps+6, 0 
+;ADC_Buttons.c,451 :: 		Save_EncoderValue(Sps.SokDeg);
+	MOVF        _Sps+4, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
-	MOVF        _Sps+7, 0 
+	MOVF        _Sps+5, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,459 :: 		while(!RA2_bit);
-L_SampleButtons210:
+;ADC_Buttons.c,452 :: 		while(!RA2_bit);
+L_SampleButtons206:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons211
-	GOTO        L_SampleButtons210
-L_SampleButtons211:
-;ADC_Buttons.c,460 :: 		}
-L_SampleButtons209:
-;ADC_Buttons.c,461 :: 		if(OK_B){
-	BTFSS       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons212
-;ADC_Buttons.c,462 :: 		Sps.SokTmr = Get_EncoderValue();
+	GOTO        L_SampleButtons207
+	GOTO        L_SampleButtons206
+L_SampleButtons207:
+;ADC_Buttons.c,453 :: 		}
+L_SampleButtons205:
+;ADC_Buttons.c,454 :: 		if(OK_A){
+	BTFSS       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons208
+;ADC_Buttons.c,455 :: 		Sps.SokDeg = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
-	MOVWF       _Sps+6 
+	MOVWF       _Sps+4 
 	MOVF        R1, 0 
-	MOVWF       _Sps+7 
-;ADC_Buttons.c,463 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVWF       _Sps+5 
+;ADC_Buttons.c,456 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -2983,21 +2948,120 @@ L_SampleButtons209:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons213
-;ADC_Buttons.c,464 :: 		OK_B = 0;
-	BCF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,465 :: 		while(!RA2_bit);
-L_SampleButtons214:
+	GOTO        L_SampleButtons209
+;ADC_Buttons.c,457 :: 		OK_A = 0;
+	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,458 :: 		while(!RA2_bit);
+L_SampleButtons210:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons211
+	GOTO        L_SampleButtons210
+L_SampleButtons211:
+;ADC_Buttons.c,459 :: 		enC_line_inc = 1;
+	MOVLW       1
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,460 :: 		enC = Save_EncoderValue(enC_line_inc);
+	MOVLW       1
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,461 :: 		}
+L_SampleButtons209:
+;ADC_Buttons.c,462 :: 		}
+L_SampleButtons208:
+;ADC_Buttons.c,463 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+L_SampleButtons212:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons215
-	GOTO        L_SampleButtons214
-L_SampleButtons215:
+	BTFSC       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons215
+L__SampleButtons327:
+;ADC_Buttons.c,464 :: 		enC = Save_EncoderValue(enC);
+	MOVF        ADC_Buttons_enC+0, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,465 :: 		OK_B = 1;
+	BSF         ADC_Buttons_B_+0, 1 
 ;ADC_Buttons.c,466 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,467 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,467 :: 		Save_EncoderValue(Sps.SokTmr);
+	MOVF        _Sps+6, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        _Sps+7, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+;ADC_Buttons.c,468 :: 		while(!RA2_bit);
+L_SampleButtons216:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons217
+	GOTO        L_SampleButtons216
+L_SampleButtons217:
+;ADC_Buttons.c,469 :: 		}
+L_SampleButtons215:
+;ADC_Buttons.c,470 :: 		if(OK_B){
+	BTFSS       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons218
+;ADC_Buttons.c,471 :: 		Sps.SokTmr = Get_EncoderValue();
+	CALL        _Get_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       _Sps+6 
+	MOVF        R1, 0 
+	MOVWF       _Sps+7 
+;ADC_Buttons.c,472 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons219
+;ADC_Buttons.c,473 :: 		OK_B = 0;
+	BCF         ADC_Buttons_B_+0, 1 
+;ADC_Buttons.c,474 :: 		while(!RA2_bit);
+L_SampleButtons220:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons221
+	GOTO        L_SampleButtons220
+L_SampleButtons221:
+;ADC_Buttons.c,475 :: 		enC_line_inc = 2;
+	MOVLW       2
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,476 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       2
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3007,13 +3071,13 @@ L_SampleButtons215:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,469 :: 		}
-L_SampleButtons213:
-;ADC_Buttons.c,470 :: 		}
-L_SampleButtons212:
-;ADC_Buttons.c,471 :: 		case 3:
-L_SampleButtons216:
-;ADC_Buttons.c,472 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
+;ADC_Buttons.c,478 :: 		}
+L_SampleButtons219:
+;ADC_Buttons.c,479 :: 		}
+L_SampleButtons218:
+;ADC_Buttons.c,480 :: 		case 3:
+L_SampleButtons222:
+;ADC_Buttons.c,481 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -3025,7 +3089,7 @@ L_SampleButtons216:
 	MOVLW       hi_addr(?lstr52_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,473 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SoakDeg:=");
+;ADC_Buttons.c,482 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SoakDeg:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3037,7 +3101,7 @@ L_SampleButtons216:
 	MOVLW       hi_addr(?lstr53_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,474 :: 		sprintf(txt4,"%3d",Sps.SokDeg);
+;ADC_Buttons.c,483 :: 		sprintf(txt4,"%3d",Sps.SokDeg);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3053,7 +3117,7 @@ L_SampleButtons216:
 	MOVF        _Sps+5, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,475 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,484 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3065,7 +3129,7 @@ L_SampleButtons216:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,476 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SoakTmr:=");
+;ADC_Buttons.c,485 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SoakTmr:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3077,7 +3141,7 @@ L_SampleButtons216:
 	MOVLW       hi_addr(?lstr55_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,477 :: 		sprintf(txt4,"%3d",Sps.SokTmr);
+;ADC_Buttons.c,486 :: 		sprintf(txt4,"%3d",Sps.SokTmr);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3093,7 +3157,7 @@ L_SampleButtons216:
 	MOVF        _Sps+7, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,478 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+;ADC_Buttons.c,487 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3105,7 +3169,7 @@ L_SampleButtons216:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,479 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
+;ADC_Buttons.c,488 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -3117,11 +3181,11 @@ L_SampleButtons216:
 	MOVLW       hi_addr(?lstr57_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,480 :: 		break;
-	GOTO        L_SampleButtons189
-;ADC_Buttons.c,481 :: 		default:    //clear screen & update cursor position
-L_SampleButtons217:
-;ADC_Buttons.c,482 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,489 :: 		break;
+	GOTO        L_SampleButtons195
+;ADC_Buttons.c,490 :: 		default:    //clear screen & update cursor position
+L_SampleButtons223:
+;ADC_Buttons.c,491 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -3129,10 +3193,10 @@ L_SampleButtons217:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,483 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,492 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,484 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,493 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -3140,70 +3204,70 @@ L_SampleButtons217:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,485 :: 		enC_last = -1;
+;ADC_Buttons.c,494 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,486 :: 		break;
-	GOTO        L_SampleButtons189
-;ADC_Buttons.c,487 :: 		}
-L_SampleButtons188:
+;ADC_Buttons.c,495 :: 		break;
+	GOTO        L_SampleButtons195
+;ADC_Buttons.c,496 :: 		}
+L_SampleButtons194:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons365
+	GOTO        L__SampleButtons406
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons365:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons190
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons366
-	MOVLW       1
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons366:
+L__SampleButtons406:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons196
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons367
-	MOVLW       2
+	GOTO        L__SampleButtons407
+	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons367:
+L__SampleButtons407:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons206
+	GOTO        L_SampleButtons202
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons368
+	GOTO        L__SampleButtons408
+	MOVLW       2
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons408:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons212
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons409
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons368:
+L__SampleButtons409:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons216
-	GOTO        L_SampleButtons217
-L_SampleButtons189:
-;ADC_Buttons.c,488 :: 		break;
+	GOTO        L_SampleButtons222
+	GOTO        L_SampleButtons223
+L_SampleButtons195:
+;ADC_Buttons.c,497 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,489 :: 		case SpikeSettings:
-L_SampleButtons218:
-;ADC_Buttons.c,490 :: 		if(enC > 3){
+;ADC_Buttons.c,498 :: 		case SpikeSettings:
+L_SampleButtons224:
+;ADC_Buttons.c,499 :: 		if(enC > 3){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons369
+	GOTO        L__SampleButtons410
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       3
-L__SampleButtons369:
+L__SampleButtons410:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons219
-;ADC_Buttons.c,491 :: 		enC = Save_EncoderValue(3);
+	GOTO        L_SampleButtons225
+;ADC_Buttons.c,500 :: 		enC = Save_EncoderValue(3);
 	MOVLW       3
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3213,51 +3277,13 @@ L__SampleButtons369:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,492 :: 		}
-L_SampleButtons219:
-;ADC_Buttons.c,493 :: 		ret5:
-___SampleButtons_ret5:
-;ADC_Buttons.c,494 :: 		switch(enC){
-	GOTO        L_SampleButtons220
-;ADC_Buttons.c,495 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == SpikeSettings)){
-L_SampleButtons222:
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons225
-	MOVF        _Sps+16, 0 
-	XORLW       6
-	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons225
-L__SampleButtons287:
-;ADC_Buttons.c,496 :: 		Sps.State = TempMenu;
-	MOVLW       2
-	MOVWF       _Sps+16 
-;ADC_Buttons.c,497 :: 		while(!RA2_bit);
-L_SampleButtons226:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons227
-	GOTO        L_SampleButtons226
-L_SampleButtons227:
-;ADC_Buttons.c,498 :: 		enC = 13;
-	MOVLW       13
-	MOVWF       ADC_Buttons_enC+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,499 :: 		goto ret5;
-	GOTO        ___SampleButtons_ret5
-;ADC_Buttons.c,500 :: 		}
+;ADC_Buttons.c,501 :: 		}
 L_SampleButtons225:
-;ADC_Buttons.c,501 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+;ADC_Buttons.c,502 :: 		ret5:
+___SampleButtons_ret5:
+;ADC_Buttons.c,503 :: 		switch(enC){
+	GOTO        L_SampleButtons226
+;ADC_Buttons.c,504 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == SpikeSettings)){
 L_SampleButtons228:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -3272,10 +3298,48 @@ L_SampleButtons228:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons231
-	BTFSC       ADC_Buttons_B_+0, 0 
+	MOVF        _Sps+16, 0 
+	XORLW       6
+	BTFSS       STATUS+0, 2 
 	GOTO        L_SampleButtons231
-L__SampleButtons286:
-;ADC_Buttons.c,502 :: 		enC = Save_EncoderValue(enC);
+L__SampleButtons326:
+;ADC_Buttons.c,505 :: 		Sps.State = TempMenu;
+	MOVLW       2
+	MOVWF       _Sps+16 
+;ADC_Buttons.c,506 :: 		while(!RA2_bit);
+L_SampleButtons232:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons233
+	GOTO        L_SampleButtons232
+L_SampleButtons233:
+;ADC_Buttons.c,507 :: 		enC = 13;
+	MOVLW       13
+	MOVWF       ADC_Buttons_enC+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,508 :: 		goto ret5;
+	GOTO        ___SampleButtons_ret5
+;ADC_Buttons.c,509 :: 		}
+L_SampleButtons231:
+;ADC_Buttons.c,510 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+L_SampleButtons234:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons237
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons237
+L__SampleButtons325:
+;ADC_Buttons.c,511 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -3285,31 +3349,31 @@ L__SampleButtons286:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,503 :: 		OK_A = 1;
+;ADC_Buttons.c,512 :: 		OK_A = 1;
 	BSF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,504 :: 		enC_line_inc = 1;
+;ADC_Buttons.c,513 :: 		enC_line_inc = 1;
 	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,505 :: 		Save_EncoderValue(Sps.SpkeDeg);
+;ADC_Buttons.c,514 :: 		Save_EncoderValue(Sps.SpkeDeg);
 	MOVF        _Sps+8, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _Sps+9, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,506 :: 		}
-L_SampleButtons231:
-;ADC_Buttons.c,507 :: 		if(OK_A){
+;ADC_Buttons.c,515 :: 		}
+L_SampleButtons237:
+;ADC_Buttons.c,516 :: 		if(OK_A){
 	BTFSS       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons232
-;ADC_Buttons.c,508 :: 		Sps.SpkeDeg = Get_EncoderValue();
+	GOTO        L_SampleButtons238
+;ADC_Buttons.c,517 :: 		Sps.SpkeDeg = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+8 
 	MOVF        R1, 0 
 	MOVWF       _Sps+9 
-;ADC_Buttons.c,509 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,518 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3322,21 +3386,21 @@ L_SampleButtons231:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons233
-;ADC_Buttons.c,510 :: 		OK_A = 0;
+	GOTO        L_SampleButtons239
+;ADC_Buttons.c,519 :: 		OK_A = 0;
 	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,511 :: 		while(!RA2_bit);
-L_SampleButtons234:
+;ADC_Buttons.c,520 :: 		while(!RA2_bit);
+L_SampleButtons240:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons235
-	GOTO        L_SampleButtons234
-L_SampleButtons235:
-;ADC_Buttons.c,512 :: 		enC_line_inc = 1;
+	GOTO        L_SampleButtons241
+	GOTO        L_SampleButtons240
+L_SampleButtons241:
+;ADC_Buttons.c,521 :: 		enC_line_inc = 1;
 	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,513 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,522 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       1
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3346,12 +3410,12 @@ L_SampleButtons235:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,514 :: 		}
-L_SampleButtons233:
-;ADC_Buttons.c,515 :: 		}
-L_SampleButtons232:
-;ADC_Buttons.c,516 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
-L_SampleButtons236:
+;ADC_Buttons.c,523 :: 		}
+L_SampleButtons239:
+;ADC_Buttons.c,524 :: 		}
+L_SampleButtons238:
+;ADC_Buttons.c,525 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+L_SampleButtons242:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3364,11 +3428,11 @@ L_SampleButtons236:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons239
+	GOTO        L_SampleButtons245
 	BTFSC       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons239
-L__SampleButtons285:
-;ADC_Buttons.c,517 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons245
+L__SampleButtons324:
+;ADC_Buttons.c,526 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -3378,37 +3442,37 @@ L__SampleButtons285:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,518 :: 		OK_B = 1;
+;ADC_Buttons.c,527 :: 		OK_B = 1;
 	BSF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,519 :: 		enC_line_inc = 2;
+;ADC_Buttons.c,528 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,520 :: 		Save_EncoderValue(Sps.SpkeTmr);
+;ADC_Buttons.c,529 :: 		Save_EncoderValue(Sps.SpkeTmr);
 	MOVF        _Sps+10, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _Sps+11, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,521 :: 		while(!RA2_bit);
-L_SampleButtons240:
+;ADC_Buttons.c,530 :: 		while(!RA2_bit);
+L_SampleButtons246:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons241
-	GOTO        L_SampleButtons240
-L_SampleButtons241:
-;ADC_Buttons.c,522 :: 		}
-L_SampleButtons239:
-;ADC_Buttons.c,523 :: 		if(OK_B){
+	GOTO        L_SampleButtons247
+	GOTO        L_SampleButtons246
+L_SampleButtons247:
+;ADC_Buttons.c,531 :: 		}
+L_SampleButtons245:
+;ADC_Buttons.c,532 :: 		if(OK_B){
 	BTFSS       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons242
-;ADC_Buttons.c,524 :: 		Sps.SpkeTmr = Get_EncoderValue();
+	GOTO        L_SampleButtons248
+;ADC_Buttons.c,533 :: 		Sps.SpkeTmr = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+10 
 	MOVF        R1, 0 
 	MOVWF       _Sps+11 
-;ADC_Buttons.c,525 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,534 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3421,21 +3485,21 @@ L_SampleButtons239:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons243
-;ADC_Buttons.c,526 :: 		OK_B = 0;
+	GOTO        L_SampleButtons249
+;ADC_Buttons.c,535 :: 		OK_B = 0;
 	BCF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,527 :: 		while(!RA2_bit);
-L_SampleButtons244:
+;ADC_Buttons.c,536 :: 		while(!RA2_bit);
+L_SampleButtons250:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons245
-	GOTO        L_SampleButtons244
-L_SampleButtons245:
-;ADC_Buttons.c,528 :: 		enC_line_inc = 2;
+	GOTO        L_SampleButtons251
+	GOTO        L_SampleButtons250
+L_SampleButtons251:
+;ADC_Buttons.c,537 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,529 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,538 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       2
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3445,13 +3509,13 @@ L_SampleButtons245:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,530 :: 		}
-L_SampleButtons243:
-;ADC_Buttons.c,531 :: 		}
-L_SampleButtons242:
-;ADC_Buttons.c,532 :: 		case 3:
-L_SampleButtons246:
-;ADC_Buttons.c,533 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret       ");
+;ADC_Buttons.c,539 :: 		}
+L_SampleButtons249:
+;ADC_Buttons.c,540 :: 		}
+L_SampleButtons248:
+;ADC_Buttons.c,541 :: 		case 3:
+L_SampleButtons252:
+;ADC_Buttons.c,542 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret       ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -3463,7 +3527,7 @@ L_SampleButtons246:
 	MOVLW       hi_addr(?lstr58_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,534 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SpikeDeg:=");
+;ADC_Buttons.c,543 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SpikeDeg:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3475,7 +3539,7 @@ L_SampleButtons246:
 	MOVLW       hi_addr(?lstr59_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,535 :: 		sprintf(txt4,"%3d",Sps.SokDeg);
+;ADC_Buttons.c,544 :: 		sprintf(txt4,"%3d",Sps.SokDeg);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3491,7 +3555,7 @@ L_SampleButtons246:
 	MOVF        _Sps+5, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,536 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,545 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3503,7 +3567,7 @@ L_SampleButtons246:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,537 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SpikeTmr:=");
+;ADC_Buttons.c,546 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SpikeTmr:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3515,7 +3579,7 @@ L_SampleButtons246:
 	MOVLW       hi_addr(?lstr61_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,538 :: 		sprintf(txt4,"%3d",Sps.SokTmr);
+;ADC_Buttons.c,547 :: 		sprintf(txt4,"%3d",Sps.SokTmr);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3531,7 +3595,7 @@ L_SampleButtons246:
 	MOVF        _Sps+7, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,539 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+;ADC_Buttons.c,548 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3543,7 +3607,7 @@ L_SampleButtons246:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,540 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"          ");
+;ADC_Buttons.c,549 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"          ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -3555,11 +3619,11 @@ L_SampleButtons246:
 	MOVLW       hi_addr(?lstr63_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,541 :: 		break;
-	GOTO        L_SampleButtons221
-;ADC_Buttons.c,542 :: 		default:    //clear screen & update cursor position
-L_SampleButtons247:
-;ADC_Buttons.c,543 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,550 :: 		break;
+	GOTO        L_SampleButtons227
+;ADC_Buttons.c,551 :: 		default:    //clear screen & update cursor position
+L_SampleButtons253:
+;ADC_Buttons.c,552 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -3567,10 +3631,10 @@ L_SampleButtons247:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,544 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,553 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,545 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,554 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -3578,70 +3642,70 @@ L_SampleButtons247:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,546 :: 		enC_last = -1;
+;ADC_Buttons.c,555 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,547 :: 		break;
-	GOTO        L_SampleButtons221
-;ADC_Buttons.c,548 :: 		}
-L_SampleButtons220:
+;ADC_Buttons.c,556 :: 		break;
+	GOTO        L_SampleButtons227
+;ADC_Buttons.c,557 :: 		}
+L_SampleButtons226:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons370
+	GOTO        L__SampleButtons411
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons370:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons222
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons371
-	MOVLW       1
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons371:
+L__SampleButtons411:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons228
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons372
-	MOVLW       2
+	GOTO        L__SampleButtons412
+	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons372:
+L__SampleButtons412:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons236
+	GOTO        L_SampleButtons234
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons373
+	GOTO        L__SampleButtons413
+	MOVLW       2
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons413:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons242
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons414
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons373:
+L__SampleButtons414:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons246
-	GOTO        L_SampleButtons247
-L_SampleButtons221:
-;ADC_Buttons.c,549 :: 		break;
+	GOTO        L_SampleButtons252
+	GOTO        L_SampleButtons253
+L_SampleButtons227:
+;ADC_Buttons.c,558 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,550 :: 		case CoolSettings:
-L_SampleButtons248:
-;ADC_Buttons.c,551 :: 		if(enC > 3){
+;ADC_Buttons.c,559 :: 		case CoolSettings:
+L_SampleButtons254:
+;ADC_Buttons.c,560 :: 		if(enC > 3){
 	MOVLW       0
 	MOVWF       R0 
 	MOVF        ADC_Buttons_enC+1, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons374
+	GOTO        L__SampleButtons415
 	MOVF        ADC_Buttons_enC+0, 0 
 	SUBLW       3
-L__SampleButtons374:
+L__SampleButtons415:
 	BTFSC       STATUS+0, 0 
-	GOTO        L_SampleButtons249
-;ADC_Buttons.c,552 :: 		enC = Save_EncoderValue(3);
+	GOTO        L_SampleButtons255
+;ADC_Buttons.c,561 :: 		enC = Save_EncoderValue(3);
 	MOVLW       3
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3651,51 +3715,13 @@ L__SampleButtons374:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,553 :: 		}
-L_SampleButtons249:
-;ADC_Buttons.c,554 :: 		ret6:
-___SampleButtons_ret6:
-;ADC_Buttons.c,555 :: 		switch(enC){
-	GOTO        L_SampleButtons250
-;ADC_Buttons.c,556 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == CoolSettings)){
-L_SampleButtons252:
-	MOVLW       PORTA+0
-	MOVWF       FARG_Button_port+0 
-	MOVLW       hi_addr(PORTA+0)
-	MOVWF       FARG_Button_port+1 
-	MOVLW       2
-	MOVWF       FARG_Button_pin+0 
-	MOVLW       200
-	MOVWF       FARG_Button_time_ms+0 
-	CLRF        FARG_Button_active_state+0 
-	CALL        _Button+0, 0
-	MOVF        R0, 1 
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons255
-	MOVF        _Sps+16, 0 
-	XORLW       7
-	BTFSS       STATUS+0, 2 
-	GOTO        L_SampleButtons255
-L__SampleButtons284:
-;ADC_Buttons.c,557 :: 		Sps.State = TempMenu;
-	MOVLW       2
-	MOVWF       _Sps+16 
-;ADC_Buttons.c,558 :: 		while(!RA2_bit);
-L_SampleButtons256:
-	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons257
-	GOTO        L_SampleButtons256
-L_SampleButtons257:
-;ADC_Buttons.c,559 :: 		enC = 13;
-	MOVLW       13
-	MOVWF       ADC_Buttons_enC+0 
-	MOVLW       0
-	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,560 :: 		goto ret6;
-	GOTO        ___SampleButtons_ret6
-;ADC_Buttons.c,561 :: 		}
+;ADC_Buttons.c,562 :: 		}
 L_SampleButtons255:
-;ADC_Buttons.c,562 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+;ADC_Buttons.c,563 :: 		ret6:
+___SampleButtons_ret6:
+;ADC_Buttons.c,564 :: 		switch(enC){
+	GOTO        L_SampleButtons256
+;ADC_Buttons.c,565 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == CoolSettings)){
 L_SampleButtons258:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
@@ -3710,10 +3736,48 @@ L_SampleButtons258:
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons261
-	BTFSC       ADC_Buttons_B_+0, 0 
+	MOVF        _Sps+16, 0 
+	XORLW       7
+	BTFSS       STATUS+0, 2 
 	GOTO        L_SampleButtons261
-L__SampleButtons283:
-;ADC_Buttons.c,563 :: 		enC = Save_EncoderValue(enC);
+L__SampleButtons323:
+;ADC_Buttons.c,566 :: 		Sps.State = TempMenu;
+	MOVLW       2
+	MOVWF       _Sps+16 
+;ADC_Buttons.c,567 :: 		while(!RA2_bit);
+L_SampleButtons262:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons263
+	GOTO        L_SampleButtons262
+L_SampleButtons263:
+;ADC_Buttons.c,568 :: 		enC = 13;
+	MOVLW       13
+	MOVWF       ADC_Buttons_enC+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,569 :: 		goto ret6;
+	GOTO        ___SampleButtons_ret6
+;ADC_Buttons.c,570 :: 		}
+L_SampleButtons261:
+;ADC_Buttons.c,571 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+L_SampleButtons264:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons267
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons267
+L__SampleButtons322:
+;ADC_Buttons.c,572 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -3723,31 +3787,31 @@ L__SampleButtons283:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,564 :: 		OK_A = 1;
+;ADC_Buttons.c,573 :: 		OK_A = 1;
 	BSF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,565 :: 		enC_line_inc = 1;
+;ADC_Buttons.c,574 :: 		enC_line_inc = 1;
 	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,566 :: 		Save_EncoderValue(Sps.CoolOffDeg);
+;ADC_Buttons.c,575 :: 		Save_EncoderValue(Sps.CoolOffDeg);
 	MOVF        _Sps+12, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _Sps+13, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,567 :: 		}
-L_SampleButtons261:
-;ADC_Buttons.c,568 :: 		if(OK_A){
+;ADC_Buttons.c,576 :: 		}
+L_SampleButtons267:
+;ADC_Buttons.c,577 :: 		if(OK_A){
 	BTFSS       ADC_Buttons_B_+0, 0 
-	GOTO        L_SampleButtons262
-;ADC_Buttons.c,569 :: 		Sps.CoolOffDeg = Get_EncoderValue();
+	GOTO        L_SampleButtons268
+;ADC_Buttons.c,578 :: 		Sps.CoolOffDeg = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+12 
 	MOVF        R1, 0 
 	MOVWF       _Sps+13 
-;ADC_Buttons.c,570 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,579 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3760,21 +3824,21 @@ L_SampleButtons261:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons263
-;ADC_Buttons.c,571 :: 		OK_A = 0;
+	GOTO        L_SampleButtons269
+;ADC_Buttons.c,580 :: 		OK_A = 0;
 	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,572 :: 		while(!RA2_bit);
-L_SampleButtons264:
+;ADC_Buttons.c,581 :: 		while(!RA2_bit);
+L_SampleButtons270:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons265
-	GOTO        L_SampleButtons264
-L_SampleButtons265:
-;ADC_Buttons.c,573 :: 		enC_line_inc = 1;
+	GOTO        L_SampleButtons271
+	GOTO        L_SampleButtons270
+L_SampleButtons271:
+;ADC_Buttons.c,582 :: 		enC_line_inc = 1;
 	MOVLW       1
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,574 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,583 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       1
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3784,12 +3848,12 @@ L_SampleButtons265:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,575 :: 		}
-L_SampleButtons263:
-;ADC_Buttons.c,576 :: 		}
-L_SampleButtons262:
-;ADC_Buttons.c,577 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
-L_SampleButtons266:
+;ADC_Buttons.c,584 :: 		}
+L_SampleButtons269:
+;ADC_Buttons.c,585 :: 		}
+L_SampleButtons268:
+;ADC_Buttons.c,586 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+L_SampleButtons272:
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3802,11 +3866,11 @@ L_SampleButtons266:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons269
+	GOTO        L_SampleButtons275
 	BTFSC       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons269
-L__SampleButtons282:
-;ADC_Buttons.c,578 :: 		enC = Save_EncoderValue(enC);
+	GOTO        L_SampleButtons275
+L__SampleButtons321:
+;ADC_Buttons.c,587 :: 		enC = Save_EncoderValue(enC);
 	MOVF        ADC_Buttons_enC+0, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        ADC_Buttons_enC+1, 0 
@@ -3816,37 +3880,37 @@ L__SampleButtons282:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,579 :: 		OK_B = 1;
+;ADC_Buttons.c,588 :: 		OK_B = 1;
 	BSF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,580 :: 		enC_line_inc = 2;
+;ADC_Buttons.c,589 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,581 :: 		Save_EncoderValue(Sps.CoolOffTmr);
+;ADC_Buttons.c,590 :: 		Save_EncoderValue(Sps.CoolOffTmr);
 	MOVF        _Sps+14, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVF        _Sps+15, 0 
 	MOVWF       FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
-;ADC_Buttons.c,582 :: 		while(!RA2_bit);
-L_SampleButtons270:
+;ADC_Buttons.c,591 :: 		while(!RA2_bit);
+L_SampleButtons276:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons271
-	GOTO        L_SampleButtons270
-L_SampleButtons271:
-;ADC_Buttons.c,583 :: 		}
-L_SampleButtons269:
-;ADC_Buttons.c,584 :: 		if(OK_B){
+	GOTO        L_SampleButtons277
+	GOTO        L_SampleButtons276
+L_SampleButtons277:
+;ADC_Buttons.c,592 :: 		}
+L_SampleButtons275:
+;ADC_Buttons.c,593 :: 		if(OK_B){
 	BTFSS       ADC_Buttons_B_+0, 1 
-	GOTO        L_SampleButtons272
-;ADC_Buttons.c,585 :: 		Sps.CoolOffTmr = Get_EncoderValue();
+	GOTO        L_SampleButtons278
+;ADC_Buttons.c,594 :: 		Sps.CoolOffTmr = Get_EncoderValue();
 	CALL        _Get_EncoderValue+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+14 
 	MOVF        R1, 0 
 	MOVWF       _Sps+15 
-;ADC_Buttons.c,586 :: 		if(Button(&PORTA, 2, 200, 0)){
+;ADC_Buttons.c,595 :: 		if(Button(&PORTA, 2, 200, 0)){
 	MOVLW       PORTA+0
 	MOVWF       FARG_Button_port+0 
 	MOVLW       hi_addr(PORTA+0)
@@ -3859,21 +3923,21 @@ L_SampleButtons269:
 	CALL        _Button+0, 0
 	MOVF        R0, 1 
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons273
-;ADC_Buttons.c,587 :: 		OK_B = 0;
+	GOTO        L_SampleButtons279
+;ADC_Buttons.c,596 :: 		OK_B = 0;
 	BCF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,588 :: 		while(!RA2_bit);
-L_SampleButtons274:
+;ADC_Buttons.c,597 :: 		while(!RA2_bit);
+L_SampleButtons280:
 	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
-	GOTO        L_SampleButtons275
-	GOTO        L_SampleButtons274
-L_SampleButtons275:
-;ADC_Buttons.c,589 :: 		enC_line_inc = 2;
+	GOTO        L_SampleButtons281
+	GOTO        L_SampleButtons280
+L_SampleButtons281:
+;ADC_Buttons.c,598 :: 		enC_line_inc = 2;
 	MOVLW       2
 	MOVWF       ADC_Buttons_enC_line_inc+0 
 	MOVLW       0
 	MOVWF       ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,590 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,599 :: 		enC = Save_EncoderValue(enC_line_inc);
 	MOVLW       2
 	MOVWF       FARG_Save_EncoderValue_new_val+0 
 	MOVLW       0
@@ -3883,13 +3947,13 @@ L_SampleButtons275:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,591 :: 		}
-L_SampleButtons273:
-;ADC_Buttons.c,592 :: 		}
-L_SampleButtons272:
-;ADC_Buttons.c,593 :: 		case 3:
-L_SampleButtons276:
-;ADC_Buttons.c,594 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
+;ADC_Buttons.c,600 :: 		}
+L_SampleButtons279:
+;ADC_Buttons.c,601 :: 		}
+L_SampleButtons278:
+;ADC_Buttons.c,602 :: 		case 3:
+L_SampleButtons282:
+;ADC_Buttons.c,603 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       1
@@ -3901,7 +3965,7 @@ L_SampleButtons276:
 	MOVLW       hi_addr(?lstr64_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,595 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"CoolDeg:=");
+;ADC_Buttons.c,604 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"CoolDeg:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3913,7 +3977,7 @@ L_SampleButtons276:
 	MOVLW       hi_addr(?lstr65_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,596 :: 		sprintf(txt4,"%3d",Sps.CoolOffDeg);
+;ADC_Buttons.c,605 :: 		sprintf(txt4,"%3d",Sps.CoolOffDeg);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3929,7 +3993,7 @@ L_SampleButtons276:
 	MOVF        _Sps+13, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,597 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+;ADC_Buttons.c,606 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       2
@@ -3941,7 +4005,7 @@ L_SampleButtons276:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,598 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"CoolTmr:=");
+;ADC_Buttons.c,607 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"CoolTmr:=");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3953,7 +4017,7 @@ L_SampleButtons276:
 	MOVLW       hi_addr(?lstr67_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,599 :: 		sprintf(txt4,"%3d",Sps.CoolOffTmr);
+;ADC_Buttons.c,608 :: 		sprintf(txt4,"%3d",Sps.CoolOffTmr);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3969,7 +4033,7 @@ L_SampleButtons276:
 	MOVF        _Sps+15, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
-;ADC_Buttons.c,600 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+;ADC_Buttons.c,609 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
@@ -3981,7 +4045,7 @@ L_SampleButtons276:
 	MOVLW       hi_addr(_txt4+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,601 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
+;ADC_Buttons.c,610 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       4
@@ -3993,11 +4057,11 @@ L_SampleButtons276:
 	MOVLW       hi_addr(?lstr69_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,602 :: 		break;
-	GOTO        L_SampleButtons251
-;ADC_Buttons.c,603 :: 		default:    //clear screen & update cursor position
-L_SampleButtons277:
-;ADC_Buttons.c,604 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+;ADC_Buttons.c,611 :: 		break;
+	GOTO        L_SampleButtons257
+;ADC_Buttons.c,612 :: 		default:    //clear screen & update cursor position
+L_SampleButtons283:
+;ADC_Buttons.c,613 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -4005,10 +4069,10 @@ L_SampleButtons277:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,605 :: 		enC_line_inc = 0;
+;ADC_Buttons.c,614 :: 		enC_line_inc = 0;
 	CLRF        ADC_Buttons_enC_line_inc+0 
 	CLRF        ADC_Buttons_enC_line_inc+1 
-;ADC_Buttons.c,606 :: 		enC = Save_EncoderValue(enC_line_inc);
+;ADC_Buttons.c,615 :: 		enC = Save_EncoderValue(enC_line_inc);
 	CLRF        FARG_Save_EncoderValue_new_val+0 
 	CLRF        FARG_Save_EncoderValue_new_val+1 
 	CALL        _Save_EncoderValue+0, 0
@@ -4016,62 +4080,494 @@ L_SampleButtons277:
 	MOVWF       ADC_Buttons_enC+0 
 	MOVF        R1, 0 
 	MOVWF       ADC_Buttons_enC+1 
-;ADC_Buttons.c,607 :: 		enC_last = -1;
+;ADC_Buttons.c,616 :: 		enC_last = -1;
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+0 
 	MOVLW       255
 	MOVWF       ADC_Buttons_enC_last+1 
-;ADC_Buttons.c,608 :: 		break;
-	GOTO        L_SampleButtons251
-;ADC_Buttons.c,609 :: 		}
-L_SampleButtons250:
+;ADC_Buttons.c,617 :: 		break;
+	GOTO        L_SampleButtons257
+;ADC_Buttons.c,618 :: 		}
+L_SampleButtons256:
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons375
+	GOTO        L__SampleButtons416
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons375:
-	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons252
-	MOVLW       0
-	XORWF       ADC_Buttons_enC+1, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons376
-	MOVLW       1
-	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons376:
+L__SampleButtons416:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_SampleButtons258
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons377
-	MOVLW       2
+	GOTO        L__SampleButtons417
+	MOVLW       1
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons377:
+L__SampleButtons417:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons266
+	GOTO        L_SampleButtons264
 	MOVLW       0
 	XORWF       ADC_Buttons_enC+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__SampleButtons378
+	GOTO        L__SampleButtons418
+	MOVLW       2
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons418:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons272
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons419
 	MOVLW       3
 	XORWF       ADC_Buttons_enC+0, 0 
-L__SampleButtons378:
+L__SampleButtons419:
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons276
-	GOTO        L_SampleButtons277
-L_SampleButtons251:
-;ADC_Buttons.c,610 :: 		break;
+	GOTO        L_SampleButtons282
+	GOTO        L_SampleButtons283
+L_SampleButtons257:
+;ADC_Buttons.c,619 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,611 :: 		default: Sps.State = Return;
-L_SampleButtons278:
+;ADC_Buttons.c,620 :: 		case TimeSettings:
+L_SampleButtons284:
+;ADC_Buttons.c,621 :: 		if(enC > 3){
+	MOVLW       0
+	MOVWF       R0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons420
+	MOVF        ADC_Buttons_enC+0, 0 
+	SUBLW       3
+L__SampleButtons420:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_SampleButtons285
+;ADC_Buttons.c,622 :: 		enC = Save_EncoderValue(3);
+	MOVLW       3
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,623 :: 		}
+L_SampleButtons285:
+;ADC_Buttons.c,624 :: 		ret7:
+___SampleButtons_ret7:
+;ADC_Buttons.c,625 :: 		switch(enC){
+	GOTO        L_SampleButtons286
+;ADC_Buttons.c,626 :: 		case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == TimeSettings)){
+L_SampleButtons288:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons291
+	MOVF        _Sps+16, 0 
+	XORLW       8
+	BTFSS       STATUS+0, 2 
+	GOTO        L_SampleButtons291
+L__SampleButtons320:
+;ADC_Buttons.c,627 :: 		Sps.State = TempMenu;
+	MOVLW       2
+	MOVWF       _Sps+16 
+;ADC_Buttons.c,628 :: 		while(!RA2_bit);
+L_SampleButtons292:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons293
+	GOTO        L_SampleButtons292
+L_SampleButtons293:
+;ADC_Buttons.c,629 :: 		enC = 13;
+	MOVLW       13
+	MOVWF       ADC_Buttons_enC+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,630 :: 		goto ret7;
+	GOTO        ___SampleButtons_ret7
+;ADC_Buttons.c,631 :: 		}
+L_SampleButtons291:
+;ADC_Buttons.c,632 :: 		case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+L_SampleButtons294:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons297
+	BTFSC       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons297
+L__SampleButtons319:
+;ADC_Buttons.c,633 :: 		enC = Save_EncoderValue(enC);
+	MOVF        ADC_Buttons_enC+0, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,634 :: 		OK_A = 1;OK_B=0;
+	BSF         ADC_Buttons_B_+0, 0 
+	BCF         ADC_Buttons_B_+0, 1 
+;ADC_Buttons.c,635 :: 		enC_line_inc = 1;
+	MOVLW       1
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,636 :: 		Save_EncoderValue(Sps.SerialWriteDly);
+	MOVF        _Sps+17, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+;ADC_Buttons.c,637 :: 		}
+L_SampleButtons297:
+;ADC_Buttons.c,638 :: 		if(OK_A){
+	BTFSS       ADC_Buttons_B_+0, 0 
+	GOTO        L_SampleButtons298
+;ADC_Buttons.c,639 :: 		Sps.SerialWriteDly = Get_EncoderValue();
+	CALL        _Get_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       _Sps+17 
+;ADC_Buttons.c,640 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons299
+;ADC_Buttons.c,641 :: 		OK_A = 0;
+	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,642 :: 		while(!RA2_bit);
+L_SampleButtons300:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons301
+	GOTO        L_SampleButtons300
+L_SampleButtons301:
+;ADC_Buttons.c,643 :: 		enC_line_inc = 1;
+	MOVLW       1
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,644 :: 		enC = Save_EncoderValue(enC_line_inc);
+	MOVLW       1
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,645 :: 		}
+L_SampleButtons299:
+;ADC_Buttons.c,646 :: 		}
+L_SampleButtons298:
+;ADC_Buttons.c,647 :: 		case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+L_SampleButtons302:
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons305
+	BTFSC       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons305
+L__SampleButtons318:
+;ADC_Buttons.c,648 :: 		enC = Save_EncoderValue(enC);
+	MOVF        ADC_Buttons_enC+0, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVF        ADC_Buttons_enC+1, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,649 :: 		OK_B = 1;OK_A=0;
+	BSF         ADC_Buttons_B_+0, 1 
+	BCF         ADC_Buttons_B_+0, 0 
+;ADC_Buttons.c,650 :: 		enC_line_inc = 2;
+	MOVLW       2
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,651 :: 		Save_EncoderValue(DegC.SampleTmrSP);
+	MOVF        _DegC+22, 0 
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+;ADC_Buttons.c,652 :: 		while(!RA2_bit);
+L_SampleButtons306:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons307
+	GOTO        L_SampleButtons306
+L_SampleButtons307:
+;ADC_Buttons.c,653 :: 		}
+L_SampleButtons305:
+;ADC_Buttons.c,654 :: 		if(OK_B){
+	BTFSS       ADC_Buttons_B_+0, 1 
+	GOTO        L_SampleButtons308
+;ADC_Buttons.c,655 :: 		DegC.SampleTmrSP = Get_EncoderValue();
+	CALL        _Get_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       _DegC+22 
+;ADC_Buttons.c,656 :: 		if(Button(&PORTA, 2, 200, 0)){
+	MOVLW       PORTA+0
+	MOVWF       FARG_Button_port+0 
+	MOVLW       hi_addr(PORTA+0)
+	MOVWF       FARG_Button_port+1 
+	MOVLW       2
+	MOVWF       FARG_Button_pin+0 
+	MOVLW       200
+	MOVWF       FARG_Button_time_ms+0 
+	CLRF        FARG_Button_active_state+0 
+	CALL        _Button+0, 0
+	MOVF        R0, 1 
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons309
+;ADC_Buttons.c,657 :: 		OK_B = 0;
+	BCF         ADC_Buttons_B_+0, 1 
+;ADC_Buttons.c,658 :: 		while(!RA2_bit);
+L_SampleButtons310:
+	BTFSC       RA2_bit+0, BitPos(RA2_bit+0) 
+	GOTO        L_SampleButtons311
+	GOTO        L_SampleButtons310
+L_SampleButtons311:
+;ADC_Buttons.c,659 :: 		enC_line_inc = 2;
+	MOVLW       2
+	MOVWF       ADC_Buttons_enC_line_inc+0 
+	MOVLW       0
+	MOVWF       ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,660 :: 		enC = Save_EncoderValue(enC_line_inc);
+	MOVLW       2
+	MOVWF       FARG_Save_EncoderValue_new_val+0 
+	MOVLW       0
+	MOVWF       FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,661 :: 		}
+L_SampleButtons309:
+;ADC_Buttons.c,662 :: 		}
+L_SampleButtons308:
+;ADC_Buttons.c,663 :: 		case 3:
+L_SampleButtons312:
+;ADC_Buttons.c,664 :: 		I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       1
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr70_ADC_Buttons+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr70_ADC_Buttons+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,665 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Ser Dly:=");
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr71_ADC_Buttons+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr71_ADC_Buttons+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,666 :: 		sprintf(txt4,"%4d",Sps.SerialWriteDly);
+	MOVLW       _txt4+0
+	MOVWF       FARG_sprintf_wh+0 
+	MOVLW       hi_addr(_txt4+0)
+	MOVWF       FARG_sprintf_wh+1 
+	MOVLW       ?lstr_72_ADC_Buttons+0
+	MOVWF       FARG_sprintf_f+0 
+	MOVLW       hi_addr(?lstr_72_ADC_Buttons+0)
+	MOVWF       FARG_sprintf_f+1 
+	MOVLW       higher_addr(?lstr_72_ADC_Buttons+0)
+	MOVWF       FARG_sprintf_f+2 
+	MOVF        _Sps+17, 0 
+	MOVWF       FARG_sprintf_wh+5 
+	CALL        _sprintf+0, 0
+;ADC_Buttons.c,667 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       16
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       _txt4+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(_txt4+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,668 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,2,"'C  Dly:=");
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       3
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr73_ADC_Buttons+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr73_ADC_Buttons+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,669 :: 		sprintf(txt4,"%4d",DegC.SampleTmrSP);
+	MOVLW       _txt4+0
+	MOVWF       FARG_sprintf_wh+0 
+	MOVLW       hi_addr(_txt4+0)
+	MOVWF       FARG_sprintf_wh+1 
+	MOVLW       ?lstr_74_ADC_Buttons+0
+	MOVWF       FARG_sprintf_f+0 
+	MOVLW       hi_addr(?lstr_74_ADC_Buttons+0)
+	MOVWF       FARG_sprintf_f+1 
+	MOVLW       higher_addr(?lstr_74_ADC_Buttons+0)
+	MOVWF       FARG_sprintf_f+2 
+	MOVF        _DegC+22, 0 
+	MOVWF       FARG_sprintf_wh+5 
+	CALL        _sprintf+0, 0
+;ADC_Buttons.c,670 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       3
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       16
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       _txt4+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(_txt4+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,671 :: 		I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_LCD_Out_addr+0 
+	MOVLW       4
+	MOVWF       FARG_I2C_LCD_Out_row+0 
+	MOVLW       2
+	MOVWF       FARG_I2C_LCD_Out_col+0 
+	MOVLW       ?lstr75_ADC_Buttons+0
+	MOVWF       FARG_I2C_LCD_Out_s+0 
+	MOVLW       hi_addr(?lstr75_ADC_Buttons+0)
+	MOVWF       FARG_I2C_LCD_Out_s+1 
+	CALL        _I2C_LCD_Out+0, 0
+;ADC_Buttons.c,672 :: 		break;
+	GOTO        L_SampleButtons287
+;ADC_Buttons.c,673 :: 		default:    //clear screen & update cursor position
+L_SampleButtons313:
+;ADC_Buttons.c,674 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+	MOVF        _LCD_01_ADDRESS+0, 0 
+	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
+	MOVLW       5
+	MOVWF       FARG_I2C_Lcd_Cmd_cmd+0 
+	MOVLW       1
+	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
+	CALL        _I2C_Lcd_Cmd+0, 0
+;ADC_Buttons.c,675 :: 		enC_line_inc = 0;
+	CLRF        ADC_Buttons_enC_line_inc+0 
+	CLRF        ADC_Buttons_enC_line_inc+1 
+;ADC_Buttons.c,676 :: 		enC = Save_EncoderValue(enC_line_inc);
+	CLRF        FARG_Save_EncoderValue_new_val+0 
+	CLRF        FARG_Save_EncoderValue_new_val+1 
+	CALL        _Save_EncoderValue+0, 0
+	MOVF        R0, 0 
+	MOVWF       ADC_Buttons_enC+0 
+	MOVF        R1, 0 
+	MOVWF       ADC_Buttons_enC+1 
+;ADC_Buttons.c,677 :: 		enC_last = -1;
+	MOVLW       255
+	MOVWF       ADC_Buttons_enC_last+0 
+	MOVLW       255
+	MOVWF       ADC_Buttons_enC_last+1 
+;ADC_Buttons.c,678 :: 		break;
+	GOTO        L_SampleButtons287
+;ADC_Buttons.c,679 :: 		}
+L_SampleButtons286:
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons421
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons421:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons288
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons422
+	MOVLW       1
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons422:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons294
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons423
+	MOVLW       2
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons423:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons302
+	MOVLW       0
+	XORWF       ADC_Buttons_enC+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__SampleButtons424
+	MOVLW       3
+	XORWF       ADC_Buttons_enC+0, 0 
+L__SampleButtons424:
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons312
+	GOTO        L_SampleButtons313
+L_SampleButtons287:
+;ADC_Buttons.c,680 :: 		break;
+	GOTO        L_SampleButtons20
+;ADC_Buttons.c,681 :: 		default: Sps.State = Return;
+L_SampleButtons314:
 	MOVLW       1
 	MOVWF       _Sps+16 
-;ADC_Buttons.c,612 :: 		break;
+;ADC_Buttons.c,682 :: 		break;
 	GOTO        L_SampleButtons20
-;ADC_Buttons.c,613 :: 		}
+;ADC_Buttons.c,683 :: 		}
 L_SampleButtons19:
 	MOVF        _Sps+16, 0 
 	XORLW       1
@@ -4080,74 +4576,78 @@ L_SampleButtons19:
 	MOVF        _Sps+16, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons53
+	GOTO        L_SampleButtons56
 	MOVF        _Sps+16, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons85
+	GOTO        L_SampleButtons91
 	MOVF        _Sps+16, 0 
 	XORLW       4
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons154
+	GOTO        L_SampleButtons160
 	MOVF        _Sps+16, 0 
 	XORLW       5
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons186
+	GOTO        L_SampleButtons192
 	MOVF        _Sps+16, 0 
 	XORLW       6
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons218
+	GOTO        L_SampleButtons224
 	MOVF        _Sps+16, 0 
 	XORLW       7
 	BTFSC       STATUS+0, 2 
-	GOTO        L_SampleButtons248
-	GOTO        L_SampleButtons278
+	GOTO        L_SampleButtons254
+	MOVF        _Sps+16, 0 
+	XORLW       8
+	BTFSC       STATUS+0, 2 
+	GOTO        L_SampleButtons284
+	GOTO        L_SampleButtons314
 L_SampleButtons20:
-;ADC_Buttons.c,615 :: 		}
+;ADC_Buttons.c,685 :: 		}
 L_SampleButtons14:
-;ADC_Buttons.c,617 :: 		if(EEWrt){
+;ADC_Buttons.c,687 :: 		if(EEWrt){
 	BTFSS       ADC_Buttons_B+0, 4 
-	GOTO        L_SampleButtons279
-;ADC_Buttons.c,618 :: 		EEWrite();
+	GOTO        L_SampleButtons315
+;ADC_Buttons.c,688 :: 		EEWrite();
 	CALL        _EEWrite+0, 0
-;ADC_Buttons.c,619 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Writing To EEPROM...");
+;ADC_Buttons.c,689 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Writing To EEPROM...");
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_LCD_Out_addr+0 
 	MOVLW       3
 	MOVWF       FARG_I2C_LCD_Out_row+0 
 	MOVLW       1
 	MOVWF       FARG_I2C_LCD_Out_col+0 
-	MOVLW       ?lstr70_ADC_Buttons+0
+	MOVLW       ?lstr76_ADC_Buttons+0
 	MOVWF       FARG_I2C_LCD_Out_s+0 
-	MOVLW       hi_addr(?lstr70_ADC_Buttons+0)
+	MOVLW       hi_addr(?lstr76_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,620 :: 		Delay_ms(1000);
+;ADC_Buttons.c,690 :: 		Delay_ms(1000);
 	MOVLW       82
 	MOVWF       R11, 0
 	MOVLW       43
 	MOVWF       R12, 0
 	MOVLW       0
 	MOVWF       R13, 0
-L_SampleButtons280:
+L_SampleButtons316:
 	DECFSZ      R13, 1, 1
-	BRA         L_SampleButtons280
+	BRA         L_SampleButtons316
 	DECFSZ      R12, 1, 1
-	BRA         L_SampleButtons280
+	BRA         L_SampleButtons316
 	DECFSZ      R11, 1, 1
-	BRA         L_SampleButtons280
+	BRA         L_SampleButtons316
 	NOP
-;ADC_Buttons.c,621 :: 		EERead();
+;ADC_Buttons.c,691 :: 		EERead();
 	CALL        _EERead+0, 0
-;ADC_Buttons.c,622 :: 		CalcTimerTicks(DegC.Temp_iPv);
+;ADC_Buttons.c,692 :: 		CalcTimerTicks(DegC.Temp_iPv);
 	MOVF        _DegC+16, 0 
 	MOVWF       FARG_CalcTimerTicks_iPv+0 
 	MOVF        _DegC+17, 0 
 	MOVWF       FARG_CalcTimerTicks_iPv+1 
 	CALL        _CalcTimerTicks+0, 0
-;ADC_Buttons.c,623 :: 		ResetBits();
+;ADC_Buttons.c,693 :: 		ResetBits();
 	CALL        _ResetBits+0, 0
-;ADC_Buttons.c,624 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);               // Clear display
+;ADC_Buttons.c,694 :: 		I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);               // Clear display
 	MOVF        _LCD_01_ADDRESS+0, 0 
 	MOVWF       FARG_I2C_Lcd_Cmd_addr+0 
 	MOVLW       5
@@ -4155,475 +4655,637 @@ L_SampleButtons280:
 	MOVLW       1
 	MOVWF       FARG_I2C_Lcd_Cmd_col+0 
 	CALL        _I2C_Lcd_Cmd+0, 0
-;ADC_Buttons.c,625 :: 		}
-L_SampleButtons279:
-;ADC_Buttons.c,627 :: 		}
+;ADC_Buttons.c,695 :: 		}
+L_SampleButtons315:
+;ADC_Buttons.c,697 :: 		}
 L_end_SampleButtons:
 	RETURN      0
 ; end of _SampleButtons
 
 _ResetBits:
 
-;ADC_Buttons.c,629 :: 		void ResetBits(){
-;ADC_Buttons.c,630 :: 		valOf     = 0;
+;ADC_Buttons.c,699 :: 		void ResetBits(){
+;ADC_Buttons.c,700 :: 		valOf     = 0;
 	CLRF        ADC_Buttons_valOf+0 
 	CLRF        ADC_Buttons_valOf+1 
-;ADC_Buttons.c,631 :: 		Sps.State = 0;
+;ADC_Buttons.c,701 :: 		Sps.State = 0;
 	CLRF        _Sps+16 
-;ADC_Buttons.c,632 :: 		Menu_Bit  = 0;
+;ADC_Buttons.c,702 :: 		Menu_Bit  = 0;
 	BCF         ADC_Buttons_B+0, 0 
-;ADC_Buttons.c,633 :: 		OK_A      = 0;
+;ADC_Buttons.c,703 :: 		OK_A      = 0;
 	BCF         ADC_Buttons_B_+0, 0 
-;ADC_Buttons.c,634 :: 		OK_B      = 0;
+;ADC_Buttons.c,704 :: 		OK_B      = 0;
 	BCF         ADC_Buttons_B_+0, 1 
-;ADC_Buttons.c,635 :: 		OK_C      = 0;
+;ADC_Buttons.c,705 :: 		OK_C      = 0;
 	BCF         ADC_Buttons_B_+0, 2 
-;ADC_Buttons.c,636 :: 		OK_D      = 0;
+;ADC_Buttons.c,706 :: 		OK_D      = 0;
 	BCF         ADC_Buttons_B_+0, 3 
-;ADC_Buttons.c,637 :: 		OK_E      = 0;
+;ADC_Buttons.c,707 :: 		OK_E      = 0;
 	BCF         ADC_Buttons_B_+0, 4 
-;ADC_Buttons.c,638 :: 		OK_F      = 0;
+;ADC_Buttons.c,708 :: 		OK_F      = 0;
 	BCF         ADC_Buttons_B_+0, 5 
-;ADC_Buttons.c,639 :: 		OK_G      = 0;
+;ADC_Buttons.c,709 :: 		OK_G      = 0;
 	BCF         ADC_Buttons_B_+0, 6 
-;ADC_Buttons.c,640 :: 		OK_H      = 0;
+;ADC_Buttons.c,710 :: 		OK_H      = 0;
 	BCF         ADC_Buttons_B_+0, 7 
-;ADC_Buttons.c,641 :: 		OK_I      = 0;
+;ADC_Buttons.c,711 :: 		OK_I      = 0;
 	BCF         ADC_Buttons_B+0, 5 
-;ADC_Buttons.c,642 :: 		OK_J      = 0;
+;ADC_Buttons.c,712 :: 		OK_J      = 0;
 	BCF         ADC_Buttons_B+0, 6 
-;ADC_Buttons.c,643 :: 		OK_K      = 0;
+;ADC_Buttons.c,713 :: 		OK_K      = 0;
 	BCF         ADC_Buttons_B+0, 7 
-;ADC_Buttons.c,644 :: 		EEWrt = 0;
+;ADC_Buttons.c,714 :: 		EEWrt = 0;
 	BCF         ADC_Buttons_B+0, 4 
-;ADC_Buttons.c,645 :: 		P1 = 0;
+;ADC_Buttons.c,715 :: 		P1 = 0;
 	BCF         ADC_Buttons_P1+0, BitPos(ADC_Buttons_P1+0) 
-;ADC_Buttons.c,646 :: 		}
+;ADC_Buttons.c,716 :: 		}
 L_end_ResetBits:
 	RETURN      0
 ; end of _ResetBits
 
 _EERead:
 
-;ADC_Buttons.c,648 :: 		void EERead(){
-;ADC_Buttons.c,650 :: 		Lo(Sps.RmpDeg)  = EEPROM_Read(0x00);
+;ADC_Buttons.c,718 :: 		void EERead(){
+;ADC_Buttons.c,720 :: 		Lo(Sps.RmpDeg)  = EEPROM_Read(0x00);
 	CLRF        FARG_EEPROM_Read_address+0 
+	CLRF        FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+0 
-;ADC_Buttons.c,651 :: 		Hi(Sps.RmpDeg)  = EEPROM_Read(0x01);
+;ADC_Buttons.c,721 :: 		Hi(Sps.RmpDeg)  = EEPROM_Read(0x01);
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+1 
-;ADC_Buttons.c,652 :: 		Lo(Sps.RmpTmr)  = EEPROM_Read(0x02);
+;ADC_Buttons.c,722 :: 		Lo(Sps.RmpTmr)  = EEPROM_Read(0x02);
 	MOVLW       2
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+2 
-;ADC_Buttons.c,653 :: 		Hi(Sps.RmpTmr)  = EEPROM_Read(0x03);
+;ADC_Buttons.c,723 :: 		Hi(Sps.RmpTmr)  = EEPROM_Read(0x03);
 	MOVLW       3
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+3 
-;ADC_Buttons.c,654 :: 		Lo(Sps.SokDeg)  = EEPROM_Read(0x04);
+;ADC_Buttons.c,724 :: 		Lo(Sps.SokDeg)  = EEPROM_Read(0x04);
 	MOVLW       4
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+4 
-;ADC_Buttons.c,655 :: 		Hi(Sps.SokDeg)  = EEPROM_Read(0x05);
+;ADC_Buttons.c,725 :: 		Hi(Sps.SokDeg)  = EEPROM_Read(0x05);
 	MOVLW       5
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+5 
-;ADC_Buttons.c,656 :: 		Lo(Sps.SokTmr)  = EEPROM_Read(0x06);
+;ADC_Buttons.c,726 :: 		Lo(Sps.SokTmr)  = EEPROM_Read(0x06);
 	MOVLW       6
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+6 
-;ADC_Buttons.c,657 :: 		Hi(Sps.SokTmr)  = EEPROM_Read(0x07);
+;ADC_Buttons.c,727 :: 		Hi(Sps.SokTmr)  = EEPROM_Read(0x07);
 	MOVLW       7
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+7 
-;ADC_Buttons.c,658 :: 		Lo(Sps.SpkeDeg)  = EEPROM_Read(0x08);
+;ADC_Buttons.c,728 :: 		Lo(Sps.SpkeDeg)  = EEPROM_Read(0x08);
 	MOVLW       8
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+8 
-;ADC_Buttons.c,659 :: 		Hi(Sps.SpkeDeg)  = EEPROM_Read(0x09);
+;ADC_Buttons.c,729 :: 		Hi(Sps.SpkeDeg)  = EEPROM_Read(0x09);
 	MOVLW       9
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+9 
-;ADC_Buttons.c,660 :: 		Lo(Sps.SpkeTmr)  = EEPROM_Read(0x0A);
+;ADC_Buttons.c,730 :: 		Lo(Sps.SpkeTmr)  = EEPROM_Read(0x0A);
 	MOVLW       10
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+10 
-;ADC_Buttons.c,661 :: 		Hi(Sps.SpkeTmr)  = EEPROM_Read(0x0B);
+;ADC_Buttons.c,731 :: 		Hi(Sps.SpkeTmr)  = EEPROM_Read(0x0B);
 	MOVLW       11
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+11 
-;ADC_Buttons.c,662 :: 		Lo(Sps.CoolOffDeg)  = EEPROM_Read(0x0C);
+;ADC_Buttons.c,732 :: 		Lo(Sps.CoolOffDeg)  = EEPROM_Read(0x0C);
 	MOVLW       12
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+12 
-;ADC_Buttons.c,663 :: 		Hi(Sps.CoolOffDeg)  = EEPROM_Read(0x0D);
+;ADC_Buttons.c,733 :: 		Hi(Sps.CoolOffDeg)  = EEPROM_Read(0x0D);
 	MOVLW       13
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+13 
-;ADC_Buttons.c,664 :: 		Lo(Sps.CoolOffTmr)  = EEPROM_Read(0x0E);
+;ADC_Buttons.c,734 :: 		Lo(Sps.CoolOffTmr)  = EEPROM_Read(0x0E);
 	MOVLW       14
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+14 
-;ADC_Buttons.c,665 :: 		Hi(Sps.CoolOffTmr)  = EEPROM_Read(0x0F);
+;ADC_Buttons.c,735 :: 		Hi(Sps.CoolOffTmr)  = EEPROM_Read(0x0F);
 	MOVLW       15
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _Sps+15 
-;ADC_Buttons.c,668 :: 		Lo(pid_t.Kp)         = EEPROM_Read(0x10);
+;ADC_Buttons.c,738 :: 		Lo(pid_t.Kp)         = EEPROM_Read(0x10);
 	MOVLW       16
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+0 
-;ADC_Buttons.c,669 :: 		Hi(pid_t.Kp)         = EEPROM_Read(0x11);
+;ADC_Buttons.c,739 :: 		Hi(pid_t.Kp)         = EEPROM_Read(0x11);
 	MOVLW       17
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+1 
-;ADC_Buttons.c,670 :: 		Lo(pid_t.Ki)         = EEPROM_Read(0x12);
+;ADC_Buttons.c,740 :: 		Lo(pid_t.Ki)         = EEPROM_Read(0x12);
 	MOVLW       18
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+2 
-;ADC_Buttons.c,671 :: 		Hi(pid_t.Ki)         = EEPROM_Read(0x13);
+;ADC_Buttons.c,741 :: 		Hi(pid_t.Ki)         = EEPROM_Read(0x13);
 	MOVLW       19
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+3 
-;ADC_Buttons.c,672 :: 		Lo(pid_t.Kd)         = EEPROM_Read(0x14);
+;ADC_Buttons.c,742 :: 		Lo(pid_t.Kd)         = EEPROM_Read(0x14);
 	MOVLW       20
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+4 
-;ADC_Buttons.c,673 :: 		Hi(pid_t.Kd)         = EEPROM_Read(0x15);
+;ADC_Buttons.c,743 :: 		Hi(pid_t.Kd)         = EEPROM_Read(0x15);
 	MOVLW       21
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+5 
-;ADC_Buttons.c,674 :: 		Lo(DegC.Deg_OffSet)  = EEPROM_Read(0x16);
+;ADC_Buttons.c,744 :: 		Lo(DegC.Deg_OffSet)  = EEPROM_Read(0x16);
 	MOVLW       22
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _DegC+8 
-;ADC_Buttons.c,675 :: 		Hi(DegC.Deg_OffSet)  = EEPROM_Read(0x17);
+;ADC_Buttons.c,745 :: 		Hi(DegC.Deg_OffSet)  = EEPROM_Read(0x17);
 	MOVLW       23
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _DegC+9 
-;ADC_Buttons.c,676 :: 		pid_t.Kt             = EEPROM_Read(0x18);
+;ADC_Buttons.c,746 :: 		pid_t.Kt             = EEPROM_Read(0x18);
 	MOVLW       24
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _pid_t+33 
-;ADC_Buttons.c,679 :: 		Lo(TempTicks.RampTick)   = EEPROM_Read(0x1A);
+;ADC_Buttons.c,749 :: 		Lo(TempTicks.RampTick)   = EEPROM_Read(0x1A);
 	MOVLW       26
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+2 
-;ADC_Buttons.c,680 :: 		Hi(TempTicks.RampTick)   = EEPROM_Read(0x1B);
+;ADC_Buttons.c,750 :: 		Hi(TempTicks.RampTick)   = EEPROM_Read(0x1B);
 	MOVLW       27
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+3 
-;ADC_Buttons.c,681 :: 		Lo(TempTicks.SoakTick)   = EEPROM_Read(0x1C);
+;ADC_Buttons.c,751 :: 		Lo(TempTicks.SoakTick)   = EEPROM_Read(0x1C);
 	MOVLW       28
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+4 
-;ADC_Buttons.c,682 :: 		Hi(TempTicks.SoakTick)   = EEPROM_Read(0x1D);
+;ADC_Buttons.c,752 :: 		Hi(TempTicks.SoakTick)   = EEPROM_Read(0x1D);
 	MOVLW       29
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+5 
-;ADC_Buttons.c,683 :: 		Lo(TempTicks.SpikeTick)  = EEPROM_Read(0x1E);
+;ADC_Buttons.c,753 :: 		Lo(TempTicks.SpikeTick)  = EEPROM_Read(0x1E);
 	MOVLW       30
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+6 
-;ADC_Buttons.c,684 :: 		Hi(TempTicks.SpikeTick)  = EEPROM_Read(0x1F);
+;ADC_Buttons.c,754 :: 		Hi(TempTicks.SpikeTick)  = EEPROM_Read(0x1F);
 	MOVLW       31
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+7 
-;ADC_Buttons.c,685 :: 		Lo(TempTicks.CoolTick)   = EEPROM_Read(0x20);
+;ADC_Buttons.c,755 :: 		Lo(TempTicks.CoolTick)   = EEPROM_Read(0x20);
 	MOVLW       32
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+8 
-;ADC_Buttons.c,686 :: 		Hi(TempTicks.CoolTick)   = EEPROM_Read(0x21);
+;ADC_Buttons.c,756 :: 		Hi(TempTicks.CoolTick)   = EEPROM_Read(0x21);
 	MOVLW       33
 	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
 	CALL        _EEPROM_Read+0, 0
 	MOVF        R0, 0 
 	MOVWF       _TempTicks+9 
-;ADC_Buttons.c,688 :: 		}
+;ADC_Buttons.c,759 :: 		Sps.SerialWriteDly   =  EEPROM_Read(0x22);
+	MOVLW       34
+	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
+	CALL        _EEPROM_Read+0, 0
+	MOVF        R0, 0 
+	MOVWF       _Sps+17 
+;ADC_Buttons.c,760 :: 		DegC.SampleTmrSP     =  EEPROM_Read(0x23);
+	MOVLW       35
+	MOVWF       FARG_EEPROM_Read_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Read_address+1 
+	CALL        _EEPROM_Read+0, 0
+	MOVF        R0, 0 
+	MOVWF       _DegC+22 
+;ADC_Buttons.c,761 :: 		}
 L_end_EERead:
 	RETURN      0
 ; end of _EERead
 
 _EEWrite:
 
-;ADC_Buttons.c,689 :: 		void EEWrite(){
-;ADC_Buttons.c,691 :: 		EEPROM_Write(0x00, Lo(Sps.RmpDeg));
+;ADC_Buttons.c,762 :: 		void EEWrite(){
+;ADC_Buttons.c,764 :: 		EEPROM_Write(0x00, Lo(Sps.RmpDeg));
 	CLRF        FARG_EEPROM_Write_address+0 
+	CLRF        FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,692 :: 		EEPROM_Write(0x01, Hi(Sps.RmpDeg));
+;ADC_Buttons.c,765 :: 		EEPROM_Write(0x01, Hi(Sps.RmpDeg));
 	MOVLW       1
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+1, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,693 :: 		EEPROM_Write(0x02, Lo(Sps.RmpTmr));
+;ADC_Buttons.c,766 :: 		EEPROM_Write(0x02, Lo(Sps.RmpTmr));
 	MOVLW       2
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+2, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,694 :: 		EEPROM_Write(0x03, Hi(Sps.RmpTmr));
+;ADC_Buttons.c,767 :: 		EEPROM_Write(0x03, Hi(Sps.RmpTmr));
 	MOVLW       3
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+3, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,695 :: 		EEPROM_Write(0x04, Lo(Sps.SokDeg));
+;ADC_Buttons.c,768 :: 		EEPROM_Write(0x04, Lo(Sps.SokDeg));
 	MOVLW       4
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+4, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,696 :: 		EEPROM_Write(0x05, Hi(Sps.SokDeg));
+;ADC_Buttons.c,769 :: 		EEPROM_Write(0x05, Hi(Sps.SokDeg));
 	MOVLW       5
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+5, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,697 :: 		EEPROM_Write(0x06, Lo(Sps.SokTmr));
+;ADC_Buttons.c,770 :: 		EEPROM_Write(0x06, Lo(Sps.SokTmr));
 	MOVLW       6
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+6, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,698 :: 		EEPROM_Write(0x07, Hi(Sps.SokTmr));
+;ADC_Buttons.c,771 :: 		EEPROM_Write(0x07, Hi(Sps.SokTmr));
 	MOVLW       7
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+7, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,699 :: 		EEPROM_Write(0x08, Lo(Sps.SpkeDeg));
+;ADC_Buttons.c,772 :: 		EEPROM_Write(0x08, Lo(Sps.SpkeDeg));
 	MOVLW       8
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+8, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,700 :: 		EEPROM_Write(0x09, Hi(Sps.SpkeDeg));
+;ADC_Buttons.c,773 :: 		EEPROM_Write(0x09, Hi(Sps.SpkeDeg));
 	MOVLW       9
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+9, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,701 :: 		EEPROM_Write(0x0A, Lo(Sps.SpkeTmr));
+;ADC_Buttons.c,774 :: 		EEPROM_Write(0x0A, Lo(Sps.SpkeTmr));
 	MOVLW       10
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+10, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,702 :: 		EEPROM_Write(0x0B, Hi(Sps.SpkeTmr));
+;ADC_Buttons.c,775 :: 		EEPROM_Write(0x0B, Hi(Sps.SpkeTmr));
 	MOVLW       11
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+11, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,703 :: 		EEPROM_Write(0x0C, Lo(Sps.CoolOffDeg));
+;ADC_Buttons.c,776 :: 		EEPROM_Write(0x0C, Lo(Sps.CoolOffDeg));
 	MOVLW       12
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+12, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,704 :: 		EEPROM_Write(0x0D, Hi(Sps.CoolOffDeg));
+;ADC_Buttons.c,777 :: 		EEPROM_Write(0x0D, Hi(Sps.CoolOffDeg));
 	MOVLW       13
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+13, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,705 :: 		EEPROM_Write(0x0E, Lo(Sps.CoolOffTmr));
+;ADC_Buttons.c,778 :: 		EEPROM_Write(0x0E, Lo(Sps.CoolOffTmr));
 	MOVLW       14
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+14, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,706 :: 		EEPROM_Write(0x0F, Hi(Sps.CoolOffTmr));
+;ADC_Buttons.c,779 :: 		EEPROM_Write(0x0F, Hi(Sps.CoolOffTmr));
 	MOVLW       15
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _Sps+15, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,709 :: 		EEPROM_Write(0x10, Lo(pid_t.Kp));
+;ADC_Buttons.c,782 :: 		EEPROM_Write(0x10, Lo(pid_t.Kp));
 	MOVLW       16
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+0, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,710 :: 		EEPROM_Write(0x11, Hi(pid_t.Kp));
+;ADC_Buttons.c,783 :: 		EEPROM_Write(0x11, Hi(pid_t.Kp));
 	MOVLW       17
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+1, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,711 :: 		EEPROM_Write(0x12, Lo(pid_t.Ki));
+;ADC_Buttons.c,784 :: 		EEPROM_Write(0x12, Lo(pid_t.Ki));
 	MOVLW       18
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+2, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,712 :: 		EEPROM_Write(0x13, Hi(pid_t.Ki));
+;ADC_Buttons.c,785 :: 		EEPROM_Write(0x13, Hi(pid_t.Ki));
 	MOVLW       19
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+3, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,713 :: 		EEPROM_Write(0x14, Lo(pid_t.Kd));
+;ADC_Buttons.c,786 :: 		EEPROM_Write(0x14, Lo(pid_t.Kd));
 	MOVLW       20
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+4, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,714 :: 		EEPROM_Write(0x15, Hi(pid_t.Kd));
+;ADC_Buttons.c,787 :: 		EEPROM_Write(0x15, Hi(pid_t.Kd));
 	MOVLW       21
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+5, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,715 :: 		EEPROM_Write(0x16, Lo(DegC.Deg_OffSet));
+;ADC_Buttons.c,788 :: 		EEPROM_Write(0x16, Lo(DegC.Deg_OffSet));
 	MOVLW       22
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _DegC+8, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,716 :: 		EEPROM_Write(0x17, Hi(DegC.Deg_OffSet));
+;ADC_Buttons.c,789 :: 		EEPROM_Write(0x17, Hi(DegC.Deg_OffSet));
 	MOVLW       23
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _DegC+9, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,717 :: 		EEPROM_Write(0x18, pid_t.Kt);
+;ADC_Buttons.c,790 :: 		EEPROM_Write(0x18, pid_t.Kt);
 	MOVLW       24
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _pid_t+33, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,720 :: 		EEPROM_Write(0x1A, Lo(TempTicks.RampTick));
+;ADC_Buttons.c,793 :: 		EEPROM_Write(0x1A, Lo(TempTicks.RampTick));
 	MOVLW       26
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+2, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,721 :: 		EEPROM_Write(0x1B, Hi(TempTicks.RampTick));
+;ADC_Buttons.c,794 :: 		EEPROM_Write(0x1B, Hi(TempTicks.RampTick));
 	MOVLW       27
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+3, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,722 :: 		EEPROM_Write(0x1C, Lo(TempTicks.SoakTick));
+;ADC_Buttons.c,795 :: 		EEPROM_Write(0x1C, Lo(TempTicks.SoakTick));
 	MOVLW       28
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+4, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,723 :: 		EEPROM_Write(0x1D, Hi(TempTicks.SoakTick));
+;ADC_Buttons.c,796 :: 		EEPROM_Write(0x1D, Hi(TempTicks.SoakTick));
 	MOVLW       29
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+5, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,724 :: 		EEPROM_Write(0x1E, Lo(TempTicks.SpikeTick));
+;ADC_Buttons.c,797 :: 		EEPROM_Write(0x1E, Lo(TempTicks.SpikeTick));
 	MOVLW       30
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+6, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,725 :: 		EEPROM_Write(0x1F, Hi(TempTicks.SpikeTick));
+;ADC_Buttons.c,798 :: 		EEPROM_Write(0x1F, Hi(TempTicks.SpikeTick));
 	MOVLW       31
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+7, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,726 :: 		EEPROM_Write(0x20, Lo(TempTicks.CoolTick));
+;ADC_Buttons.c,799 :: 		EEPROM_Write(0x20, Lo(TempTicks.CoolTick));
 	MOVLW       32
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+8, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,727 :: 		EEPROM_Write(0x21, Hi(TempTicks.CoolTick));
+;ADC_Buttons.c,800 :: 		EEPROM_Write(0x21, Hi(TempTicks.CoolTick));
 	MOVLW       33
 	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
 	MOVF        _TempTicks+9, 0 
 	MOVWF       FARG_EEPROM_Write_data_+0 
 	CALL        _EEPROM_Write+0, 0
-;ADC_Buttons.c,728 :: 		Delay_ms(100);
+;ADC_Buttons.c,803 :: 		EEPROM_Write(0x22, Sps.SerialWriteDly);
+	MOVLW       34
+	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
+	MOVF        _Sps+17, 0 
+	MOVWF       FARG_EEPROM_Write_data_+0 
+	CALL        _EEPROM_Write+0, 0
+;ADC_Buttons.c,804 :: 		EEPROM_Write(0x23, DegC.SampleTmrSP);
+	MOVLW       35
+	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       0
+	MOVWF       FARG_EEPROM_Write_address+1 
+	MOVF        _DegC+22, 0 
+	MOVWF       FARG_EEPROM_Write_data_+0 
+	CALL        _EEPROM_Write+0, 0
+;ADC_Buttons.c,807 :: 		Delay_ms(100);
 	MOVLW       9
 	MOVWF       R11, 0
 	MOVLW       30
 	MOVWF       R12, 0
 	MOVLW       228
 	MOVWF       R13, 0
-L_EEWrite281:
+L_EEWrite317:
 	DECFSZ      R13, 1, 1
-	BRA         L_EEWrite281
+	BRA         L_EEWrite317
 	DECFSZ      R12, 1, 1
-	BRA         L_EEWrite281
+	BRA         L_EEWrite317
 	DECFSZ      R11, 1, 1
-	BRA         L_EEWrite281
+	BRA         L_EEWrite317
 	NOP
-;ADC_Buttons.c,729 :: 		}
+;ADC_Buttons.c,808 :: 		}
 L_end_EEWrite:
 	RETURN      0
 ; end of _EEWrite

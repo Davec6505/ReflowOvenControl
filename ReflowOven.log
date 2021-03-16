@@ -1,7 +1,7 @@
-0	1	mikroCPIC1618.exe -MSF -DBG -pP18F25K22 -RA -GC -DL -O11111114 -fo64 -EH"C:\Users\GIT\ReflowOvenControl\ReflowOven.ihex" -N"C:\Users\GIT\ReflowOvenControl\ReflowOven.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\GIT\ReflowOvenControl\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\PID\Uses\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\I2C_LcdRm\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\PID\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\I2C_LcdRm\Uses\" "ReflowOven.c" "Config.c" "Max31855J.c" "PID.c" "Calcs.c" "ADC_Buttons.c" "IRQs.c" "Encoder.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CType.mcl" "__Lib_CString.mcl" "__Lib_CStdlib.mcl" "__Lib_Conversions.mcl" "__Lib_Sprintf.mcl" "__Lib_Button.mcl" "__Lib_ADC_K22_B.mcl" "__Lib_EEPROM_256.mcl" "__Lib_I2C_c34b12.mcl" "__Lib_SPI_c345b123.mcl" "__Lib_UART_c67b67.mcl" "PID_Lib.mcl" "I2C_Lcd.mcl"	 
-hint: 0	1139	Available RAM: 1515 [bytes], Available ROM: 32768 [bytes]	 
-diagnostics: 0	122	Compilation Started	P18F25K22.c
-diagnostics: 2616	123	Compiled Successfully	P18F25K22.c
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F26K22 -RA -GC -DL -O11111114 -fo64 -EH"C:\Users\GIT\ReflowOvenControl\ReflowOven.ihex" -N"C:\Users\GIT\ReflowOvenControl\ReflowOven.mcppi" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\GIT\ReflowOvenControl\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\PID\Uses\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\I2C_LcdRm\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\PID\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\Packages\I2C_LcdRm\Uses\" "ReflowOven.c" "Config.c" "Max31855J.c" "PID.c" "Calcs.c" "ADC_Buttons.c" "IRQs.c" "Encoder.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CType.mcl" "__Lib_CString.mcl" "__Lib_CStdlib.mcl" "__Lib_Conversions.mcl" "__Lib_Sprintf.mcl" "__Lib_Button.mcl" "__Lib_ADC_K22_B.mcl" "__Lib_EEPROM_1024.mcl" "__Lib_I2C_c34b12.mcl" "__Lib_SPI_c345b123.mcl" "__Lib_UART_c67b67.mcl" "PID_Lib.mcl" "I2C_Lcd.mcl"	 
+hint: 0	1139	Available RAM: 3875 [bytes], Available ROM: 65536 [bytes]	 
+diagnostics: 0	122	Compilation Started	P18F26K22.c
+diagnostics: 2623	123	Compiled Successfully	P18F26K22.c
 diagnostics: 0	122	Compilation Started	__Lib_Delays.c
 diagnostics: 172	123	Compiled Successfully	__Lib_Delays.c
 diagnostics: 0	122	Compilation Started	pid_lib.h
@@ -12,14 +12,13 @@ diagnostics: 174	123	Compiled Successfully	I2C_Lcd.c
 hint: 14	1164	Variable 'S' has been eliminated by optimizer	I2C_Lcd.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
-hint: 93	1163	Variable 'Test' has been declared, but not used	ReflowOven.c
-hint: 49	1163	Variable 'a' has been declared, but not used	ReflowOven.c
-hint: 0	1004	interrupt handler (HighPrioity at 0x0008)	ReflowOven.c
-hint: 0	1004	interrupt handler (Tmr1_Int at 0x0018)	ReflowOven.c
-diagnostics: 338	123	Compiled Successfully	ReflowOven.c
+hint: 69	1163	Variable 'Test' has been declared, but not used	ReflowOven.c
+hint: 0	1004	interrupt handler (HighPriority at 0x0008)	ReflowOven.c
+hint: 0	1004	interrupt handler (LowPriority at 0x0018)	ReflowOven.c
+diagnostics: 360	123	Compiled Successfully	ReflowOven.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
-diagnostics: 153	123	Compiled Successfully	Config.c
+diagnostics: 195	123	Compiled Successfully	Config.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
 hint: 48	1163	Variable 'sign' has been declared, but not used	Max31855J.c
@@ -34,19 +33,18 @@ warning: 35	1504	Initialization of extern object 'mulFact'	config.h
 diagnostics: 30	123	Compiled Successfully	Calcs.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
-hint: 49	1163	Variable 'i' has been declared, but not used	ADC_Buttons.c
-diagnostics: 729	123	Compiled Successfully	ADC_Buttons.c
+diagnostics: 808	123	Compiled Successfully	ADC_Buttons.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
-diagnostics: 134	123	Compiled Successfully	IRQs.c
+diagnostics: 140	123	Compiled Successfully	IRQs.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 35	1504	Initialization of extern object 'mulFact'	config.h
 diagnostics: 51	123	Compiled Successfully	Encoder.c
-diagnostics: 0	127	All files Compiled in 485 ms	 
-hint: 0	1144	Used RAM (bytes): 958 (63%)  Free RAM (bytes): 557 (37%)	Used RAM (bytes): 958 (63%)  Free RAM (bytes): 557 (37%)
-hint: 0	1144	Used ROM (bytes): 32738 (100%)  Free ROM (bytes): 30 (0%)	Used ROM (bytes): 32738 (100%)  Free ROM (bytes): 30 (0%)
+diagnostics: 0	127	All files Compiled in 484 ms	 
+hint: 0	1144	Used RAM (bytes): 1023 (26%)  Free RAM (bytes): 2852 (74%)	Used RAM (bytes): 1023 (26%)  Free RAM (bytes): 2852 (74%)
+hint: 0	1144	Used ROM (bytes): 34600 (53%)  Free ROM (bytes): 30936 (47%)	Used ROM (bytes): 34600 (53%)  Free ROM (bytes): 30936 (47%)
 diagnostics: 0	125	Project Linked Successfully	ReflowOven.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
-diagnostics: 0	128	Linked in 1547 ms	 
-diagnostics: 0	129	Project 'ReflowOven.mcppi' completed: 2266 ms	 
-diagnostics: 0	103	Finished successfully: 14 Mar 2021, 20:23:33	ReflowOven.mcppi
+diagnostics: 0	128	Linked in 1578 ms	 
+diagnostics: 0	129	Project 'ReflowOven.mcppi' completed: 2297 ms	 
+diagnostics: 0	103	Finished successfully: 16 Mar 2021, 13:40:12	ReflowOven.mcppi

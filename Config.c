@@ -4,7 +4,10 @@
 
 
 void ConfPic(){
-
+ //SLRB_bit = 1;
+ C1ON_bit = 0;  //turn off comparators
+ C2ON_bit = 0;
+ 
  ANSELA = 0x03; //make RA0 to RA3 as analogs
  ANSELB = 0X00; //turn off all analogs attached to Port B
  ANSELC = 0X00;
@@ -12,24 +15,43 @@ void ConfPic(){
  TRISA = 0x3F;  //RA0 - RA5 as inputs
  TRISB = 0XC0;
  TRISC = 0x08;  //RC port as outputs;
+ 
+ LATA  = 0;
+ LATB  = 0;
  LATC  = 0;     //FORCE portc off
 
 
- //SLRB_bit = 1;
- C1ON_bit = 0;  //turn off comparators
- C2ON_bit = 0;
  //set timers for CCp module up front
  CCPTMRS0 = 0xD0;
  CCPTMRS1 = 0X0F;
+
+  I2C1_Init(100000);//INIT I2C AT 100KHZ
+  Delay_ms(100); 
+  I2C1_SetTimeoutCallback(1000,I2C1_TimeoutCallback);    // enable error flag for I2C1 test
+  I2C_Set_Active(&I2C1_Start, &I2C1_Repeated_Start,&I2C1_Rd, &I2C1_Wr,&I2C1_Stop,&I2C1_Is_Idle); // Sets the I2C1 module active
+  ConfigSpi();
+  SetUp_IOCxInterrupts();
+  Delay_ms(100);
+  UART1_Init(115200);
+  Uart1_En();
+  Delay_ms(100);
+  Set_Priority();
+  InitTimer0();
+  InitTimer1();
+  //  InitTimer2();
+  InitTimer3();
+  InitTimer5();
+  ADC_Init();
 }
+
 //Timer0
 //Counter mode | Clck Pin | Lo2Hi | No PreScaler assigned | Prescaler 1:1;
 void InitTimer0(){
   T0CON       =  0xF8;
   TMR0L       =  0xFF; //To generate an immediate overflow
   TMR0IE_bit  = on;
-  TMR0IF_bit  = off;
   TMR0IP_bit  = on;    //assigne high priority
+  TMR0IF_bit  = off;
 }
 //Timer1
 //| Fosc/4 | Prescaler 1:8 | TxSOSCEN = 0 | No external clk | 16bit | T1ON = 1 |;
@@ -37,13 +59,14 @@ void InitTimer1(){
   T1CON       = 0x37;
   TMR1GE_bit  = off;
   TMR1IE_bit  = off;
+  TMR1IF_bit  = off;
   //Configure Compare module for software interrupt and T1
   CCP1M3_bit = 1;     // |------
   CCP1M2_bit = 0;     // | _ Special Event interrupt
   CCP1M1_bit = 1;     // |
   CCP1M0_bit = 1;     // |------
   
-  CCP1IE_bit = off;
+  CCP1IE_bit = on;
   CCP1IF_bit = on;
   CCP1IP_bit = on;
   CCP1MD_bit = off;
@@ -64,8 +87,8 @@ void InitTimer2(){
   DC1B1_bit = 0;
   DC1B0_bit = 0;
   T2CON              = 0x1C;
-  TMR2IF_bit  = off;
   TRISC2_bit  = off;
+  TMR2IF_bit  = off;
 }
 //Timer3
 //Prescaler 1:1; TMR1 Preload = 49536; Actual Interrupt Time : 1 ms
@@ -74,10 +97,11 @@ void InitTimer3(){
   TMR3IF_bit  = 0;
   TMR3H              = 0xC1;
   TMR3L              = 0x80;
-  TMR3IE_bit  = 1;
-  TMR3IP_bit  = 0;
-
+  TMR3IE_bit  = on;
+  TMR3IP_bit  = on;
+  TMR3IF_bit  = off;
 }
+
 //Timer5
 //| Fosc/4 | Prescaler 1:8 | TxSOSCEN = 0 | No external clk | 16bit | T5ON = 1 |;
 void InitTimer5(){
@@ -91,8 +115,8 @@ void InitTimer5(){
   CCP2M0_bit = 0;     // |------
 
   CCP2IE_bit = on;
-  CCP2IF_bit = off;
   CCP2IP_bit = on;
+  CCP2IF_bit = off;
   CCP2MD_bit = off;
 
   CCPR2H = 0;
@@ -102,8 +126,8 @@ void InitTimer5(){
 
 void Uart1_En(){
  RC1IE_bit = 1;  //turn on recieve interrupts
- RC1IF_bit = 0;
  RC1IP_bit = 0; //low priority interrupt
+ RC1IF_bit = 0;
 }
 //INTERRUPTS enable
 void Set_Priority(){
@@ -138,8 +162,26 @@ void ClearAll(){
   Phs.PhasePulsCntr = 0;
   Phs.PhaseCntr = 1;
   DegC.sampleTimer = 0;
+  wait = off;
+  DegC.Temp_iPv = 0;
+  tmr.sec = 0;
+  Menu_Bit = 0;
+  Ok_Bit = 0;
+  OFF_Bit = 0;
+  pid_t.Mv = 10;
 }
 
+void WriteStart(){
+      UART1_Write_Text("Start");
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+}
+
+void WriteFin(){
+      UART1_Write_Text("Finnished");
+      UART1_Write(0x0D);
+      UART1_Write(0x0A);
+}
 
 void WriteDataOut(){
       UART1_Write_Text(txt1);

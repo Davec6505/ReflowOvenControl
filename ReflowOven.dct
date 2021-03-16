@@ -786,6 +786,11 @@ eeadr6
 eeadr6_bit
 eeadr7
 eeadr7_bit
+eeadr8
+eeadr8_bit
+eeadr9
+eeadr9_bit
+eeadrh
 eecon1
 eecon2
 eedata
@@ -888,7 +893,7 @@ hextoword
 hfiofs
 hfiofs_bit
 high_priority
-highprioity
+highpriority
 hlvdcon
 hlvden
 hlvden_bit
@@ -938,6 +943,7 @@ i2c1_settimeoutcallback
 i2c1_start
 i2c1_stop
 i2c1_timeout_ptr
+i2c1_timeoutcallback
 i2c1_wr
 i2c2_init
 i2c2_is_idle
@@ -1157,6 +1163,7 @@ longwordtohex
 longwordtostr
 longwordtostrwithzeros
 low_priority
+lowpriority
 ltrim
 lvdcon
 lvden
@@ -1511,7 +1518,6 @@ pid_offset
 pid_prev_input
 pid_prev_integrated
 pid_t
-pidtimer
 pie1
 pie2
 pie3
@@ -1752,6 +1758,7 @@ rsen
 rsen_bit
 rsen_ssp1con2_bit
 rstentrybits
+rstlocals
 rsttmr
 rtrim
 rx_
@@ -1778,10 +1785,10 @@ s
 s_bit
 s_hwmul
 s_ssp1stat_bit
-sample_spi
 sample_tmr
 samplebuttons
 sampletimer
+sampletmrsp
 save_encodervalue
 sbcde
 sbcde_bit
@@ -1845,6 +1852,7 @@ sendb1_bit
 sendb2
 sendb2_bit
 serial
+serialwritedly
 set_priority
 setcoolbit
 setfdz32
@@ -2317,7 +2325,6 @@ tmr0ip_bit
 tmr0l
 tmr0on
 tmr0on_bit
-tmr1_int
 tmr1cs0
 tmr1cs0_bit
 tmr1cs1
@@ -2659,6 +2666,8 @@ wrerr
 wrerr_bit
 writedata
 writedataout
+writefin
+writestart
 wue
 wue_baud1con_bit
 wue_bit

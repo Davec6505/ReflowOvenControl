@@ -55,26 +55,23 @@ main
 			double2longint
 				SETIOV3224
 	__CC2DW
+	DI
 	ConfPic
-	ADC_Init
-	UART1_Init
-	I2C1_Init
-	I2C_Set_Active
-	EERead
-		EEPROM_Read
-	PID_Init
-	Uart1_En
-	Set_Priority
-	ConfigSpi
-		SPI2_Init_Advanced
-		SPI_Set_Active
-	InitTimer0
-	InitTimer1
-	InitTimer3
-	InitTimer5
-	SetUp_IOCxInterrupts
-	ResetBits
-	ClearAll
+		I2C1_Init
+		I2C1_SetTimeoutCallback
+		I2C_Set_Active
+		ConfigSpi
+			SPI2_Init_Advanced
+			SPI_Set_Active
+		SetUp_IOCxInterrupts
+		UART1_Init
+		Uart1_En
+		Set_Priority
+		InitTimer0
+		InitTimer1
+		InitTimer3
+		InitTimer5
+		ADC_Init
 	I2C_LCD_init
 		I2C_LCD_putcmd
 			I2C_PCF8574_Write
@@ -120,10 +117,46 @@ main
 				I2C2_Wr
 					____DoIFC
 				I2C2_Stop
-	EI
+	I2C_LCD_Out
+		I2C_LCD_goto
+			I2C_LCD_putcmd
+				I2C_PCF8574_Write
+					I2C1_Start
+						I2C1_Is_Idle
+						____DoIFC
+					I2C1_Wr
+						____DoIFC
+					I2C1_Stop
+					I2C2_Start
+						I2C2_Is_Idle
+						____DoIFC
+					I2C2_Wr
+						____DoIFC
+					I2C2_Stop
+		I2C_LCD_putch
+			I2C_PCF8574_Write
+				I2C1_Start
+					I2C1_Is_Idle
+					____DoIFC
+				I2C1_Wr
+					____DoIFC
+				I2C1_Stop
+				I2C2_Start
+					I2C2_Is_Idle
+					____DoIFC
+				I2C2_Wr
+					____DoIFC
+				I2C2_Stop
+	EERead
+		EEPROM_Read
 	CalcTimerTicks
 		Div_16X16_U
 		S_HWMul
+	PID_Init
+	ResetBits
+	ClearAll
+	RstLocals
+	EI
 	SampleButtons
 		sprintf
 			_doprntf
@@ -286,40 +319,7 @@ main
 						____DoIFC
 					I2C2_Stop
 	DoTime
-	I2C_LCD_Out
-		I2C_LCD_goto
-			I2C_LCD_putcmd
-				I2C_PCF8574_Write
-					I2C1_Start
-						I2C1_Is_Idle
-						____DoIFC
-					I2C1_Wr
-						____DoIFC
-					I2C1_Stop
-					I2C2_Start
-						I2C2_Is_Idle
-						____DoIFC
-					I2C2_Wr
-						____DoIFC
-					I2C2_Stop
-		I2C_LCD_putch
-			I2C_PCF8574_Write
-				I2C1_Start
-					I2C1_Is_Idle
-					____DoIFC
-				I2C1_Wr
-					____DoIFC
-				I2C1_Stop
-				I2C2_Start
-					I2C2_Is_Idle
-					____DoIFC
-				I2C2_Wr
-					____DoIFC
-				I2C2_Stop
-	UART1_Write_Text
-		UART1_Write
-	UART1_Write
-	WriteDataOut
+	WriteStart
 		UART1_Write_Text
 			UART1_Write
 		UART1_Write
@@ -344,11 +344,18 @@ main
 	strcat
 	PID_Calc
 		S_HWMul
-Tmr1_Int
+	UART1_Write_Text
+		UART1_Write
+	UART1_Write
+	WriteFin
+		UART1_Write_Text
+			UART1_Write
+		UART1_Write
+LowPriority
 	Low_Priority
-		TMR3
 		Encode
 			read_rotary
 		Serial
-HighPrioity
+HighPriority
 	High_Priority
+		TMR3

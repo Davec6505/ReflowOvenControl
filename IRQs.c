@@ -4,7 +4,13 @@ bit wait;
 
 
 void High_Priority(){
+    if (TMR3IF_bit){
+       TMR3IF_bit = 0;
+       TMR3();
+    }
+
      if(TMR0IF_bit){
+      // LATB5_bit  = !LATB5_bit;
       //Zero crossing has occured
        TMR0IF_bit  = off;
        TMR0L       = 0xFF;
@@ -75,8 +81,8 @@ void High_Priority(){
 }
 
 void Low_Priority(){
-    if (TMR3IF_bit)
-           TMR3();
+
+
      
      if(RBIF_bit){
         RBIF_bit  = 0;
@@ -84,8 +90,10 @@ void Low_Priority(){
             Encode();
      }
      
-     if(RC1IF_bit)
+     if(RC1IF_bit){
+        RCIF_bit = off;
         Serial();
+     }
 }
 
 void DoTime(){
@@ -107,7 +115,6 @@ void DoTime(){
 }
 
 void TMR3(){
-    TMR3IF_bit = 0;
     TMR3H      = 0xC1;
     TMR3L      = 0x80;
 
@@ -129,7 +136,5 @@ void TMR3(){
 }
 
 void Serial(){
-     RCIF_bit = off;
      TXREG1 = RCREG1;
 }
-

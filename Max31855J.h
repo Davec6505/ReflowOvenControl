@@ -19,9 +19,8 @@ struct Temp{
  int   Temp_iPv;
  unsigned int xVal;
  uint8_t Deg_decimal;
- short sampleTimer;
- short pidTimer;
- unsigned int Sample_SPI;
+ unsigned short sampleTimer;
+ unsigned short SampleTmrSP;
 };
 
 extern struct Temp DegC;

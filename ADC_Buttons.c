@@ -46,7 +46,6 @@ void RstEntryBits(){
        I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
 }
 void SampleButtons(){
-static unsigned int i;
   //test first entry and reset
 
 
@@ -98,8 +97,8 @@ static unsigned int i;
          */
         state:
        switch(Sps.State){
-           case Return:   if(enC > 3){
-                              enC = Save_EncoderValue(3);
+           case Return:   if(enC > 7){
+                              enC = Save_EncoderValue(7);
                           }
                           close:
                           switch(enC){
@@ -131,9 +130,14 @@ static unsigned int i;
                                         I2C_LCD_Out(LCD_01_ADDRESS,4,2,"ReStart");
                                      break;
                                case 4:
+                                        if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+                                              OFF_Bit = 1;;
+                                              enC = 13;
+                                              goto close;
+                                        }
                                case 5:
                                case 6:
-                               case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Spare  ");
+                               case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Stop   ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
@@ -193,9 +197,14 @@ static unsigned int i;
                                               goto state;
                                          }
                                case 5:
+                                         if (Button(&PORTA, 2, 200, 0) && (Sps.State != TimeSettings)){
+                                              Sps.State = TimeSettings;
+                                              enC = Save_EncoderValue(0);
+                                              goto state;
+                                         }
                                case 6:
                                case 7:    I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Cool   ");
-                                          I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Spare  ");
+                                          I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Timers ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare  ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare  ");
                                      break;
@@ -336,10 +345,10 @@ static unsigned int i;
                                               I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
                                           }
                                           I2C_LCD_Out(LCD_01_ADDRESS,1,2,"*Kt");
-                                          sprintf(txt4,"%3d",pid_t.Kt);
+                                          sprintf(txt4,"%4d",pid_t.Kt);
                                           I2C_LCD_Out(LCD_01_ADDRESS,1,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"*C Offset");
-                                          sprintf(txt4,"%3d",DegC.Deg_OffSet);
+                                          sprintf(txt4,"%4d",DegC.Deg_OffSet);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,2,"Spare    ");
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"Spare    ");
@@ -608,6 +617,67 @@ static unsigned int i;
                                      break;
                           }
                 break;
+           case TimeSettings:
+                          if(enC > 3){
+                               enC = Save_EncoderValue(3);
+                          }
+                          ret7:
+                          switch(enC){
+                               case 0:    if (Button(&PORTA, 2, 200, 0) && (Sps.State == TimeSettings)){
+                                              Sps.State = TempMenu;
+                                              while(!RA2_bit);
+                                              enC = 13;
+                                              goto ret7;
+                                          }
+                               case 1:    if (Button(&PORTA, 2, 200, 0) && !OK_A){
+                                                 enC = Save_EncoderValue(enC);
+                                                 OK_A = 1;OK_B=0;
+                                                  enC_line_inc = 1;
+                                                  Save_EncoderValue(Sps.SerialWriteDly);
+                                          }
+                                          if(OK_A){
+                                              Sps.SerialWriteDly = Get_EncoderValue();
+                                              if(Button(&PORTA, 2, 200, 0)){
+                                                  OK_A = 0;
+                                                  while(!RA2_bit);
+                                                  enC_line_inc = 1;
+                                                  enC = Save_EncoderValue(enC_line_inc);
+                                              }
+                                          }
+                               case 2:    if (Button(&PORTA, 2, 200, 0) && !OK_B){
+                                                 enC = Save_EncoderValue(enC);
+                                                 OK_B = 1;OK_A=0;
+                                                  enC_line_inc = 2;
+                                                  Save_EncoderValue(DegC.SampleTmrSP);
+                                                  while(!RA2_bit);
+                                          }
+                                          if(OK_B){
+                                              DegC.SampleTmrSP = Get_EncoderValue();
+                                              if(Button(&PORTA, 2, 200, 0)){
+                                                  OK_B = 0;
+                                                  while(!RA2_bit);
+                                                  enC_line_inc = 2;
+                                                  enC = Save_EncoderValue(enC_line_inc);
+                                              }
+                                          }
+                               case 3:
+                                          I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret      ");
+                                          I2C_LCD_Out(LCD_01_ADDRESS,2,2,"Ser Dly:=");
+                                          sprintf(txt4,"%4d",Sps.SerialWriteDly);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"'C  Dly:=");
+                                          sprintf(txt4,"%4d",DegC.SampleTmrSP);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
+                                     break;
+                              default:    //clear screen & update cursor position
+                                          I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
+                                          enC_line_inc = 0;
+                                          enC = Save_EncoderValue(enC_line_inc);
+                                          enC_last = -1;
+                                     break;
+                          }
+                break;
            default: Sps.State = Return;
                 break;
        }
@@ -684,7 +754,10 @@ void EERead(){
    Hi(TempTicks.SpikeTick)  = EEPROM_Read(0x1F);
    Lo(TempTicks.CoolTick)   = EEPROM_Read(0x20);
    Hi(TempTicks.CoolTick)   = EEPROM_Read(0x21);
-   
+   /////////////////////////////////////////////////////
+   //aditional values for control
+   Sps.SerialWriteDly   =  EEPROM_Read(0x22);
+   DegC.SampleTmrSP     =  EEPROM_Read(0x23);
 }
 void EEWrite(){
   //SETPOINTS
@@ -725,5 +798,11 @@ void EEWrite(){
    EEPROM_Write(0x1F, Hi(TempTicks.SpikeTick));
    EEPROM_Write(0x20, Lo(TempTicks.CoolTick));
    EEPROM_Write(0x21, Hi(TempTicks.CoolTick));
+   //////////////////////////////////////////////////////
+   //Aditional vlaues added to control
+    EEPROM_Write(0x22, Sps.SerialWriteDly);
+    EEPROM_Write(0x23, DegC.SampleTmrSP);
+    /////////////////////////////////////////////////////
+    //stall for 100ms to allow write to finnish
    Delay_ms(100);
 }

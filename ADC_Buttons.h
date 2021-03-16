@@ -18,6 +18,7 @@ enum StatesOfControl{
       SoakSettings,
       SpikeSettings,
       CoolSettings,
+      TimeSettings,
       KpSettings,
       KiSettings,
       KdSettings,
@@ -63,6 +64,7 @@ unsigned int SpkeTmr;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
 unsigned char State;
+unsigned short SerialWriteDly;
 }Spts;
 
 extern enum StatesOfControl Cntrl;

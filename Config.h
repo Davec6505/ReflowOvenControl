@@ -35,6 +35,7 @@ extern unsigned char txt6[4];
 extern const unsigned int mulFact = 10;
 ///////////////////////////////////////////
 //function prototypes
+void I2C1_TimeoutCallback(char errorCode);
 
 void ConfPic();
 void InitTimer0();
@@ -50,7 +51,10 @@ void DI();
 void ClearAll();
 unsigned long HWMul(unsigned int adcVal,unsigned int multiplicand);
 void DoTime();
+void WriteStart();
+void WriteFin();
 void WriteDataOut();
+void RstLocals();
 #endif
 
 /////////////////////////////////////////////////
