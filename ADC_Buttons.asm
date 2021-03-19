@@ -3541,7 +3541,7 @@ L_SampleButtons252:
 	MOVLW       hi_addr(?lstr59_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,543 :: 		sprintf(txt4,"%3d",Sps.SokDeg);
+;ADC_Buttons.c,543 :: 		sprintf(txt4,"%3d",Sps.SpkeDeg);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3552,9 +3552,9 @@ L_SampleButtons252:
 	MOVWF       FARG_sprintf_f+1 
 	MOVLW       higher_addr(?lstr_60_ADC_Buttons+0)
 	MOVWF       FARG_sprintf_f+2 
-	MOVF        _Sps+4, 0 
+	MOVF        _Sps+8, 0 
 	MOVWF       FARG_sprintf_wh+5 
-	MOVF        _Sps+5, 0 
+	MOVF        _Sps+9, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
 ;ADC_Buttons.c,544 :: 		I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
@@ -3581,7 +3581,7 @@ L_SampleButtons252:
 	MOVLW       hi_addr(?lstr61_ADC_Buttons+0)
 	MOVWF       FARG_I2C_LCD_Out_s+1 
 	CALL        _I2C_LCD_Out+0, 0
-;ADC_Buttons.c,546 :: 		sprintf(txt4,"%3d",Sps.SokTmr);
+;ADC_Buttons.c,546 :: 		sprintf(txt4,"%3d",Sps.SpkeTmr);
 	MOVLW       _txt4+0
 	MOVWF       FARG_sprintf_wh+0 
 	MOVLW       hi_addr(_txt4+0)
@@ -3592,9 +3592,9 @@ L_SampleButtons252:
 	MOVWF       FARG_sprintf_f+1 
 	MOVLW       higher_addr(?lstr_62_ADC_Buttons+0)
 	MOVWF       FARG_sprintf_f+2 
-	MOVF        _Sps+6, 0 
+	MOVF        _Sps+10, 0 
 	MOVWF       FARG_sprintf_wh+5 
-	MOVF        _Sps+7, 0 
+	MOVF        _Sps+11, 0 
 	MOVWF       FARG_sprintf_wh+6 
 	CALL        _sprintf+0, 0
 ;ADC_Buttons.c,547 :: 		I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);

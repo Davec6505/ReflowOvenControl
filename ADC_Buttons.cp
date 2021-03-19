@@ -916,10 +916,10 @@ void SampleButtons(){
  case 3:
  I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Ret       ");
  I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SpikeDeg:=");
- sprintf(txt4,"%3d",Sps.SokDeg);
+ sprintf(txt4,"%3d",Sps.SpkeDeg);
  I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
  I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SpikeTmr:=");
- sprintf(txt4,"%3d",Sps.SokTmr);
+ sprintf(txt4,"%3d",Sps.SpkeTmr);
  I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
  I2C_LCD_Out(LCD_01_ADDRESS,4,2,"          ");
  break;

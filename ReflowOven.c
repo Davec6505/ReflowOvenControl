@@ -8,7 +8,7 @@ Description: Code for a reflow oven
 
 //constants
 const unsigned int mulFact = 18;
-unsigned char LCD_01_ADDRESS = 0x4E;//4E = !A || 7E = A
+unsigned char LCD_01_ADDRESS = 0x7E;//4E = !A || 7E = A
 char *test = "Starting up";
 
 // structs & enums
@@ -64,6 +64,10 @@ void main() {
   ClearAll();
   RstLocals();
   DegC.Temp_iPv = (int)ReadMax31855J();
+  sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
+  I2C_LCD_Out(LCD_01_ADDRESS,3,13,"iC:=");
+  //strcat(txt5, "'C");
+  I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);
   CalcTimerTicks(DegC.Temp_iPv);
   EI();
   while(1){
@@ -72,10 +76,11 @@ void main() {
   static int DegSP_last;
   static unsigned int TempTicPlaceholder;
   static unsigned int TempDegPlaceholder;    
+   
+     LATC5_bit = RA3_bit && !FinCycle;
      ////////////////////////////////////////////
      //LCD Display control
-     LATB5_bit  = Menu_Bit;
-     
+
      if(Menu_Bit)
          SampleButtons();
      
@@ -210,7 +215,7 @@ void main() {
             }
 
             if(DegC.LastDeg != DegC.Deg_Sp){
-               sprintf(txt1,"%3u",DegC.Deg_Sp);
+               sprintf(txt1,"%4d",DegC.Deg_Sp);
                I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
                I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
                DegC.LastDeg = DegC.Deg_Sp;
@@ -218,6 +223,7 @@ void main() {
 
           }
        }else{
+         I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Off ");
          SetCoolBit = off;
          tmr.tenMilli = 0;
          TempTicks.tickActual = 0;
@@ -273,10 +279,10 @@ void main() {
                       I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
                       strcat(txt5, "'C");
                       I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
-                    /*sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
-                      I2C_LCD_Out(LCD_01_ADDRESS,3,12,"iPv:=");
+                      sprintf(txt5,"%3d",DegC.Temp_iPv); //DegC.Temp_
+                      I2C_LCD_Out(LCD_01_ADDRESS,3,13,"iC:=");
                       //strcat(txt5, "'C");
-                      I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);*/
+                      I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);
                     }
                   }
                 }

@@ -384,7 +384,7 @@ void WriteDataOut();
 void RstLocals();
 #line 10 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
 const unsigned int mulFact = 18;
-unsigned char LCD_01_ADDRESS = 0x4E;
+unsigned char LCD_01_ADDRESS = 0x7E;
 char *test = "Starting up";
 
 
@@ -440,6 +440,10 @@ void main() {
  ClearAll();
  RstLocals();
  DegC.Temp_iPv = (int)ReadMax31855J();
+ sprintf(txt5,"%3d",DegC.Temp_iPv);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,13,"iC:=");
+
+ I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);
  CalcTimerTicks(DegC.Temp_iPv);
  EI();
  while(1){
@@ -449,8 +453,9 @@ void main() {
  static unsigned int TempTicPlaceholder;
  static unsigned int TempDegPlaceholder;
 
+ LATC5_bit = RA3_bit && !FinCycle;
 
- LATB5_bit = Menu_Bit;
+
 
  if(Menu_Bit)
  SampleButtons();
@@ -586,7 +591,7 @@ void main() {
  }
 
  if(DegC.LastDeg != DegC.Deg_Sp){
- sprintf(txt1,"%3u",DegC.Deg_Sp);
+ sprintf(txt1,"%4d",DegC.Deg_Sp);
  I2C_LCD_Out(LCD_01_ADDRESS,2,1,"Deg:=");
  I2C_LCD_Out(LCD_01_ADDRESS,2,6,txt1);
  DegC.LastDeg = DegC.Deg_Sp;
@@ -594,6 +599,7 @@ void main() {
 
  }
  }else{
+ I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Off ");
  SetCoolBit = off;
  tmr.tenMilli = 0;
  TempTicks.tickActual = 0;
@@ -623,7 +629,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 252 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -631,7 +637,7 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 261 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 267 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
@@ -647,7 +653,10 @@ void main() {
  I2C_LCD_Out(LCD_01_ADDRESS,3,1,"Pv:=");
  strcat(txt5, "'C");
  I2C_LCD_Out(LCD_01_ADDRESS,3,5,txt5);
-#line 280 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+ sprintf(txt5,"%3d",DegC.Temp_iPv);
+ I2C_LCD_Out(LCD_01_ADDRESS,3,13,"iC:=");
+
+ I2C_LCD_Out(LCD_01_ADDRESS,3,18,txt5);
  }
  }
  }
