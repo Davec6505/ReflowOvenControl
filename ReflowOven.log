@@ -39,7 +39,7 @@ diagnostics: 40	123	Compiled Successfully	Calcs.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 37	1504	Initialization of extern object 'DegC'	max31855j.h
 warning: 37	1504	Initialization of extern object 'mulFact'	config.h
-diagnostics: 813	123	Compiled Successfully	ADC_Buttons.c
+diagnostics: 814	123	Compiled Successfully	ADC_Buttons.c
 diagnostics: 0	122	Compilation Started	stdint.h
 warning: 37	1504	Initialization of extern object 'DegC'	max31855j.h
 warning: 37	1504	Initialization of extern object 'mulFact'	config.h
@@ -48,11 +48,11 @@ diagnostics: 0	122	Compilation Started	stdint.h
 warning: 37	1504	Initialization of extern object 'DegC'	max31855j.h
 warning: 37	1504	Initialization of extern object 'mulFact'	config.h
 diagnostics: 51	123	Compiled Successfully	Encoder.c
-diagnostics: 0	127	All files Compiled in 500 ms	 
+diagnostics: 0	127	All files Compiled in 485 ms	 
 hint: 0	1144	Used RAM (bytes): 1062 (27%)  Free RAM (bytes): 2813 (73%)	Used RAM (bytes): 1062 (27%)  Free RAM (bytes): 2813 (73%)
-hint: 0	1144	Used ROM (bytes): 34939 (53%)  Free ROM (bytes): 30597 (47%)	Used ROM (bytes): 34939 (53%)  Free ROM (bytes): 30597 (47%)
+hint: 0	1144	Used ROM (bytes): 34955 (53%)  Free ROM (bytes): 30581 (47%)	Used ROM (bytes): 34955 (53%)  Free ROM (bytes): 30581 (47%)
 diagnostics: 0	125	Project Linked Successfully	ReflowOven.mcppi
 hint: 0	1004	COFF file successfully generated	COFF file successfully generated
 diagnostics: 0	128	Linked in 1609 ms	 
-diagnostics: 0	129	Project 'ReflowOven.mcppi' completed: 2328 ms	 
-diagnostics: 0	103	Finished successfully: 27 Mar 2021, 09:09:25	ReflowOven.mcppi
+diagnostics: 0	129	Project 'ReflowOven.mcppi' completed: 2344 ms	 
+diagnostics: 0	103	Finished successfully: 27 Mar 2021, 20:26:57	ReflowOven.mcppi

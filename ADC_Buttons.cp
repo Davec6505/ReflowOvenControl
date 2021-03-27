@@ -452,27 +452,29 @@ void SampleButtons(){
  enC_last = -1;
  }
 
+ if(enC < 0 || enC > 65000){
+ enC = 0;
+ enC = (uint8_t)Save_EncoderValue(enC);
+ }
 
  if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
  if((Sps.State == Return)||(Sps.State == TempMenu)||(Sps.State == PIDMenu)||
  (Sps.State == RampSettings)||(Sps.State == SoakSettings)||
  (Sps.State == SpikeSettings)||(Sps.State == CoolSettings)){
- enC = Get_EncoderValue();
+ enC = (uint8_t)Get_EncoderValue();
  enC /= 4;
  }
  else
- enC = Get_EncoderValue();
-
- if(enC < 0 || enC > 65000){
- enC = 0;
- enC = Save_EncoderValue(enC);
- }
+ enC = (uint8_t)Get_EncoderValue();
 
  if(enC_last != enC){
  enC_last = enC;
  if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E){
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_last,1," ");
+ if(enC > 0)
  enC_line_inc = enC % 4 + 1;
+ else
+ enC_line_inc = enC % 4;
  enC_line_last = enC_line_inc;
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_inc,1,">");
  enC_line_edit = enC_line_inc;
@@ -480,7 +482,6 @@ void SampleButtons(){
  }
 
  }
-
 
  if(Menu_Bit){
 
@@ -491,11 +492,11 @@ void SampleButtons(){
  P1 = 1;
  I2C_LCD_Out(LCD_01_ADDRESS,enC_line_edit,15,"@");
  }
-#line 104 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
+#line 105 "C:/Users/GIT/ReflowOvenControl/ADC_Buttons.c"
  state:
  switch(Sps.State){
  case Return: if(enC > 7){
- enC = Save_EncoderValue(7);
+ enC = (uint8_t)Save_EncoderValue(7);
  }
  close:
  switch(enC){
@@ -505,13 +506,13 @@ void SampleButtons(){
  }
  case 1: if (Button(&PORTA, 2, 200, 0) && (Sps.State != TempMenu)){
  Sps.State = TempMenu;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
 
  case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
  Sps.State = PIDMenu;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  case 3:
@@ -552,7 +553,7 @@ void SampleButtons(){
  if(P1) EEWrt = on;
  else Menu_Bit = off;
  P0 = 0;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  break;
  }
  break;
@@ -569,17 +570,17 @@ void SampleButtons(){
  }
  case 1: if (Button(&PORTA, 2, 200, 0) && (Sps.State != RampSettings)){
  Sps.State = RampSettings;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != SoakSettings)){
  Sps.State = SoakSettings;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  case 3: if (Button(&PORTA, 2, 200, 0) && (Sps.State != SpikeSettings)){
  Sps.State = SpikeSettings;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu   ");
@@ -589,13 +590,13 @@ void SampleButtons(){
  break;
  case 4: if (Button(&PORTA, 2, 200, 0) && (Sps.State != CoolSettings)){
  Sps.State = CoolSettings;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  case 5:
  if (Button(&PORTA, 2, 200, 0) && (Sps.State != TimeSettings)){
  Sps.State = TimeSettings;
- enC = Save_EncoderValue(0);
+ enC = (uint8_t)Save_EncoderValue(0);
  goto state;
  }
  case 6:
@@ -616,14 +617,14 @@ void SampleButtons(){
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  Sps.State = 1;
  enC_line_inc = 0;
- enC = Save_EncoderValue(enC_line_inc);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc);
  enC_last = -1;
  break;
  }
  break;
  case PIDMenu:
  if(enC > 7){
- enC = Save_EncoderValue(7);
+ enC = (uint8_t)Save_EncoderValue(7);
  }
  ret2:
  switch(enC){
@@ -636,36 +637,36 @@ void SampleButtons(){
  }
  case 1:
  if (Button(&PORTA, 2, 200, 0) && !OK_A){
- enC = Save_EncoderValue(enC);
+ enC = (uint8_t)Save_EncoderValue(enC);
  OK_A = 1;OK_B = 0;OK_C = 0;OK_D=0;OK_E=0;
  enC_line_inc = 1;
  Save_EncoderValue(pid_t.Kp);
  while(!RA2_bit);
  }
  if(OK_A){
- pid_t.Kp = Get_EncoderValue();
+ pid_t.Kp = (uint8_t)Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
  OK_A = 0;
  while(!RA2_bit);
  enC_line_inc = 1;
- enC = Save_EncoderValue(enC_line_inc);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc);
  }
  }
  case 2:
  if (Button(&PORTA, 2, 200, 0) && !OK_B){
- enC = Save_EncoderValue(enC);
+ enC = (uint8_t)Save_EncoderValue(enC);
  OK_B = 1;OK_A=0;OK_C=0;OK_D=0;
  enC_line_inc = 2;
  Save_EncoderValue(pid_t.Ki);
  while(!RA2_bit);
  }
  if(OK_B){
- pid_t.Ki = Get_EncoderValue();
+ pid_t.Ki = (uint8_t)Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
  OK_B = 0;OK_A=0;OK_C=0;OK_D=0;OK_E=0;
  while(!RA2_bit);
  enC_line_inc = 2;
- enC = Save_EncoderValue(enC_line_inc);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc);
  }
  }
  case 3:
@@ -674,19 +675,19 @@ void SampleButtons(){
  I2C_Lcd_Cmd(LCD_01_ADDRESS,_LCD_CLEAR,1);
  }
  if (Button(&PORTA, 2, 200, 0) && !OK_C){
- enC = Save_EncoderValue(enC);
+ enC = (uint8_t)Save_EncoderValue(enC);
  OK_C = 1;OK_A=0;OK_B=0;OK_D=0;OK_E=0;
  enC_line_inc = 3;
  Save_EncoderValue(pid_t.Kd);
  while(!RA2_bit);
  }
  if(OK_C){
- pid_t.Kd = Get_EncoderValue();
+ pid_t.Kd = (uint8_t)Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
  OK_C = 0;
  while(!RA2_bit);
  enC_line_inc = 3;
- enC = Save_EncoderValue(enC_line_inc);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc);
  }
  }
  I2C_LCD_Out(LCD_01_ADDRESS,1,2,"Menu     ");
@@ -702,36 +703,36 @@ void SampleButtons(){
  break;
  case 4:
  if (Button(&PORTA, 2, 200, 0) && !OK_D){
- enC = Save_EncoderValue(enC);
+ enC = (uint8_t)Save_EncoderValue(enC);
  OK_D = 1;OK_A=0;OK_B=0;OK_C = 0;OK_E=0;
  enC_line_inc = 0;
  Save_EncoderValue(pid_t.Kt);
  while(!RA2_bit);
  }
  if(OK_D){
- pid_t.Kt = Get_EncoderValue();
+ pid_t.Kt = (uint8_t)Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
  OK_D = 0;
  while(!RA2_bit);
  enC_line_inc = 0;
- enC = Save_EncoderValue(enC_line_inc+4);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc+4);
  }
  }
  case 5:
  if (Button(&PORTA, 2, 200, 0) && !OK_E){
- enC = Save_EncoderValue(enC);
+ enC = (uint8_t)Save_EncoderValue(enC);
  OK_E = 1;OK_A=0;OK_B=0;OK_C = 0;OK_D=0;
  enC_line_inc = 1;
  Save_EncoderValue(DegC.Deg_OffSet);
  while(!RA2_bit);
  }
  if(OK_E){
- DegC.Deg_OffSet = Get_EncoderValue();
+ DegC.Deg_OffSet = (uint8_t)Get_EncoderValue();
  if(Button(&PORTA, 2, 200, 0)){
  OK_E = 0;
  while(!RA2_bit);
  enC_line_inc = 1;
- enC = Save_EncoderValue(enC_line_inc+4);
+ enC = (uint8_t)Save_EncoderValue(enC_line_inc+4);
  }
  }
  case 6:
