@@ -47,9 +47,6 @@ void RstEntryBits(){
 }
 void SampleButtons(){
   //test first entry and reset
-
-
-         
      if(Menu_Bit){
        if(!P0 && (enC != 0)){
           P0 = 1;
@@ -59,9 +56,17 @@ void SampleButtons(){
           enC_last = -1;
        }
        
+       
        if(!OK_A && !OK_B && !OK_C && !OK_D && !OK_E)
-           enC = Get_EncoderValue();//get encoder value
-           
+          if((Sps.State == Return)||(Sps.State == TempMenu)||(Sps.State == PIDMenu)||
+             (Sps.State == RampSettings)||(Sps.State == SoakSettings)||
+             (Sps.State == SpikeSettings)||(Sps.State == CoolSettings)){
+            enC = Get_EncoderValue();//get encoder value
+            enC /= 4;
+          }
+       else
+          enC = Get_EncoderValue();
+          
        if(enC < 0 || enC > 65000){
            enC = 0;
            enC = Save_EncoderValue(enC);
@@ -79,6 +84,7 @@ void SampleButtons(){
        }
        
      }
+     
      
     if(Menu_Bit){
         ///////////////////////////////////////////
@@ -112,7 +118,7 @@ void SampleButtons(){
                                               goto state;
                                          }
                                                  
-                               case 2:  if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
+                               case 2: if (Button(&PORTA, 2, 200, 0) && (Sps.State != PIDMenu)){
                                               Sps.State = PIDMenu;
                                               enC = Save_EncoderValue(0);
                                               goto state;
@@ -401,11 +407,11 @@ void SampleButtons(){
                                                  enC = Save_EncoderValue(enC);
                                                  OK_B = 1;
                                                   enC_line_inc = 2;
-                                                  Save_EncoderValue(Sps.RmpTmr);
+                                                  Save_EncoderValue(Sps.RmpSec);
                                                   while(!RA2_bit);
                                           }
                                           if(OK_B){
-                                              Sps.RmpTmr = Get_EncoderValue();
+                                              Sps.RmpSec = Get_EncoderValue();
                                               if(Button(&PORTA, 2, 200, 0)){
                                                   OK_B = 0;
                                                   while(!RA2_bit);
@@ -418,8 +424,8 @@ void SampleButtons(){
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"RmpDeg:=");
                                           sprintf(txt4,"%3d",Sps.RmpDeg);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
-                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"RmpTmr:=");
-                                          sprintf(txt4,"%3d",Sps.RmpTmr);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"RmpSec:=");
+                                          sprintf(txt4,"%3d",Sps.RmpSec);
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"        ");
                                      break;
@@ -463,11 +469,11 @@ void SampleButtons(){
                                                  enC = Save_EncoderValue(enC);
                                                  OK_B = 1;
                                                   enC_line_inc = 2;
-                                                  Save_EncoderValue(Sps.SokTmr);
+                                                  Save_EncoderValue(Sps.SokSec);
                                                   while(!RA2_bit);
                                           }
                                           if(OK_B){
-                                              Sps.SokTmr = Get_EncoderValue();
+                                              Sps.SokSec = Get_EncoderValue();
                                               if(Button(&PORTA, 2, 200, 0)){
                                                   OK_B = 0;
                                                   while(!RA2_bit);
@@ -481,8 +487,8 @@ void SampleButtons(){
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SoakDeg:=");
                                           sprintf(txt4,"%3d",Sps.SokDeg);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
-                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SoakTmr:=");
-                                          sprintf(txt4,"%3d",Sps.SokTmr);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SoakSec:=");
+                                          sprintf(txt4,"%3d",Sps.SokSec);
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
                                      break;
@@ -525,11 +531,11 @@ void SampleButtons(){
                                                  enC = Save_EncoderValue(enC);
                                                  OK_B = 1;
                                                   enC_line_inc = 2;
-                                                  Save_EncoderValue(Sps.SpkeTmr);
+                                                  Save_EncoderValue(Sps.SpkeSec);
                                                   while(!RA2_bit);
                                           }
                                           if(OK_B){
-                                              Sps.SpkeTmr = Get_EncoderValue();
+                                              Sps.SpkeSec = Get_EncoderValue();
                                               if(Button(&PORTA, 2, 200, 0)){
                                                   OK_B = 0;
                                                   while(!RA2_bit);
@@ -542,8 +548,8 @@ void SampleButtons(){
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"SpikeDeg:=");
                                           sprintf(txt4,"%3d",Sps.SpkeDeg);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
-                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SpikeTmr:=");
-                                          sprintf(txt4,"%3d",Sps.SpkeTmr);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"SpikeSec:=");
+                                          sprintf(txt4,"%3d",Sps.SpkeSec);
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"          ");
                                      break;
@@ -586,11 +592,11 @@ void SampleButtons(){
                                                  enC = Save_EncoderValue(enC);
                                                  OK_B = 1;
                                                   enC_line_inc = 2;
-                                                  Save_EncoderValue(Sps.CoolOffTmr);
+                                                  Save_EncoderValue(Sps.CoolOffSec);
                                                   while(!RA2_bit);
                                           }
                                           if(OK_B){
-                                              Sps.CoolOffTmr = Get_EncoderValue();
+                                              Sps.CoolOffSec = Get_EncoderValue();
                                               if(Button(&PORTA, 2, 200, 0)){
                                                   OK_B = 0;
                                                   while(!RA2_bit);
@@ -603,8 +609,8 @@ void SampleButtons(){
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,2,"CoolDeg:=");
                                           sprintf(txt4,"%3d",Sps.CoolOffDeg);
                                           I2C_LCD_Out(LCD_01_ADDRESS,2,16,txt4);
-                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"CoolTmr:=");
-                                          sprintf(txt4,"%3d",Sps.CoolOffTmr);
+                                          I2C_LCD_Out(LCD_01_ADDRESS,3,2,"CoolSec:=");
+                                          sprintf(txt4,"%3d",Sps.CoolOffSec);
                                           I2C_LCD_Out(LCD_01_ADDRESS,3,16,txt4);
                                           I2C_LCD_Out(LCD_01_ADDRESS,4,2,"         ");
                                      break;
@@ -718,20 +724,20 @@ void EERead(){
   //SETPOINTS
    Lo(Sps.RmpDeg)  = EEPROM_Read(0x00);
    Hi(Sps.RmpDeg)  = EEPROM_Read(0x01);
-   Lo(Sps.RmpTmr)  = EEPROM_Read(0x02);
-   Hi(Sps.RmpTmr)  = EEPROM_Read(0x03);
+   Lo(Sps.RmpSec)  = EEPROM_Read(0x02);
+   Hi(Sps.RmpSec)  = EEPROM_Read(0x03);
    Lo(Sps.SokDeg)  = EEPROM_Read(0x04);
    Hi(Sps.SokDeg)  = EEPROM_Read(0x05);
-   Lo(Sps.SokTmr)  = EEPROM_Read(0x06);
-   Hi(Sps.SokTmr)  = EEPROM_Read(0x07);
+   Lo(Sps.SokSec)  = EEPROM_Read(0x06);
+   Hi(Sps.SokSec)  = EEPROM_Read(0x07);
    Lo(Sps.SpkeDeg)  = EEPROM_Read(0x08);
    Hi(Sps.SpkeDeg)  = EEPROM_Read(0x09);
-   Lo(Sps.SpkeTmr)  = EEPROM_Read(0x0A);
-   Hi(Sps.SpkeTmr)  = EEPROM_Read(0x0B);
+   Lo(Sps.SpkeSec)  = EEPROM_Read(0x0A);
+   Hi(Sps.SpkeSec)  = EEPROM_Read(0x0B);
    Lo(Sps.CoolOffDeg)  = EEPROM_Read(0x0C);
    Hi(Sps.CoolOffDeg)  = EEPROM_Read(0x0D);
-   Lo(Sps.CoolOffTmr)  = EEPROM_Read(0x0E);
-   Hi(Sps.CoolOffTmr)  = EEPROM_Read(0x0F);
+   Lo(Sps.CoolOffSec)  = EEPROM_Read(0x0E);
+   Hi(Sps.CoolOffSec)  = EEPROM_Read(0x0F);
    /////////////////////////////////////////////////////
    //PID
    Lo(pid_t.Kp)         = EEPROM_Read(0x10);
@@ -762,20 +768,20 @@ void EEWrite(){
   //SETPOINTS
    EEPROM_Write(0x00, Lo(Sps.RmpDeg));
    EEPROM_Write(0x01, Hi(Sps.RmpDeg));
-   EEPROM_Write(0x02, Lo(Sps.RmpTmr));
-   EEPROM_Write(0x03, Hi(Sps.RmpTmr));
+   EEPROM_Write(0x02, Lo(Sps.RmpSec));
+   EEPROM_Write(0x03, Hi(Sps.RmpSec));
    EEPROM_Write(0x04, Lo(Sps.SokDeg));
    EEPROM_Write(0x05, Hi(Sps.SokDeg));
-   EEPROM_Write(0x06, Lo(Sps.SokTmr));
-   EEPROM_Write(0x07, Hi(Sps.SokTmr));
+   EEPROM_Write(0x06, Lo(Sps.SokSec));
+   EEPROM_Write(0x07, Hi(Sps.SokSec));
    EEPROM_Write(0x08, Lo(Sps.SpkeDeg));
    EEPROM_Write(0x09, Hi(Sps.SpkeDeg));
-   EEPROM_Write(0x0A, Lo(Sps.SpkeTmr));
-   EEPROM_Write(0x0B, Hi(Sps.SpkeTmr));
+   EEPROM_Write(0x0A, Lo(Sps.SpkeSec));
+   EEPROM_Write(0x0B, Hi(Sps.SpkeSec));
    EEPROM_Write(0x0C, Lo(Sps.CoolOffDeg));
    EEPROM_Write(0x0D, Hi(Sps.CoolOffDeg));
-   EEPROM_Write(0x0E, Lo(Sps.CoolOffTmr));
-   EEPROM_Write(0x0F, Hi(Sps.CoolOffTmr));
+   EEPROM_Write(0x0E, Lo(Sps.CoolOffSec));
+   EEPROM_Write(0x0F, Hi(Sps.CoolOffSec));
    //////////////////////////////////////////////////////
    //PID
    EEPROM_Write(0x10, Lo(pid_t.Kp));

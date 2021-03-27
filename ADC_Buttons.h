@@ -57,12 +57,16 @@ unsigned char ButtState;
 typedef struct Setpoints {
 unsigned int RmpDeg;
 unsigned int RmpTmr;
+unsigned int RmpSec;
 unsigned int SokDeg;
 unsigned int SokTmr;
+unsigned int SokSec;
 unsigned int SpkeDeg;
 unsigned int SpkeTmr;
+unsigned int SpkeSec;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
+unsigned int CoolOffSec;
 unsigned char State;
 unsigned short SerialWriteDly;
 }Spts;

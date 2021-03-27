@@ -154,7 +154,18 @@ struct Temp{
  unsigned short SampleTmrSP;
 };
 
-extern struct Temp DegC;
+extern struct Temp DegC = {
+ 0,
+ {0,0,0,0,0},
+ 0,
+ 0,
+ 0,
+ 0.0,
+ 0,
+ 0,
+ 0,
+ 0
+};
 
 
 
@@ -307,12 +318,16 @@ unsigned char ButtState;
 typedef struct Setpoints {
 unsigned int RmpDeg;
 unsigned int RmpTmr;
+unsigned int RmpSec;
 unsigned int SokDeg;
 unsigned int SokTmr;
+unsigned int SokSec;
 unsigned int SpkeDeg;
 unsigned int SpkeTmr;
+unsigned int SpkeSec;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
+unsigned int CoolOffSec;
 unsigned char State;
 unsigned short SerialWriteDly;
 }Spts;
@@ -367,7 +382,7 @@ void WriteStart();
 void WriteFin();
 void WriteDataOut();
 void RstLocals();
-#line 6 "c:/users/git/reflowovencontrol/calcs.h"
+#line 10 "c:/users/git/reflowovencontrol/calcs.h"
 struct Ticks{
 unsigned int Ambient;
 unsigned int RampTick;
@@ -382,31 +397,35 @@ extern struct Ticks TempTicks;
 
 
  void CalcTimerTicks(int iPv);
-#line 4 "C:/Users/GIT/ReflowOvenControl/Calcs.c"
+#line 10 "C:/Users/GIT/ReflowOvenControl/Calcs.c"
 struct Ticks TempTicks;
-
+unsigned int temp;
 
 void CalcTimerTicks(int iPv){
  TempTicks.Ambient = iPv;
 
 
- TempTicks.RampTick = Sps.RmpTmr;
- TempTicks.RampTick /= (Sps.RmpDeg + TempTicks.Ambient);
- TempTicks.RampTick = S_HWMul(TempTicks.RampTick,10);
+ Sps.RmpTmr = S_HWMul(Sps.RmpSec,  100 );
+ temp = Sps.RmpDeg - TempTicks.Ambient;
+ TempTicks.RampTick = Sps.RmpTmr / temp;
+ TempTicks.RampTick = S_HWMul(TempTicks.RampTick, 10 );
 
 
- TempTicks.SoakTick = Sps.SokTmr - Sps.RmpTmr;
- TempTicks.SoakTick /= ( Sps.SokDeg - Sps.RmpDeg );
- TempTicks.SoakTick = S_HWMul(TempTicks.SoakTick,10);
+ Sps.SokTmr = S_HWMul(Sps.SokSec, 100 );
+ temp = Sps.SokDeg - Sps.RmpDeg;
+ TempTicks.SoakTick = Sps.SokTmr / temp;
+ TempTicks.SoakTick = S_HWMul(TempTicks.SoakTick, 10 );
 
 
- TempTicks.SpikeTick = Sps.SpkeTmr - Sps.SokTmr;
- TempTicks.SpikeTick /= (Sps.SpkeDeg - Sps.SokDeg);
- TempTicks.SpikeTick = S_HWMul(TempTicks.SpikeTick,10);
+ Sps.SpkeTmr = S_HWMul(Sps.SpkeSec, 100 );
+ temp = Sps.SpkeDeg - Sps.SokDeg;
+ TempTicks.SpikeTick = Sps.SpkeTmr / temp;
+ TempTicks.SpikeTick = S_HWMul(TempTicks.SpikeTick, 10 );
 
 
- TempTicks.CoolTick = Sps.CoolOffTmr - Sps.SpkeTmr;
- TempTicks.CoolTick /= Sps.SpkeDeg - TempTicks.Ambient;
- TempTicks.CoolTick = S_HWMul(TempTicks.CoolTick,10);
+ Sps.CoolOffTmr = S_HWMul(Sps.CoolOffSec, 100 );
+ temp = Sps.SpkeDeg -Sps.CoolOffDeg;
+ TempTicks.CoolTick = Sps.CoolOffTmr / temp;
+ TempTicks.CoolTick = S_HWMul(TempTicks.CoolTick, 10 );
 
  }

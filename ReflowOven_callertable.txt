@@ -171,8 +171,8 @@ main
 	double2int
 		SETIOV3224
 	CalcTimerTicks
-		Div_16X16_U
 		S_HWMul
+		Div_16X16_U
 	EI
 	SampleButtons
 		sprintf
@@ -299,8 +299,8 @@ main
 		EERead
 			EEPROM_Read
 		CalcTimerTicks
-			Div_16X16_U
 			S_HWMul
+			Div_16X16_U
 		ResetBits
 	Button
 		Delay_500us

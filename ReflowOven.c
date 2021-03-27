@@ -8,7 +8,7 @@ Description: Code for a reflow oven
 
 //constants
 const unsigned int mulFact = 18;
-unsigned char LCD_01_ADDRESS = 0x7E;//4E = !A || 7E = A
+unsigned char LCD_01_ADDRESS = 0x4E;//4E = !A || 7E = A
 char *test = "Starting up";
 
 // structs & enums
@@ -80,7 +80,6 @@ void main() {
      LATC5_bit = RA3_bit && !FinCycle;
      ////////////////////////////////////////////
      //LCD Display control
-
      if(Menu_Bit)
          SampleButtons();
      
@@ -183,19 +182,19 @@ void main() {
                TempDegPlaceholder = Sps.RmpDeg;
                TempTicPlaceholder = TempTicks.RampTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
-               sprintf(txt6,"%3u",Sps.RmpDeg);
+               sprintf(txt6,"%4d",Sps.RmpDeg);
           }
           else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
                TempDegPlaceholder = Sps.SokDeg;
                TempTicPlaceholder = TempTicks.SoakTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
-               sprintf(txt6,"%3u",Sps.SokDeg);
+               sprintf(txt6,"%4d",Sps.SokDeg);
           }
           else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
                TempDegPlaceholder = Sps.SpkeDeg;
                TempTicPlaceholder = TempTicks.SpikeTick;
                I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
-               sprintf(txt6,"%3u",Sps.SpkeDeg);
+               sprintf(txt6,"%4d",Sps.SpkeDeg);
           }
           else{
               SetCoolBit = on;
@@ -296,7 +295,7 @@ void main() {
                     if(!FinCycle)
                         PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
                      else
-                        pid_t.Mv = 0;
+                        pid_t.Mv = -900;
                         
                     if(!Menu_Bit){
                       I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");

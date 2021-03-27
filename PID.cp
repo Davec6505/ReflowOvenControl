@@ -154,7 +154,18 @@ struct Temp{
  unsigned short SampleTmrSP;
 };
 
-extern struct Temp DegC;
+extern struct Temp DegC = {
+ 0,
+ {0,0,0,0,0},
+ 0,
+ 0,
+ 0,
+ 0.0,
+ 0,
+ 0,
+ 0,
+ 0
+};
 
 
 
@@ -164,7 +175,7 @@ float GetTemp();
 #line 1 "c:/users/git/reflowovencontrol/pid.h"
 #line 1 "c:/users/git/reflowovencontrol/calcs.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
-#line 6 "c:/users/git/reflowovencontrol/calcs.h"
+#line 10 "c:/users/git/reflowovencontrol/calcs.h"
 struct Ticks{
 unsigned int Ambient;
 unsigned int RampTick;
@@ -261,12 +272,16 @@ unsigned char ButtState;
 typedef struct Setpoints {
 unsigned int RmpDeg;
 unsigned int RmpTmr;
+unsigned int RmpSec;
 unsigned int SokDeg;
 unsigned int SokTmr;
+unsigned int SokSec;
 unsigned int SpkeDeg;
 unsigned int SpkeTmr;
+unsigned int SpkeSec;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
+unsigned int CoolOffSec;
 unsigned char State;
 unsigned short SerialWriteDly;
 }Spts;

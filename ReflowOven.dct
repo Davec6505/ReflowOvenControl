@@ -585,6 +585,7 @@ configspi
 confpic
 control
 cooloffdeg
+cooloffsec
 coolofftmr
 cooltick
 cren
@@ -1752,6 +1753,7 @@ result
 ri
 ri_bit
 rmpdeg
+rmpsec
 rmptmr
 ror
 rot_enc_table
@@ -1878,6 +1880,7 @@ smp_bit
 smp_ssp1stat_bit
 soaktick
 sokdeg
+soksec
 soktmr
 soscgo
 soscgo_bit
@@ -1926,6 +1929,7 @@ spi2_write
 spiindx
 spiketick
 spkedeg
+spkesec
 spketmr
 sprintf
 sps
@@ -2304,6 +2308,7 @@ tblptr
 tblptrh
 tblptrl
 tblptru
+temp
 temp_fpv
 temp_ipv
 tempbuff

@@ -153,7 +153,18 @@ struct Temp{
  unsigned short SampleTmrSP;
 };
 
-extern struct Temp DegC;
+extern struct Temp DegC = {
+ 0,
+ {0,0,0,0,0},
+ 0,
+ 0,
+ 0,
+ 0.0,
+ 0,
+ 0,
+ 0,
+ 0
+};
 
 
 
@@ -225,7 +236,7 @@ void PID_Calc(_PID *PID_t,int Sp,int Pv);
 long S_HWMul(int valA,int valB);
 #line 1 "c:/users/git/reflowovencontrol/calcs.h"
 #line 1 "c:/users/git/reflowovencontrol/config.h"
-#line 6 "c:/users/git/reflowovencontrol/calcs.h"
+#line 10 "c:/users/git/reflowovencontrol/calcs.h"
 struct Ticks{
 unsigned int Ambient;
 unsigned int RampTick;
@@ -322,12 +333,16 @@ unsigned char ButtState;
 typedef struct Setpoints {
 unsigned int RmpDeg;
 unsigned int RmpTmr;
+unsigned int RmpSec;
 unsigned int SokDeg;
 unsigned int SokTmr;
+unsigned int SokSec;
 unsigned int SpkeDeg;
 unsigned int SpkeTmr;
+unsigned int SpkeSec;
 unsigned int CoolOffDeg;
 unsigned int CoolOffTmr;
+unsigned int CoolOffSec;
 unsigned char State;
 unsigned short SerialWriteDly;
 }Spts;
@@ -384,7 +399,7 @@ void WriteDataOut();
 void RstLocals();
 #line 10 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
 const unsigned int mulFact = 18;
-unsigned char LCD_01_ADDRESS = 0x7E;
+unsigned char LCD_01_ADDRESS = 0x4E;
 char *test = "Starting up";
 
 
@@ -454,7 +469,6 @@ void main() {
  static unsigned int TempDegPlaceholder;
 
  LATC5_bit = RA3_bit && !FinCycle;
-
 
 
  if(Menu_Bit)
@@ -559,19 +573,19 @@ void main() {
  TempDegPlaceholder = Sps.RmpDeg;
  TempTicPlaceholder = TempTicks.RampTick;
  I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Ramp");
- sprintf(txt6,"%3u",Sps.RmpDeg);
+ sprintf(txt6,"%4d",Sps.RmpDeg);
  }
  else if((DegC.Deg_Sp >= Sps.RmpDeg)&&(DegC.Deg_Sp < Sps.SokDeg)&&(!SetCoolBit)){
  TempDegPlaceholder = Sps.SokDeg;
  TempTicPlaceholder = TempTicks.SoakTick;
  I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Soak");
- sprintf(txt6,"%3u",Sps.SokDeg);
+ sprintf(txt6,"%4d",Sps.SokDeg);
  }
  else if((DegC.Deg_Sp >= Sps.SokDeg)&&(DegC.Deg_Sp < Sps.SpkeDeg)&&(!SetCoolBit)){
  TempDegPlaceholder = Sps.SpkeDeg;
  TempTicPlaceholder = TempTicks.SpikeTick;
  I2C_LCD_Out(LCD_01_ADDRESS,1,1,"Spke");
- sprintf(txt6,"%3u",Sps.SpkeDeg);
+ sprintf(txt6,"%4d",Sps.SpkeDeg);
  }
  else{
  SetCoolBit = on;
@@ -629,7 +643,7 @@ void main() {
  case 3:
  if(Phs.olDan0_ != Phs.an0_){
  Phs.an0_0 = (unsigned int)S_HWMul(Phs.an0_,mulFact);
-#line 258 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 257 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan0_ = Phs.an0_;
  }
 
@@ -637,7 +651,7 @@ void main() {
  case 4:
  if(Phs.olDan1_ != Phs.an1_){
  Phs.an1_1 = (unsigned int)S_HWMul(Phs.an1_, 4 );
-#line 267 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
+#line 266 "C:/Users/GIT/ReflowOvenControl/ReflowOven.c"
  Phs.olDan1_ = Phs.an1_;
  }
  break;
@@ -670,7 +684,7 @@ void main() {
  if(!FinCycle)
  PID_Calc(&pid_t,DegC.Deg_Sp,DegC.Temp_iPv);
  else
- pid_t.Mv = 0;
+ pid_t.Mv = -900;
 
  if(!Menu_Bit){
  I2C_LCD_Out(LCD_01_ADDRESS,4,1,"Mv:=");

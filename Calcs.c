@@ -1,30 +1,40 @@
+/***************************************************************************
+ * Calculation to get mSec incriment of DegC *
+ * RmpTmr = RmpSec * 1000   --- this is done in 2 stages 1st *100 || 2nd * 10
+ * DegIncriment = RmpTmr / Deg_setpoint - present_deg
+ **************************************************************************/
+
 #include "Calcs.h"
 
 
 struct Ticks TempTicks;
-
+unsigned int temp;
 
 void CalcTimerTicks(int iPv){
      TempTicks.Ambient = iPv;
     //////////////////////////////////////////////////////
     //calc the ramp timer Ticks in 10 milli seconds
-     TempTicks.RampTick = Sps.RmpTmr;
-     TempTicks.RampTick /= (Sps.RmpDeg + TempTicks.Ambient);
-     TempTicks.RampTick =  S_HWMul(TempTicks.RampTick,10);
+     Sps.RmpTmr = S_HWMul(Sps.RmpSec, ten_msec_multiplier);
+     temp = Sps.RmpDeg - TempTicks.Ambient;
+     TempTicks.RampTick = Sps.RmpTmr / temp;
+     TempTicks.RampTick =  S_HWMul(TempTicks.RampTick,msec_multiplier);
      ////////////////////////////////////////////////////
      //calculate the soak timer Ticks in 10 milli seconds
-     TempTicks.SoakTick =  Sps.SokTmr  - Sps.RmpTmr;
-     TempTicks.SoakTick /= ( Sps.SokDeg - Sps.RmpDeg );
-     TempTicks.SoakTick =  S_HWMul(TempTicks.SoakTick,10);
+     Sps.SokTmr = S_HWMul(Sps.SokSec,ten_msec_multiplier);
+     temp = Sps.SokDeg - Sps.RmpDeg;
+     TempTicks.SoakTick =  Sps.SokTmr / temp;
+     TempTicks.SoakTick =  S_HWMul(TempTicks.SoakTick,msec_multiplier);
      ////////////////////////////////////////////////////
      //calculate the spike Ticks in 10 milli seconds
-     TempTicks.SpikeTick =  Sps.SpkeTmr - Sps.SokTmr;
-     TempTicks.SpikeTick /=  (Sps.SpkeDeg - Sps.SokDeg);
-     TempTicks.SpikeTick =  S_HWMul(TempTicks.SpikeTick,10);
+     Sps.SpkeTmr = S_HWMul(Sps.SpkeSec,ten_msec_multiplier);
+     temp = Sps.SpkeDeg - Sps.SokDeg;
+     TempTicks.SpikeTick =  Sps.SpkeTmr / temp;
+     TempTicks.SpikeTick =  S_HWMul(TempTicks.SpikeTick,msec_multiplier);
      /////////////////////////////////////////////////////
      //calculate the cool Ticks in 10 milli seconds
-     TempTicks.CoolTick = Sps.CoolOffTmr - Sps.SpkeTmr;
-     TempTicks.CoolTick /= Sps.SpkeDeg - TempTicks.Ambient;
-     TempTicks.CoolTick =  S_HWMul(TempTicks.CoolTick,10);
+     Sps.CoolOffTmr = S_HWMul(Sps.CoolOffSec,ten_msec_multiplier);
+     temp =  Sps.SpkeDeg -Sps.CoolOffDeg;
+     TempTicks.CoolTick = Sps.CoolOffTmr / temp;
+     TempTicks.CoolTick =  S_HWMul(TempTicks.CoolTick,msec_multiplier);
  
  }

@@ -23,7 +23,18 @@ struct Temp{
  unsigned short SampleTmrSP;
 };
 
-extern struct Temp DegC;
+extern struct Temp DegC = {
+ 0,
+ {0,0,0,0,0},
+ 0,
+ 0,
+ 0,
+ 0.0,
+ 0,
+ 0,
+ 0,
+ 0
+};
 
 ////////////////////////////////////////
 //function prototypes
